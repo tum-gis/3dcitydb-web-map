@@ -1043,6 +1043,31 @@ function createInfoTable(res, citydbLayer) {
             }
             html += '</tbody></table>';
             html += '<style>@import url(css/ckan-importer.css);</style>';
+            
+                html += '<button id="myBtn" class="ckan-btn">transfer data to ckan</button>';
+
+            html += '<div id="id01" class="modal">';
+            html += '  <form class="modal-content animate" action="/action_page.php" method="POST">';
+            html += '  <label for="title" ><b>Sign in to your CKAN Account</b></label>';
+            html += '  <!-- Create a form container -->';
+            html += '<div class="container">';
+            html += '<!-- Username -->';
+            html += '  <label for="uname"><b>Username</b></label>';
+            html += '  <input type="text" placeholder="Enter Username" name="uname" required>';
+            html += '    <!-- Password -->';
+            html += '  <label for="psw"><b>Password</b></label>';
+            html += '<input type="password" placeholder="Enter Password" name="psw" required>';
+            html += '<!-- Submit Button -->';
+            html += '  <button type="submit">Login</button>';
+            html += '  <label>';
+            html += '  <input type="checkbox" checked="checked" name="remember">Remember Me';
+            html += '</label>';
+            html += '</div>';
+            html += '  <div class="container" style="background-color: #f1f1f1;">';
+            html += '    <button type="button" class="cancelbtn">Cancel</button>';
+            html += '  <span class="psw">Forgot <a href="#">password?</a></span>';
+            html += '</div>';
+            html += '  </div>';
 
             cesiumEntity.description = html;
         }

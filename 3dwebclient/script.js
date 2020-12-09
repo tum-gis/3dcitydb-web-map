@@ -1042,6 +1042,7 @@ function createInfoTable(res, citydbLayer) {
                 html += '<tr><td>' + key + '</td><td>' + iValue + '</td></tr>';
             }
             html += '</tbody></table>';
+            html += '<style>@import url(css/ckan-importer.css);</style>';
 
             cesiumEntity.description = html;
         }

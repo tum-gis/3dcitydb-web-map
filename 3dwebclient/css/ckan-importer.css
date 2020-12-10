@@ -12,7 +12,7 @@
 
 }
 .ckan-btn:hover{
-  background-color: darkred;
+  background-color: darkblue;
 
 }
 
@@ -49,6 +49,7 @@ opacity: 0.7;
 width: auto;
 padding: 10px 18px;
 background-color: #f44336;
+color: white;
 }
 /* Center the image and position the close button */
 
@@ -122,4 +123,28 @@ float: none;
 .cancelbtn {
 width: 100%;
 }
+}
+
+
+
+
+
+/* always hide the checkbox */
+.css-toggle-switch { display: none; }
+
+/* update label text to reflect state */
+.css-toggle-switch         + label:before { content: "Hide "; }
+.css-toggle-switch:checked + label:before { content: "Show "; }
+
+/* conditionally hide content when checked */
+.css-toggle-switch:checked ~ .css-toggle-content  { display: none; }
+
+/* make the label look clickable */
+.css-toggle-switch + label {
+  cursor: pointer;
+ -webkit-touch-callout: none;
+   -webkit-user-select: none;
+      -moz-user-select: none;
+       -ms-user-select: none;
+           user-select: none;
 }

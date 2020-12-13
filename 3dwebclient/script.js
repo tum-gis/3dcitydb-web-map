@@ -1,23 +1,23 @@
 /*
  * 3DCityDB-Web-Map-Client
  * http://www.3dcitydb.org/
- * 
+ *
  * Copyright 2015 - 2017
  * Chair of Geoinformatics
  * Technical University of Munich, Germany
  * https://www.gis.bgu.tum.de/
- * 
+ *
  * The 3DCityDB-Web-Map-Client is jointly developed with the following
  * cooperation partners:
- * 
+ *
  * virtualcitySYSTEMS GmbH, Berlin <http://www.virtualcitysystems.de/>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -146,7 +146,7 @@ function initClient() {
     // init progress indicator gif
     document.getElementById('loadingIndicator').style.display = 'none';
 
-    // activate mouseClick Events		
+    // activate mouseClick Events
     webMap.activateMouseClickEvents(true);
     webMap.activateMouseMoveEvents(true);
     webMap.activateViewChangedEvent(true);
@@ -189,13 +189,13 @@ function initClient() {
         }
     });
 
-    // inspect the status of the showed and cached tiles	
+    // inspect the status of the showed and cached tiles
     inspectTileStatus();
 
     // display current infos of active layer in the main menu
     observeActiveLayer();
 
-    // Zoom to desired camera position and load layers if encoded in the url...	
+    // Zoom to desired camera position and load layers if encoded in the url...
     zoomToDefaultCameraPosition().then(function (info) {
         var layers = urlController.getLayersFromUrl(window.location.href, CitydbUtil, CitydbKmlLayer, Cesium3DTilesDataLayer, Cesium);
         loadLayerGroup(layers);
@@ -208,7 +208,7 @@ function initClient() {
             }
             addWebMapServiceProvider();
         }
-        
+
         var cesiumWorldTerrainString = urlController.getUrlParaValue('cesiumWorldTerrain', window.location.href, CitydbUtil);
         if(cesiumWorldTerrainString === "true") {
             // if the Cesium World Terrain is given in the URL --> activate, else other terrains
@@ -896,7 +896,7 @@ function addNewLayer() {
         maxSizeOfCachedTiles: addLayerViewModel.maxSizeOfCachedTiles,
         maxCountOfVisibleTiles: addLayerViewModel.maxCountOfVisibleTiles
     }
-    
+
     // since Cesium 3D Tiles also require name.json in the URL, it must be checked first
     var layerDataTypeDropdown = document.getElementById("layerDataTypeDropdown");
     if (layerDataTypeDropdown.options[layerDataTypeDropdown.selectedIndex].value === 'Cesium 3D Tiles') {
@@ -1042,34 +1042,6 @@ function createInfoTable(res, citydbLayer) {
                 html += '<tr><td>' + key + '</td><td>' + iValue + '</td></tr>';
             }
             html += '</tbody></table>';
-            html += '<style>@import url(css/ckan-importer.css);</style>';
-            
-            html += '<input type="checkbox" id="css-toggle-switch" checked="checked" class="css-toggle-switch">';
-            html += '<label for="css-toggle-switch" class="btn">CKAN Log in for data transfer</label>';
-            html += '<div id="id01" class="css-toggle-content">';
-            html += '    <form class="modal-content animate" action="/action_page.php" method="POST">';
-            html += '    <label for="title" ><b>Sign in to your CKAN Account</b></label>';
-            html += '    <!-- Create a form container -->';
-            html += '    <div class="container">';
-            html += '    <!-- Username -->';
-            html += '      <label for="uname"><b>Username</b></label>';
-            html += '      <input type="text" placeholder="Enter Username" name="uname" required>';
-            html += '      <!-- Password -->';
-            html += '      <label for="psw"><b>Password</b></label>';
-            html += '      <input type="password" placeholder="Enter Password" name="psw" required>';
-            html += '      <!-- Submit Button -->';
-            html += '      <button class="ckan-btn" type="submit">Login</button>';
-            html += '      <label>';
-            html += '      <input type="checkbox" checked="checked" name="remember">Remember Me';
-            html += '      </label>';
-            html += '    </div>';
-            html += '    <div class="container" style="background-color: #f1f1f1;">';
-            html += '      <button type="button" onclick="document.getElementById("id01").style.display="none"" class="cancelbtn">Cancel</button>';
-            html += '      <span class="psw">Forgot <a href="#">password?</a></span>';
-            html += '    </div>';
-            html += '    </form>';
-            html += '  </div>';
-
             cesiumEntity.description = html;
         }
     }, 1000, cesiumEntity);

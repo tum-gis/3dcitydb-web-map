@@ -649,6 +649,14 @@
         <label for="css-toggle-switch" class="btn">CKAN Log in for data transfer</label>--->
         <div id="modal" class="css-toggle-content modal">
           <span class="close-importer">&times;</span>
+
+          <table id="ckan-attributes">
+              <tr>
+                <th>Key</th>
+                <th>Value</th>
+              </tr>
+            </table>
+
           <p>Please fill in the attributes you want to sent to CKAN:</p>
             <form class="modal-content animate" action="/action_page.php" method="POST">
             <label for="title" ><b>Sign in to your CKAN Account</b></label>
@@ -686,7 +694,7 @@
             // Sending and receiving data in JSON format using POST method
             //
             console.log('Starting CKAN API');
-            var xhr = new XMLHttpRequest();
+            /*var xhr = new XMLHttpRequest();
             var url = "http://localhost:5000/api/3/action/package_create";
             xhr.open("POST", url, true);
             xhr.setRequestHeader("Accept", "application/json");
@@ -699,7 +707,7 @@
                   }
                 };
                 var data = JSON.stringify({"type":"datahub_resource", "name":"deby_lod2_4906975_002","title":"DEBY_LOD2_4906975", "extras": [{"key": "ADDRESS_STREET","value": "Arcisstraße 21"}, {"key": "BUILDING_MEASURED_HEIGHT", "value":"15.76"}, {"key": "BUILDING_MEASURED_HEIGHT_UNIT", "value":"urn:adv:uom:m"}], "notes":"This set of data is out of the test data set_TUM Munich_", "end_collection_date": "","licence_agreement":["licence_agreement_check"]});
-                xhr.send(data);
+                xhr.send(data);*/
           }
 
         </script>

@@ -663,6 +663,132 @@
             <!-- Create a form container -->
             <div class="container">
             <!-- Username -->
+            <fieldset>
+              <legend>Pre-Set Categories for Information:</legend>
+                <label for="ckan-MYschematypetype" visible="true" >Schema Type:</label><br>
+                <input type="text" id="ckan-MYschematypetype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly><br><br>
+
+                <label for="ckan-MYName">Name:</label><br>
+                <input type="text" id="ckan-MYName" name="ckan-name" class="ckan-input-field" value="deby_lod2_4906975" readonly><br><br>
+
+                <label for="ckan-MYGroups">Groups:</label><br>
+                <input type="text" id="ckan-MYGroups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly><br><br>
+
+                <label for="ckan-MYLabel">Spatial extend:</label><br>
+                <input type="text" id="ckan-MYLabel" name="ckan-label" class="ckan-input-field" value="1,1;2,1;2,2;1,2;1,1"  readonly><br><br>
+
+                <label for="ckan-MYEndcollectiondate">End collectian date:</label><br>
+                <input type="text" id="ckan-MYEndcollectiondate" name="ckan-endcollectiondate" class="ckan-input-field" value="2021-01-01" STYLE="width: 290px"  readonly>
+                <input type="text" id="ckan-individualendcollectiondate" name="ckan-IndividualEndCollDate" class="ckan-input-field" placeholder="2000-02-22" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" STYLE="width: 300px" STYLE="border-color: green"><br><br>
+            </fieldset>
+
+            <fieldset>
+              <legend>Categories defined by user:</legend>
+                <!--Single Line Input-->
+                <label for="ckan-MYTitle">Title:</label><br>
+                <input type="text" id="ckan-MYTitle" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data"><br><br>
+
+                <label for="ckan-MYDescriptionnodes">Description Node:</label><br>
+                <input type="text" id="ckan-MYDescriptionnodes" name="ckan-Description_Nodes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" ><br><br>
+
+                <!-- Drop Down Box-->
+                <label for="ckan-MyLicence">Licence:</label><br>
+                <select id="ckan-MyLicence" name="ckan-dropdown1" class="ckan-input-field">
+                  <option value="cc-by" selected>Creative Commons Attribution</option>
+                  <option value="cc-by-sa">Creative Commons Attribution Share-Alike</option>
+                  <option value="cc-zero">Creative Commons CCZero</option>
+                  <option value="cc-nc">Creative Commons Non-Commercial (Any)</option>
+                  <option value="gfdl">GNU Free Documentation License</option>
+                  <option value="notspecified">License not specified</option>
+                  <option value="odc-by">Open Data Commons Attribution License</option>
+                  <option value="odc-odbl">Open Data Commons Open Database License (ODbL)</option>
+                  <option value="odc-pddl">Open Data Commons Public Domain Dedication and License (PDDL)</option>
+                  <option value="other-at">Other (Attribution)</option>
+                  <option value="other-nc">Other (Non-Commercial)</option>
+                  <option value="other-closed">Other (Not Open)</option>
+                  <option value="other-open">Other (Open)</option>
+                  <option value="other-pd">Other (Public Domain)</option>
+                  <option value="uk-ogl">UK Open Government Licence (OGL)</option>
+                </select><br><br>
+
+                <!-- Drop Down Box-->
+                <label for="ckan-MyOrganization">Organization:</label><br>
+                <select id="ckan-MyOrganization" name="ckan-dropdown2" class="ckan-input-field">
+                  <option value="bayerische-vermessungsverwaltung" selected>Bayerische Vermessungsverwaltung</option>
+                  <option value="bayern-innovativ">Bayern Innovativ</option>
+                  <option value="firmen">Firmen</option>
+                  <option value="hardwareentwickler">Hardwareentwickler</option>
+                  <option value="lehrstuhl-fur-geoinformatik">Lehrstuhl fÃ¼r Geoinformatik</option>
+                  <option value="softwareanbieter">Softwareanbieter</option>
+                  <option value="technische-universitat-munchen">Technische UniversitÃ¤t MÃ¼nchen (TUM)</option>
+                  <option value="technologieanbieter">Technologieanbieter</option>
+                  <option value="themenplattform-digitales-planen-und-bauen">Themenplattform Digitales Planen und Bauen</option>
+                  <option value="themenplattform-smarte-stadte-und-regionen">Themenplattform Smarte StÃ¤dte und Regionen</option>
+                </select><br><br>
+
+                <!-- Drop Down Box-->
+                <label for="ckan-MYVisibility">Visibility:</label><br>
+                <select id="ckan-MYVisibility"name="ckan-dropdown3" class="ckan-input-field">
+                  <option value="ckan-visibility-false" selected>Public</option>
+                  <option value="ckan-visibility-true">Organization Internal</option>
+                </select><br><br>
+
+                <!-- Drop Down Box-->
+                <label for="ckan-MYCustomfields">Custom Fields:</label><br>
+                <select id="ckan-MYCustomfields" name="ckan-dropdown4" class="ckan-input-field" multiple>
+                  <option value="ID_aagssdg" selected>ID_aagssdg</option>
+                  <option value="ID_hsfdfks">ID_hsfdfks</option>
+                  <option value="ID_sgdskkd">ID_sgdskkd</option>
+                  <option value="ID_nnernrn">ID_nnernrn</option>
+                </select>
+                <p>Hold down the Ctrl (windows) or Command (Mac) button to select multiple options.</p>
+
+                <input type="checkbox" id="ckan-Licence_Agreement" name="ckan-Licence_Agreement" value="Agreed">
+                <label for="ckan-Licence_Agreement"> I hereby confirm that all data entered by me is covered by the license selected above.</label><br><br>
+
+
+                <input type="submit" value="Submit">
+                <input type="reset">
+            </fieldset>
+
+            <fieldset>
+              <legend>Additional categories defined by user:</legend>
+                <!--Single Line Input-->
+                <label for="ckan-MYTags">Tags:</label><br>
+                <input type="text" id="ckan-MYTags" name="ckan-Tags" class="ckan-input-field"  placeholder="e.g. economy"><br><br>
+
+                <label for="ckan-MYAutorname">Autor Name:</label><br>
+                <input type="text" id="ckan-MYAutorname" name="ckan-Autor_Name" class="ckan-input-field" width=300 placeholder="Joe Bloggs" ><br><br>
+
+                <label for="ckan-MYAutormail">Autor Mail:</label><br>
+                <input type="text" id="ckan-MYAutormail" name="ckan-Autor_Mail" class="ckan-input-field" width=300 placeholder="Joe@example.com" ><br><br>
+
+                <label for="ckan-MYMaintainername">Maintiner Name:</label><br>
+                <input type="text" id="ckan-MYMaintainername" name="ckan-Maintainer_Name" class="ckan-input-field" width=300 placeholder="Jon Smith" ><br><br>
+
+                <label for="ckan-MYMaintainermail">Maintainer Mail:</label><br>
+                <input type="text" id="ckan-MYMaintainermail" name="ckan-Maintainer_Mail" class="ckan-input-field" width=300 placeholder="JonSmith@example.com" ><br><br>
+
+
+                <label for="ckan-MYLanguage1">Language:</label><br>
+                <input type="radio" id="ckan-MYLanguage1" name="ckan-language" value="ckan-language-English">
+                <label for="ckan-MYLanguage1">English</label><br>
+                <input type="radio" id="ckan-MYLanguage2" name="ckan-language" value="ckan-language-German">
+                <label for="ckan-MYLanguage2">German</label><br><br>
+
+
+                <label for="ckan-MYVersion">Version:</label><br>
+                <input type="text" id="ckan-MYVersion" name="ckan-Version" class="ckan-input-field" width=300 placeholder="1.0" ><br><br>
+
+                <label for="ckan-MYBeginncollectiondate">End collectian date:</label><br>
+                <input type="text" id="ckan-MYBeginncollectiondate" name="ckan-beginncollectiondate" class="ckan-input-field" value="2021-01-01" STYLE="width: 290px"  readonly>
+                <input type="text" id="ckan-individualbeginncollectiondate" name="ckan-IndividualBeginnCollDate" class="ckan-input-field" placeholder="2000-02-22" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" STYLE="width: 300px" STYLE="border-color: green"><br><br>
+
+
+            </fieldset>
+
+
+
               <label for="uname"><b>Author</b></label>
               <input type="text" placeholder="Enter Username" name="uname" required>
               <!-- Password -->

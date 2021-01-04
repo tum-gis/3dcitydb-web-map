@@ -644,6 +644,21 @@
             }
         </script>
         <script src="script.js"></script>
+        <SCRIPT language="javascript">
+        function ckan_addinputfield(){
+              var new_chq_no = parseInt($('#total_chq').val())+1;
+              var new_input="<input type='text'  id='new_"+new_chq_no+"'>";
+              $('#new_chq').append(new_input);
+              $('#total_chq').val(new_chq_no)
+            }
+            function ckan_removeinputfield(){
+              var last_chq_no = $('#total_chq').val();
+              if(last_chq_no>1){
+                $('#new_'+last_chq_no).ckan_removeinputfield();
+                $('#total_chq').val(last_chq_no-1);
+              }
+            }
+        </SCRIPT>
 
         <!---<input type="checkbox" id="css-toggle-switch" checked="checked" class="css-toggle-switch">
         <label for="css-toggle-switch" class="btn">CKAN Log in for data transfer</label>--->
@@ -665,35 +680,38 @@
             <!-- Username -->
             <fieldset>
               <legend class="ckan-form-label">Pre-Set Categories for Information:</legend>
-                <label class="ckan-form-label" for="ckan-MYschematypetype" visible="true" >Schema Type:</label><br>
-                <input type="text" id="ckan-MYschematypetype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly><br><br>
+                <label class="ckan-form-label" for="ckan-form-schematypetype" visible="true" >Schema Type:</label><br>
+                <input type="text" id="ckan-form-schematypetype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly><br><br>
 
-                <label class="ckan-form-label" for="ckan-MYName">Name:</label><br>
-                <input type="text" id="ckan-MYName" name="ckan-name" class="ckan-input-field" value="deby_lod2_4906975" readonly><br><br>
+                <label class="ckan-form-label" for="ckan-form-name">Name:</label><br>
+                <input type="text" id="ckan-form-name" name="ckan-name" class="ckan-input-field" value="deby_lod2_4906975" readonly><br><br>
 
-                <label class="ckan-form-label" for="ckan-MYGroups">Groups:</label><br>
-                <input type="text" id="ckan-MYGroups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly><br><br>
+                <label class="ckan-form-label" for="ckan-form-groups">Groups:</label><br>
+                <input type="text" id="ckan-form-groups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly>
+                <p class="ckan_form_pinfo"> Each catalog entry is assigned to exactly one "main category". The assignment to the groups "Topics" and "Model regions" is optional; more than one group can also be selected here. </p><br><br>
 
-                <label class="ckan-form-label" for="ckan-MYLabel">Spatial extend:</label><br>
-                <input type="text" id="ckan-MYLabel" name="ckan-label" class="ckan-input-field" value="1,1;2,1;2,2;1,2;1,1"  readonly><br><br>
+                <label class="ckan-form-label" for="ckan-form-label">Spatial extend:</label><br>
+                <input type="text" id="ckan-form-label" name="ckan-label" class="ckan-input-field" value="1,1;2,1;2,2;1,2;1,1"  readonly><br><br>
 
-                <label class="ckan-form-label" for="ckan-MYEndcollectiondate">End collectian date:</label><br>
-                <input type="text" id="ckan-MYEndcollectiondate" name="ckan-endcollectiondate" class="ckan-input-field" value="2021-01-01" STYLE="width: 290px"  readonly>
-                <input type="text" id="ckan-individualendcollectiondate" name="ckan-IndividualEndCollDate" class="ckan-input-field" placeholder="2000-02-22" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" STYLE="width: 300px" STYLE="border-color: green"><br><br>
+                <label class="ckan-form-label" for="ckan-form-endcollectiondate">End collectian date:</label><br>
+                <input type="text" id="ckan-form-endcollectiondate" name="ckan-endcollectiondate" class="ckan-input-field" value="2021-01-01" STYLE="width: 290px"  readonly>
+                <input type="text" id="ckan-form-individualendcollectiondate" name="ckan-IndividualEndCollDate" class="ckan-input-field" placeholder="2000-02-22" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" STYLE="width: 300px" STYLE="border-color: green">
+                <p class="ckan_form_pinfo">This marks the validity period of the catalog entry. This period can be used to search for entries later. </p><br><br>
+
             </fieldset>
 
             <fieldset>
               <legend class="ckan-form-label" >Categories defined by user:</legend>
                 <!--Single Line Input-->
-                <label class="ckan-form-label" for="ckan-MYTitle">Title:</label><br>
-                <input type="text" id="ckan-MYTitle" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data"><br><br>
+                <label class="ckan-form-label" for="ckan-form-title">Title:</label><br>
+                <input type="text" id="ckan-form-title" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data"><br><br>
 
-                <label class="ckan-form-label" for="ckan-MYDescriptionnodes">Description Node:</label><br>
-                <input type="text" id="ckan-MYDescriptionnodes" name="ckan-Description_Nodes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" ><br><br>
+                <label class="ckan-form-label" for="ckan-form-descriptionnodes">Description Node:</label><br>
+                <input type="text" id="ckan-form-descriptionnodes" name="ckan-Description_Nodes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" ><br><br>
 
                 <!-- Drop Down Box-->
-                <label class="ckan-form-label" for="ckan-MyLicence">Licence:</label><br>
-                <select id="ckan-MyLicence" name="ckan-dropdown1" class="ckan-input-field">
+                <label class="ckan-form-label" for="ckan-form-licence">Licence:</label><br>
+                <select id="ckan-form-licence" name="ckan-dropdown1" class="ckan-input-field">
                   <option value="cc-by" selected>Creative Commons Attribution</option>
                   <option value="cc-by-sa">Creative Commons Attribution Share-Alike</option>
                   <option value="cc-zero">Creative Commons CCZero</option>
@@ -709,11 +727,12 @@
                   <option value="other-open">Other (Open)</option>
                   <option value="other-pd">Other (Public Domain)</option>
                   <option value="uk-ogl">UK Open Government Licence (OGL)</option>
-                </select><br><br>
+                </select>
+                <p class="ckan_form_pinfo"> Licence definitions and additional information can be found at opendefinition.org </p><br><br>
 
                 <!-- Drop Down Box-->
-                <label class="ckan-form-label" for="ckan-MyOrganization">Organization:</label><br>
-                <select id="ckan-MyOrganization" name="ckan-dropdown2" class="ckan-input-field">
+                <label class="ckan-form-label" for="ckan-form-organization">Organization:</label><br>
+                <select id="ckan-form-organization" name="ckan-dropdown2" class="ckan-input-field">
                   <option value="bayerische-vermessungsverwaltung" selected>Bayerische Vermessungsverwaltung</option>
                   <option value="bayern-innovativ">Bayern Innovativ</option>
                   <option value="firmen">Firmen</option>
@@ -724,18 +743,19 @@
                   <option value="technologieanbieter">Technologieanbieter</option>
                   <option value="themenplattform-digitales-planen-und-bauen">Themenplattform Digitales Planen und Bauen</option>
                   <option value="themenplattform-smarte-stadte-und-regionen">Themenplattform Smarte StÃ¤dte und Regionen</option>
-                </select><br><br>
+                </select>
+                <p class="ckan_form_pinfo"> Defines which organization the catalog entry is assigned to. </p><br><br>
 
                 <!-- Drop Down Box-->
-                <label class="ckan-form-label" for="ckan-MYVisibility">Visibility:</label><br>
-                <select id="ckan-MYVisibility"name="ckan-dropdown3" class="ckan-input-field">
+                <label class="ckan-form-label" for="ckan-form-visibility">Visibility:</label><br>
+                <select id="ckan-form-visibility"name="ckan-dropdown3" class="ckan-input-field">
                   <option value="ckan-visibility-false" selected>Public</option>
                   <option value="ckan-visibility-true">Organization Internal</option>
                 </select><br><br>
 
                 <!-- Drop Down Box-->
-                <label class="ckan-form-label" for="ckan-MYCustomfields">Custom Fields:</label><br>
-                <select id="ckan-MYCustomfields" name="ckan-dropdown4" class="ckan-input-field" multiple>
+                <label class="ckan-form-label" for="ckan-form-customfields">Custom Fields:</label><br>
+                <select id="ckan-form-customfields" name="ckan-dropdown4" class="ckan-input-field" multiple>
                   <option value="ID_aagssdg" selected>ID_aagssdg</option>
                   <option value="ID_hsfdfks">ID_hsfdfks</option>
                   <option value="ID_sgdskkd">ID_sgdskkd</option>
@@ -743,46 +763,51 @@
                 </select>
                 <p class="ckan-form-label" >Hold down the Ctrl (windows) or Command (Mac) button to select multiple options.</p>
 
-                <input type="checkbox" id="ckan-Licence_Agreement" name="ckan-Licence_Agreement" value="Agreed">
-                <label class="ckan-form-label" for="ckan-Licence_Agreement"> I hereby confirm that all data entered by me is covered by the license selected above.</label><br><br>
+                <input type="checkbox" id="ckan-form-licence_agreement" name="ckan-Licence_Agreement" value="Agreed">
+                <label class="ckan-form-label" for="ckan-form-licence_agreement"> I hereby confirm that all data entered by me is covered by the license selected above.</label><br><br>
 
-
-                <input type="submit" value="Submit">
-                <input type="reset">
             </fieldset>
 
             <fieldset>
               <legend class="ckan-form-label" >Additional categories defined by user:</legend>
                 <!--Single Line Input-->
-                <label class="ckan-form-label" for="ckan-MYTags">Tags:</label><br>
-                <input type="text" id="ckan-MYTags" name="ckan-Tags" class="ckan-input-field"  placeholder="e.g. economy"><br><br>
+                <label class="ckan-form-label" for="ckan-form-tags">Tags:</label><br>
+                <input type="text" id="ckan-form-tags" name="ckan-Tags" class="ckan-input-field"  placeholder="e.g. economy">
+                <p class="ckan_form_pinfo">  Tags can be used to find catalog entries more easily. A tag is a word that stands in connection with the entry. </p> <br><br>
 
-                <label class="ckan-form-label" for="ckan-MYAutorname">Autor Name:</label><br>
-                <input type="text" id="ckan-MYAutorname" name="ckan-Autor_Name" class="ckan-input-field" width=300 placeholder="Joe Bloggs" ><br><br>
+                <label class="ckan-form-label" for="ckan-form-autorname">Autor Name:</label><br>
+                <input type="text" id="ckan-form-autorname" name="ckan-Autor_Name" class="ckan-input-field" width=300 placeholder="Joe Bloggs" ><br>
 
-                <label class="ckan-form-label" for="ckan-MYAutormail">Autor Mail:</label><br>
-                <input type="text" id="ckan-MYAutormail" name="ckan-Autor_Mail" class="ckan-input-field" width=300 placeholder="Joe@example.com" ><br><br>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                  <button class="ckan_addbtn" onclick="ckan_addinputfield()">Add</button>
+                  <button class="ckan_removebtn" onclick="ckan_removeinputfield()">Remove</button>
+                  <div id="new_chq"></div>
+                  <input type="hidden" class="ckan-input-field" value="1" id="total_chq"> <br>
 
-                <label class="ckan-form-label" for="ckan-MYMaintainername">Maintiner Name:</label><br>
-                <input type="text" id="ckan-MYMaintainername" name="ckan-Maintainer_Name" class="ckan-input-field" width=300 placeholder="Jon Smith" ><br><br>
+                <label class="ckan-form-label" for="ckan-form-autormail">Autor Mail:</label><br>
+                <input type="text" id="ckan-form-autormail" name="ckan-Autor_Mail" class="ckan-input-field" width=300 placeholder="Joe@example.com" ><br><br>
 
-                <label class="ckan-form-label" for="ckan-MYMaintainermail">Maintainer Mail:</label><br>
-                <input type="text" id="ckan-MYMaintainermail" name="ckan-Maintainer_Mail" class="ckan-input-field" width=300 placeholder="JonSmith@example.com" ><br><br>
+                <label class="ckan-form-label" for="ckan-form-maintainername">Maintainer Name:</label><br>
+                <input type="text" id="ckan-form-maintainername" name="ckan-Maintainer_Name" class="ckan-input-field" width=300 placeholder="Jon Smith" ><br><br>
 
-
-                <label class="ckan-form-label" for="ckan-MYLanguage1">Language:</label><br>
-                <input type="radio" id="ckan-MYLanguage1" name="ckan-language" value="ckan-language-English">
-                <label class="ckan-form-label" for="ckan-MYLanguage1">English</label><br>
-                <input type="radio" id="ckan-MYLanguage2" name="ckan-language" value="ckan-language-German">
-                <label class="ckan-form-label" for="ckan-MYLanguage2">German</label><br><br>
+                <label class="ckan-form-label" for="ckan-form-maintainermail">Maintainer Mail:</label><br>
+                <input type="text" id="ckan-form-maintainermail" name="ckan-Maintainer_Mail" class="ckan-input-field" width=300 placeholder="JonSmith@example.com" ><br><br>
 
 
-                <label class="ckan-form-label" for="ckan-MYVersion">Version:</label><br>
-                <input type="text" id="ckan-MYVersion" name="ckan-Version" class="ckan-input-field" width=300 placeholder="1.0" ><br><br>
+                <label class="ckan-form-label" for="ckan-form-language1">Language:</label><br>
+                <input type="radio" id="ckan-form-language1" name="ckan-language" value="ckan-language-English">
+                <label class="ckan-form-label" for="ckan-form-language1">English</label><br>
+                <input type="radio" id="ckan-form-language2" name="ckan-language" value="ckan-language-German">
+                <label class="ckan-form-label" for="ckan-form-language2">German</label><br><br>
 
-                <label class="ckan-form-label" for="ckan-MYBeginncollectiondate">End collectian date:</label><br>
-                <input type="text" id="ckan-MYBeginncollectiondate" name="ckan-beginncollectiondate" class="ckan-input-field" value="2021-01-01" STYLE="width: 290px"  readonly>
-                <input type="text" id="ckan-individualbeginncollectiondate" name="ckan-IndividualBeginnCollDate" class="ckan-input-field" placeholder="2000-02-22" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" STYLE="width: 300px" STYLE="border-color: green"><br><br>
+
+                <label class="ckan-form-label" for="ckan-form-version">Version:</label><br>
+                <input type="text" id="ckan-form-version" name="ckan-Version" class="ckan-input-field" width=300 placeholder="1.0" >
+                <p class="ckan_form_pinfo"> The version number can be used to make changes to the catalog entry visible. The higher the version number, the more often the catalog entry has been edited.</p><br><br>
+
+                <label class="ckan-form-label" for="ckan-form-beginncollectiondate">End collectian date:</label><br>
+                <input type="text" id="ckan-form-beginncollectiondate" name="ckan-beginncollectiondate" class="ckan-input-field" value="2021-01-01" STYLE="width: 290px"  readonly>
+                <input type="text" id="ckan-form-individualbeginncollectiondate" name="ckan-IndividualBeginnCollDate" class="ckan-input-field" placeholder="2000-02-22" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" STYLE="width: 300px" STYLE="border-color: green"><br><br>
 
 
             </fieldset>

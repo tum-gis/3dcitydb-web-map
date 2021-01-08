@@ -665,11 +665,15 @@
         <div id="modal" class="css-toggle-content modal">
           <span class="close-importer">&times;</span>
 
-          <table id="ckan-attributes">
+          <table id="ckan-attribute-table">
+            <thead>
               <tr>
                 <th>Key</th>
                 <th>Value</th>
               </tr>
+              </thead>
+              <tbody id="ckan-attribute-table-body">
+              </tbody>
             </table>
 
           <p>Please fill in the attributes you want to sent to CKAN:</p>
@@ -831,10 +835,12 @@
           var span = document.getElementsByClassName("close-importer")[0];
           span.onclick = function() {
             modal.style.display = "none";
+            document.getElementById('ckan-attribute-table-body').innerHTML = '';
           }
           window.onclick = function(event) {
             if (event.target == modal) {
               modal.style.display = "none";
+              document.getElementById('ckan-attribute-table-body').innerHTML = '';
             }
           }
 

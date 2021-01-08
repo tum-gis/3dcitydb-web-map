@@ -695,7 +695,7 @@
                 <p class="ckan_form_pinfo"> Each catalog entry is assigned to exactly one "main category". The assignment to the groups "Topics" and "Model regions" is optional; more than one group can also be selected here. </p><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-label">Spatial extend:</label><br>
-                <input type="text" id="ckan-form-label" name="ckan-label" class="ckan-input-field" value="1,1;2,1;2,2;1,2;1,1"  readonly><br><br>
+                <input type="text" id="ckan-form-spatial-extent" name="ckan-label" class="ckan-input-field" value="1,1;2,1;2,2;1,2;1,1"  readonly><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-endcollectiondate">End collectian date:</label><br>
                 <input type="text" id="ckan-form-endcollectiondate" name="ckan-endcollectiondate" class="ckan-input-field" value="2021-01-01" STYLE="width: 290px"  readonly>
@@ -831,6 +831,25 @@
         <!--<button id="ckan-submit-btn" class="ckan-btn">Submit Data</button>-->
         </div>
         <script>
+
+          function getSpatialBuildingInfo(){
+
+          var latitudeStr = urlController.getUrlParaValue('latitude', window.location.href, CitydbUtil);
+          var longitudeStr = urlController.getUrlParaValue('longitude', window.location.href, CitydbUtil);
+          console.log("Koordinaten:");
+          console.log(latitudeStr);
+          console.log(longitudeStr);
+
+          var ckan_spatial_extent= latitudeStr + '; ' + longitudeStr;
+
+          document.getElementById("ckan-form-spatial-extent").value=ckan_spatial_extent;
+
+
+
+
+
+          }
+
           var modal = document.getElementById("modal");
           var span = document.getElementsByClassName("close-importer")[0];
           span.onclick = function() {

@@ -644,37 +644,14 @@
             }
         </script>
         <script src="script.js"></script>
-        <SCRIPT language="javascript">
-        function ckan_addinputfield(){
-              var new_chq_no = parseInt($('#total_chq').val())+1;
-              var new_input="<input type='text'  id='new_"+new_chq_no+"'>";
-              $('#new_chq').append(new_input);
-              $('#total_chq').val(new_chq_no)
-            }
-            function ckan_removeinputfield(){
-              var last_chq_no = $('#total_chq').val();
-              if(last_chq_no>1){
-                $('#new_'+last_chq_no).remove();
-                $('#total_chq').val(last_chq_no-1);
-              }
-            }
-        </SCRIPT>
+
 
         <!---<input type="checkbox" id="css-toggle-switch" checked="checked" class="css-toggle-switch">
         <label for="css-toggle-switch" class="btn">CKAN Log in for data transfer</label>--->
         <div id="modal" class="css-toggle-content modal">
           <span class="close-importer">&times;</span>
 
-          <table id="ckan-attribute-table">
-            <thead>
-              <tr>
-                <th>Key</th>
-                <th>Value</th>
-              </tr>
-              </thead>
-              <tbody id="ckan-attribute-table-body">
-              </tbody>
-            </table>
+
 
           <p>Please fill in the attributes you want to sent to CKAN:</p>
             <form class="modal-content animate" action="/action_page.php" method="POST">
@@ -682,10 +659,28 @@
 
             <!-- Create a form container -->
             <div class="container" id="ckan-form-container"><br><br>
+              <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label>
+              <input type="text" placeholder="Enter Username" name="uname" required>
+              <!-- Password -->
+              <label class="ckan-form-label" for="psw"><b>API Key</b></label>
+              <input type="password" placeholder="Enter Password" name="psw" required><br><br>
+              <!-- Submit Button -->
+              <button class="ckan-btn" type="submit">Submit Data</button><br><br><br>
 
             <fieldset>
               <legend class="ckan-form-fieldsettitle">Pre-Set Categories for Information:</legend>
-                <br><label class="ckan-form-label" for="ckan-form-schematypetype" visible="true" >Schema Type:</label><br>
+                <br><table id="ckan-attribute-table" STYLE="color: black" STYLE="text-align: center">
+                  <thead>
+                    <tr>
+                      <th>Key</th>
+                      <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ckan-attribute-table-body">
+                    </tbody>
+                  </table>
+                  <br><br>
+                <label class="ckan-form-label" for="ckan-form-schematypetype" visible="true" >Schema Type:</label><br>
                 <input type="text" id="ckan-form-schematypetype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-name">Name:</label><br>
@@ -788,23 +783,36 @@
                 <p class="ckan_form_pinfo">  Tags can be used to find catalog entries more easily. A tag is a word that stands in connection with the entry. </p> <br><br>
 
                 <label class="ckan-form-label" for="ckan-form-autorname">Autor Name:</label><br>
-                <input type="text" id="ckan-form-autorname" name="ckan-Autor_Name" class="ckan-input-field" width=300 placeholder="Joe Bloggs" ><br>
-
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-                  <button class="ckan_addbtn" onclick="ckan_addinputfield()">Add</button>
-                  <button class="ckan_removebtn" onclick="ckan_removeinputfield()">Remove</button>
-                  <div id="new_chq"></div>
-                  <input type="hidden" class="ckan-input-field" value="1" id="total_chq"> <br>
+                <table class="table table-bordered" id="dynamic_field1">
+                     <tr>
+                          <td><input type="text" name="name[]" placeholder="Enter autor name" id="ckan-form-autorname" class="ckan-input-field" /></td>
+                          <td><button type="button" name="add1" id="ckan-form-autor_nameadd" class="ckan_addbtn">Add More</button></td>
+                     </tr>
+                </table>
 
                 <label class="ckan-form-label" for="ckan-form-autormail">Autor Mail:</label><br>
-                <input type="text" id="ckan-form-autormail" name="ckan-Autor_Mail" class="ckan-input-field" width=300 placeholder="Joe@example.com" ><br><br>
+                <table class="table table-bordered" id="dynamic_field2">
+                     <tr>
+                          <td><input type="text" name="name[]" placeholder="Enter autor email" id="ckan-form-autormail" class="ckan-input-field" /></td>
+                          <td><button type="button" name="add2" id="ckan-form-autor_mailadd" class="ckan_addbtn">Add More</button></td>
+                     </tr>
+                </table>
 
                 <label class="ckan-form-label" for="ckan-form-maintainername">Maintainer Name:</label><br>
-                <input type="text" id="ckan-form-maintainername" name="ckan-Maintainer_Name" class="ckan-input-field" width=300 placeholder="Jon Smith" ><br><br>
+                <table class="table table-bordered" id="dynamic_field3">
+                     <tr>
+                          <td><input type="text" name="name[]" placeholder="Enter maintainer name" id="ckan-form-maintainername" class="ckan-input-field" /></td>
+                          <td><button type="button" name="add3" id="ckan-form-maintainer_add" class="ckan_addbtn">Add More</button></td>
+                     </tr>
+                </table>
 
                 <label class="ckan-form-label" for="ckan-form-maintainermail">Maintainer Mail:</label><br>
-                <input type="text" id="ckan-form-maintainermail" name="ckan-Maintainer_Mail" class="ckan-input-field" width=300 placeholder="JonSmith@example.com" ><br><br>
-
+                <table class="table table-bordered" id="dynamic_field4">
+                     <tr>
+                          <td><input type="text" name="name[]" placeholder="Enter maintainer mail" id="ckan-form-maintainermail" class="ckan-input-field" /></td>
+                          <td><button type="button" name="add4" id="ckan-form-maintainer_emailadd" class="ckan_addbtn">Add More</button></td>
+                     </tr>
+                </table>
 
                 <label class="ckan-form-label" for="ckan-form-language1">Language:</label><br>
                 <input type="radio" id="ckan-form-language1" name="ckan-language" value="ckan-language-English">
@@ -826,18 +834,66 @@
 
 
 
-              <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label>
-              <input type="text" placeholder="Enter Username" name="uname" required>
-              <!-- Password -->
-              <label class="ckan-form-label" for="psw"><b>API Key</b></label>
-              <input type="password" placeholder="Enter Password" name="psw" required>
-              <!-- Submit Button -->
-              <button class="ckan-btn" type="submit">Submit Data</button>
+
 
         </div>
         </form>
         <!--<button id="ckan-submit-btn" class="ckan-btn">Submit Data</button>-->
         </div>
+        <script>
+        $(document).ready(function(){
+             var i=1;
+             $('#ckan-form-autor_nameadd').click(function(){
+                  i++;
+                  $('#dynamic_field1').append('<tr id="ckan-form-autor_nameaddrow'+i+'"><td><input type="text" name="name[]" placeholder="Enter autor name" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+             });
+             $(document).on('click', '.ckan-form-btn_remove', function(){
+                  var button_id = $(this).attr("id");
+                  $('#ckan-form-autor_nameaddrow'+button_id+'').remove();
+             });
+        });
+        </script>
+        <script>
+        $(document).ready(function(){
+             var i=1;
+             $('#ckan-form-autor_mailadd').click(function(){
+                  i++;
+                  $('#dynamic_field2').append('<tr id="ckan-form-autor_mailaddrow'+i+'"><td><input type="text" name="name[]" placeholder="Enter autor email" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+             });
+             $(document).on('click', '.ckan-form-btn_remove', function(){
+                  var button_id = $(this).attr("id");
+                  $('#ckan-form-autor_mailaddrow'+button_id+'').remove();
+             });
+        });
+        </script>
+        <script>
+        $(document).ready(function(){
+             var i=1;
+             $('#ckan-form-maintainer_add').click(function(){
+                  i++;
+                  $('#dynamic_field3').append('<tr id="ckan-form-maintainer_addrow'+i+'"><td><input type="text" name="name[]" placeholder="Enter maintainer name" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+             });
+             $(document).on('click', '.ckan-form-btn_remove', function(){
+                  var button_id = $(this).attr("id");
+                  $('#ckan-form-maintainer_addrow'+button_id+'').remove();
+             });
+        });
+        </script>
+        <script>
+        $(document).ready(function(){
+             var i=1;
+             $('#ckan-form-maintainer_emailadd').click(function(){
+                  i++;
+                  $('#dynamic_field4').append('<tr id="ckan-form-maintainer_mailaddrow'+i+'"><td><input type="text" name="name[]" placeholder="Enter maintainer mail" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+             });
+             $(document).on('click', '.ckan-form-btn_remove', function(){
+                  var button_id = $(this).attr("id");
+                  $('#ckan-form-maintainer_mailaddrow'+button_id+'').remove();
+             });
+        });
+        </script>
+
+
         <script>
 
           function getSpatialBuildingInfo(){

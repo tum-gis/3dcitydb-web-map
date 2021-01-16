@@ -659,16 +659,21 @@
 
             <!-- Create a form container -->
             <div class="container" id="ckan-form-container"><br><br>
+              <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
               <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label>
               <input type="text" placeholder="Enter Username" name="uname" required>
               <!-- Password -->
+              <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
               <label class="ckan-form-label" for="psw"><b>API Key</b></label>
               <input type="password" placeholder="Enter Password" name="psw" required><br><br>
               <!-- Submit Button -->
+              <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
+              <label class="ckan-form-label" for="ckan-form-title">Required fields</label><br>
               <button class="ckan-btn" type="submit">Submit Data</button><br><br><br>
 
             <fieldset>
               <legend class="ckan-form-fieldsettitle">Pre-Set Categories for Information:</legend>
+              <fieldset>
                 <br><table id="ckan-attribute-table" STYLE="color: black" STYLE="text-align: center">
                   <thead>
                     <tr>
@@ -680,6 +685,7 @@
                     </tbody>
                   </table>
                   <br><br>
+                </fieldset>
                 <label class="ckan-form-label" for="ckan-form-schematypetype" visible="true" >Schema Type:</label><br>
                 <input type="text" id="ckan-form-schematypetype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly><br><br>
 
@@ -703,7 +709,8 @@
             <fieldset>
               <legend class="ckan-form-fieldsettitle" >Categories defined by user:</legend>
                 <!--Single Line Input-->
-                <br><label class="ckan-form-label" for="ckan-form-title">Title:</label><br>
+                <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
+                <label class="ckan-form-label" for="ckan-form-title">Title:</label><br>
                 <input type="text" id="ckan-form-title" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data" required><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-descriptionnodes">Description Node:</label><br>
@@ -731,8 +738,9 @@
                 <p class="ckan_form_pinfo"> Licence definitions and additional information can be found at opendefinition.org </p><br><br>
 
                 <!-- Drop Down Box-->
+                <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
                 <label class="ckan-form-label" for="ckan-form-organization">Organization:</label><br>
-                <select id="ckan-form-organization" name="ckan-dropdown2" class="ckan-input-field">
+                <select id="ckan-form-organization" name="ckan-dropdown2" class="ckan-input-field" required>
                   <option value="bayerische-vermessungsverwaltung" selected>Bayerische Vermessungsverwaltung</option>
                   <option value="bayern-innovativ">Bayern Innovativ</option>
                   <option value="firmen">Firmen</option>
@@ -763,7 +771,8 @@
                 </select>
                 <p class="ckan-form-label" >Hold down the Ctrl (windows) or Command (Mac) button to select multiple options.</p>
 
-                <input type="checkbox" id="ckan-form-licence_agreement" name="ckan-Licence_Agreement" value="Agreed">
+                <input type="checkbox" id="ckan-form-licence_agreement" name="ckan-Licence_Agreement" value="Agreed" required>
+                <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
                 <label class="ckan-form-label" for="ckan-form-licence_agreement"> I hereby confirm that all data entered by me is covered by the license selected above.</label><br><br>
 
                 <button type="button" class="ckan-form-togglebutton" id="ckan-form-toggleadditionalcategoriesbutton">Show additional input categories</button>

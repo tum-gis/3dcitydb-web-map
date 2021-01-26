@@ -654,18 +654,18 @@
 
 
           <p>Please fill in the attributes you want to sent to CKAN:</p>
-            <form class="modal-content animate" action="/action_page.php" method="POST">
+            <form class="modal-content animate" action="javascript:transmitCKANdata();" method="POST">
             <label class="ckan-form-title" for="ckan-form-container" ><b>Web form for CKAN upload</b></label>
 
             <!-- Create a form container -->
             <div class="container" id="ckan-form-container"><br><br>
               <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
               <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label>
-              <input type="text" placeholder="Enter Username" name="uname" required>
-              <!-- Password -->
+              <input id="ckan-form-url" type="text" placeholder="Enter Username" name="uname" required>
+              <!-- API Key -->
               <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
               <label class="ckan-form-label" for="psw"><b>API Key</b></label>
-              <input type="password" placeholder="Enter Password" name="psw" required><br><br>
+              <input id="ckan-form-key" type="password" placeholder="Enter API Key" name="psw" required><br><br>
               <!-- Submit Button -->
               <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
               <label class="ckan-form-label" for="ckan-form-title">Required fields</label><br>
@@ -674,11 +674,13 @@
             <fieldset>
               <legend class="ckan-form-fieldsettitle">Pre-Set Categories for Information:</legend>
               <fieldset>
-                <br><table id="ckan-attribute-table" STYLE="color: black" STYLE="text-align: center">
+                <br>
+                <table id="ckan-attribute-table" STYLE="color: black" STYLE="text-align: center">
                   <thead>
                     <tr>
                       <th>Key</th>
                       <th>Value</th>
+                      <th>Include</th>
                     </tr>
                     </thead>
                     <tbody id="ckan-attribute-table-body">
@@ -687,17 +689,17 @@
                   <br><br>
                 </fieldset>
                 <label class="ckan-form-label" for="ckan-form-schematypetype" visible="true" >Schema Type:</label><br>
-                <input type="text" id="ckan-form-schematypetype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly><br><br>
+                <input type="text" id="ckan-form-schematype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-name">Name:</label><br>
-                <input type="text" id="ckan-form-name" name="ckan-name" class="ckan-input-field" value="deby_lod2_4906975" readonly><br><br>
+                <input type="text" id="ckan-form-name" name="ckan-name" class="ckan-input-field" value="deby_lod2_4906975124" readonly><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-groups">Groups:</label><br>
                 <input type="text" id="ckan-form-groups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly>
                 <p class="ckan_form_pinfo"> Each catalog entry is assigned to exactly one "main category". The assignment to the groups "Topics" and "Model regions" is optional; more than one group can also be selected here. </p><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-label">Spatial extend:</label><br>
-                <input type="text" id="ckan-form-spatial-extent" name="ckan-label" class="ckan-input-field" value="1,1;2,1;2,2;1,2;1,1"  readonly><br><br>
+                <input type="text" id="ckan-form-spatial-extent" name="ckan-label" class="ckan-input-field" value=""  readonly><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-endcollectiondate">End collectian date:</label><br>
                 <input type="text" id="ckan-form-endcollectiondate" name="ckan-endcollectiondate" class="ckan-input-field" value="2021-01-01" STYLE="width: 290px"  readonly>
@@ -713,8 +715,8 @@
                 <label class="ckan-form-label" for="ckan-form-title">Title:</label><br>
                 <input type="text" id="ckan-form-title" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data" required><br><br>
 
-                <label class="ckan-form-label" for="ckan-form-descriptionnodes">Description Node:</label><br>
-                <input type="text" id="ckan-form-descriptionnodes" name="ckan-Description_Nodes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" ><br><br>
+                <label class="ckan-form-label" for="ckan-form-descriptionnotes">Description Note:</label><br>
+                <input type="text" id="ckan-form-descriptionnotes" name="ckan-Description_Notes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" ><br><br>
 
                 <!-- Drop Down Box-->
                 <label class="ckan-form-label" for="ckan-form-licence">Licence:</label><br>
@@ -847,7 +849,7 @@
 
         </div>
         </form>
-        <!--<button id="ckan-submit-btn" class="ckan-btn">Submit Data</button>-->
+
         </div>
         <script>
         $(document).ready(function(){
@@ -913,7 +915,7 @@
           console.log(latitudeStr);
           console.log(longitudeStr);
 
-          var ckan_spatial_extent= latitudeStr + '; ' + longitudeStr;
+          var ckan_spatial_extent= longitudeStr + ', ' + latitudeStr;
 
           document.getElementById("ckan-form-spatial-extent").value=ckan_spatial_extent;
 
@@ -936,25 +938,81 @@
             }
           }
 
-          var submit_btn = document.getElementById("ckan-submit-btn");
-          submit_btn.onclick = function() {
-            // Sending and receiving data in JSON format using POST method
-            //
-            console.log('Starting CKAN API');
-            /*var xhr = new XMLHttpRequest();
-            var url = "http://localhost:5000/api/3/action/package_create";
-            xhr.open("POST", url, true);
+          function transmitCKANdata(){
+            //Function start
+            console.log('Starting transmitting data to CKAN');
+
+            //getting the values of the input form fields
+            var url_host = document.getElementById("ckan-form-url").value;
+            var url_path = url_host + "/api/3/action/package_create";
+            var keyValue = document.getElementById("ckan-form-key").value;
+            var typeValue = document.getElementById("ckan-form-schematype").value;
+            var nameValue = document.getElementById("ckan-form-name").value;
+            var groupsValue = document.getElementById("ckan-form-groups").value;
+            var spatialExtentValue = document.getElementById("ckan-form-spatial-extent").value;
+            var endDateValue = document.getElementById("ckan-form-endcollectiondate").value;
+            var titleValue = document.getElementById("ckan-form-title").value;
+            var noteValue = document.getElementById("ckan-form-descriptionnotes").value;
+
+            //getting meta data values from the table (only checked values)
+            var tableBody = document.getElementById("ckan-attribute-table-body");
+            var tableBody_rows = document.getElementById("ckan-attribute-table-body").rows.length;
+            var extraValues = '[';
+              for (var i = 0, row; row = tableBody.rows[i]; i++) {
+                  //iterate through rows of the tbody with the Values
+                    var col1 = row.cells[0].innerHTML;
+                    var col2 = row.cells[1].innerHTML;
+
+                    //check if checked
+                    var check = document.getElementById(col1+"_checkbox");
+                    if(check.checked){
+                      var row_string = '{"key":"'+col1+'","value": "'+col2+'"}';
+                      extraValues += row_string;
+
+                      if(i<tableBody_rows-1){
+                        extraValues +=', ';
+                      }
+                    }
+
+                }
+                extraValues +=']';
+
+
+
+
+
+
+            //Printing out all values for debugging purposes
+            console.log('CKAN URL: '+url_path);
+            console.log('CKAN Key: '+keyValue);
+            console.log('CKAN Schema Type: '+typeValue);
+            console.log('CKAN Name: '+nameValue);
+            console.log('CKAN Groups: '+groupsValue);
+            console.log('CKAN Spatial Extend: '+spatialExtentValue);
+            console.log('CKAN End Date: '+endDateValue);
+            console.log('CKAN Title: '+titleValue);
+            console.log('CKAN Notes: '+noteValue);
+            console.log('CKAN Extra: '+extraValues);
+
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url_path, true);
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("Authorization", "3bd754d6-da8d-407a-9465-5613141146c7");
+            xhr.setRequestHeader("Authorization", keyValue);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var json = JSON.parse(xhr.responseText);
                     console.log(json);
                   }
                 };
-                var data = JSON.stringify({"type":"datahub_resource", "name":"deby_lod2_4906975_002","title":"DEBY_LOD2_4906975", "extras": [{"key": "ADDRESS_STREET","value": "Arcisstraße 21"}, {"key": "BUILDING_MEASURED_HEIGHT", "value":"15.76"}, {"key": "BUILDING_MEASURED_HEIGHT_UNIT", "value":"urn:adv:uom:m"}], "notes":"This set of data is out of the test data set_TUM Munich_", "end_collection_date": "","licence_agreement":["licence_agreement_check"]});
-                xhr.send(data);*/
+                //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
+                //data += extraValues;
+                var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'", "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","licence_agreement":["licence_agreement_check"]}';
+                //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
+                console.log(data);
+                xhr.send(data);
+
           }
 
         </script>

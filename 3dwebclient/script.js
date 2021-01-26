@@ -1047,7 +1047,7 @@ function createInfoTable(res, citydbLayer) {
                 var cell3 = ckan_row.insertCell(2);
                 cell1.innerHTML = key;
                 cell2.innerHTML = iValue;
-                cell3.innerHTML = '<input type="checkbox">';
+                cell3.innerHTML = '<input id="'+key+'_checkbox'+'" type="checkbox" checked>';
             }
             html += '</tbody></table>';
             cesiumEntity.description = html;

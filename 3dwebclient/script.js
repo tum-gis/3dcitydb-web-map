@@ -1033,6 +1033,7 @@ function createInfoTable(res, citydbLayer) {
         } else {
             console.log(kvp);
             var html = '<table class="cesium-infoBox-defaultTable" style="font-size:10.5pt"><tbody>';
+            document.getElementById('ckan-attribute-table-body').innerHTML = '';
             for (var key in kvp) {
                 var iValue = kvp[key];
                 // check if this value is a valid URL

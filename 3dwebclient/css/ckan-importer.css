@@ -1,3 +1,28 @@
+.ckan-tooltip {
+  position: relative;
+  display: inline-block;
+  color:gray;
+  size: 10px;
+}
+
+.ckan-tooltip .ckan-tooltiptext {
+  visibility: hidden;
+  width: 800px;
+  background-color:white;
+  color: gray;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.ckan-tooltip:hover .ckan-tooltiptext {
+  visibility: visible;
+}
+
+
 .ckan-btn{
   background-color: blue;
   border: none;

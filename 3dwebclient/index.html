@@ -764,8 +764,8 @@
                 <!-- Drop Down Box-->
                 <label class="ckan-form-label" for="ckan-form-visibility">Visibility:</label><br>
                 <select id="ckan-form-visibility"name="ckan-dropdown3" class="ckan-input-field">
-                  <option value="true">Organization Internal</option>
                   <option value="false" selected>Public</option>
+                  <option value="true">Organization Internal</option>
                 </select><br><br>
 
 
@@ -987,6 +987,12 @@
             var versionValue = document.getElementById("ckan-form-version").value;
             var beginDateValue = document.getElementById("ckan-form-individualbeginncollectiondate").value;
             var endDateValue = document.getElementById("ckan-form-individualendcollectiondate").value;
+            var tagValue = document.getElementById("ckan-form-tags").value;
+            var autorNameValue = document.getElementById("ckan-form-autorname").value;
+            var autorMailValue = document.getElementById("ckan-form-autormail").value;
+            var maintainerNameValue = document.getElementById("ckan-form-maintainername").value;
+            var maintainerMailValue = document.getElementById("ckan-form-maintainermail").value;
+
 
 
 
@@ -1047,11 +1053,11 @@
             console.log('CKAN Version: '+versionValue);
             console.log('CKAN Begin Date: '+beginDateValue);
             console.log('CKAN End Date: '+endDateValue);
-
-
-
-
-
+            console.log('CKAN Tag: '+tagValue);
+            console.log('CKAN Autor Name: '+autorNameValue);
+            console.log('CKAN Autor Mail: '+autorMailValue);
+            console.log('CKAN Maintainer Name: '+maintainerNameValue);
+            console.log('CKAN Maintainer Mail: '+maintainerMailValue);
 
 
 
@@ -1068,7 +1074,7 @@
                 };
                 //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
                 //data += extraValues;
-                var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'", "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'"}';
+                var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'", "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": [{"name": "'+tagValue+'"}],"author": [{"author_email": "'+autorMailValue+'", "author": "'+autorNameValue+'"}],"maintainer": [{"maintainer_email": "'+maintainerMailValue+'", "maintainer": "'+maintainerNameValue+'"}]}';
                 //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
                 //"spatial":"{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}",
                 console.log(data);

@@ -648,15 +648,17 @@
 
         <!---<input type="checkbox" id="css-toggle-switch" checked="checked" class="css-toggle-switch">
         <label for="css-toggle-switch" class="btn">CKAN Log in for data transfer</label>--->
-        <div id="modal" class="css-toggle-content modal">
-          <span class="close-importer">&times;</span>
+        <div id="ckan-modal" class="css-toggle-content ckan-modal">
+          <span class="ckan-close-importer">&times;</span>
 
-            <form class="modal-content animate" action="javascript:transmitCKANdata();" method="POST">
-            <label class="ckan-form-title" for="ckan-form-container" ><b>Web form for CKAN upload</b></label>
+            <form class="ckan-modal-content ckan-animate" action="javascript:transmitCKANdata();" method="POST">
+            <div class="ckan-form-title">
+              <h3>Web form for CKAN upload</h3>
+            </div>
 
             <!-- Create a form container -->
-            <div class="container" id="ckan-form-container"><br><br>
-              <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
+            <div class="ckan-container" id="ckan-form-container">
+              <label class="ckan-form-label-star" for="ckan-form-title">* </label>
               <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label><br><br>
               <input class="ckan-input-field" id="ckan-form-url" type="url" placeholder="  Enter CKAN URL"  name="uname" required
               minlength="10"
@@ -856,6 +858,26 @@
         </form>
 
         </div>
+
+        <!--Transmission message modal -->
+
+<div id="ckan-modal-message" class="ckan-modal-message fade show" tabindex="-1" role="dialog">
+
+    <div class="ckan-modal-message-content">
+      <div class="ckan-modal-message-header">
+        <button type="button" class="ckan-close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="ckan-modal-body">
+          <h2 class="ckan-modal-title" id="exampleModalCenterTitle">Transmission to CKAN was successful!</h2>
+          <p class="ckan-text-modal mb-3">Fehlermeldung:</p>
+      </div>
+      </div>
+  </div>
+
+
+
         <script>
         $(document).ready(function(){
              var i=1;
@@ -930,8 +952,8 @@
 
           }
 
-          var modal = document.getElementById("modal");
-          var span = document.getElementsByClassName("close-importer")[0];
+          var modal = document.getElementById("ckan-modal");
+          var span = document.getElementsByClassName("ckan-close-importer")[0];
           span.onclick = function() {
             modal.style.display = "none";
             document.getElementById('ckan-attribute-table-body').innerHTML = '';

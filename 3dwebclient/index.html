@@ -659,7 +659,7 @@
 
             <!-- Create a form container -->
             <div class="container" id="ckan-form-container"><br><br>
-              <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
+              <br><label class="ckan-form-label-star" for="ckan-form-label">* </label>
               <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label>
               <input id="ckan-form-url" type="text" placeholder="Enter Username" name="uname" required>
               <!-- API Key -->
@@ -713,7 +713,7 @@
                 <!--Single Line Input-->
                 <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
                 <label class="ckan-form-label" for="ckan-form-title">Title:</label><br>
-                <input type="text" id="ckan-form-title" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data" required><br><br>
+                <input type="text" id="ckan-form-title" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data" required autocomplete="off"><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-descriptionnotes">Description Note:</label><br>
                 <input type="text" id="ckan-form-descriptionnotes" name="ckan-Description_Notes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" ><br><br>
@@ -1008,7 +1008,7 @@
                 };
                 //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
                 //data += extraValues;
-                var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'", "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","licence_agreement":["licence_agreement_check"]}';
+                var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","spatial":"{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}", "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","licence_agreement":["licence_agreement_check"]}';
                 //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
                 console.log(data);
                 xhr.send(data);

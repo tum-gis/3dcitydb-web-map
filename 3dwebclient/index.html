@@ -859,21 +859,43 @@
 
         </div>
 
-        <!--Transmission message modal -->
+<!--Transmission message modal -->
+<div id="ckan-modal-message" class="css-toggle-content ckan-modal-message">
+    <form class="ckan-modal-message-content ckan-animate" action="javascript:closeCKANimporter()" method="">
+    <div class="ckan-form-title">
+      <h3>Web form for CKAN upload</h3>
+    </div>
+        <h4>Transmission was succesful!</h4>
+      <button class="ckan-btn" type="submit">Close</button><br><br>
 
-<div id="ckan-modal-message" class="ckan-modal-message fade show" tabindex="-1" role="dialog">
+  </form>
+</div>
 
-    <div class="ckan-modal-message-content">
-      <div class="ckan-modal-message-header">
-        <button type="button" class="ckan-close">
-          <span aria-hidden="true">×</span>
-        </button>
+
+<!--Start connection modal -->
+  <div id="ckan-modal-connection" class="css-toggle-content ckan-modal-connection">
+      <form class="ckan-modal-connection-content ckan-animate" action="javascript:connect2CKAN()" method="">
+      <div class="ckan-form-title">
+        <h3>Web form for CKAN upload</h3>
       </div>
-      <div class="ckan-modal-body">
-          <h2 class="ckan-modal-title" id="exampleModalCenterTitle">Transmission to CKAN was successful!</h2>
-          <p class="ckan-text-modal mb-3">Fehlermeldung:</p>
+
+      <!-- Create a form container -->
+      <div class="ckan-container" id="ckan-form-container">
+        <label class="ckan-form-label-star" for="ckan-form-connection-title">* </label>
+        <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label><br><br>
+        <input class="ckan-input-field" id="ckan-form-connection-url" type="url" placeholder="  Enter CKAN URL"  name="uname" required
+        minlength="10"
+        maxlength="100"
+        ><br>
+        <!-- API Key -->
+        <br><label class="ckan-form-label-star" for="ckan-form-connection-title">* </label>
+        <label class="ckan-form-label" for="psw"><b>API Key</b></label>
+        <input id="ckan-form-connection-key" class="ckan-input-field" type="password" placeholder="Enter API Key" name="psw" required><br><br>
+        <!-- Submit Button -->
+        <button class="ckan-btn" type="submit">Connect to CKAN</button><br><br>
+
       </div>
-      </div>
+    </form>
   </div>
 
 
@@ -938,7 +960,7 @@
 
           var latitudeStr = urlController.getUrlParaValue('latitude', window.location.href, CitydbUtil);
           var longitudeStr = urlController.getUrlParaValue('longitude', window.location.href, CitydbUtil);
-          console.log("Koordinaten:");
+          console.log("Coordinates:");
           console.log(latitudeStr);
           console.log(longitudeStr);
 
@@ -953,6 +975,7 @@
           }
 
           var modal = document.getElementById("ckan-modal");
+          var modal_connection = document.getElementById("ckan-modal-connection");
           var span = document.getElementsByClassName("ckan-close-importer")[0];
           span.onclick = function() {
             modal.style.display = "none";
@@ -963,6 +986,45 @@
               modal.style.display = "none";
               document.getElementById('ckan-attribute-table-body').innerHTML = '';
             }
+          }
+          window.onclick = function(event) {
+            if (event.target == modal_connection) {
+              modal_connection.style.display = "none";
+            }
+          }
+
+          function connect2CKAN(){
+            //Function start
+            console.log('Starting connection to CKAN');
+            var apiKeyValue = document.getElementById("ckan-form-connection-key").value;
+            var urlValue = document.getElementById("ckan-form-connection-url").value;
+
+            var url_user_organizations = urlValue + "/api/3/action/organization_list_for_user";
+
+            console.log('CKAN URL: '+urlValue);
+            console.log('CKAN API Key: '+apiKeyValue);
+
+
+            /*var xhr_c2C = new XMLHttpRequest();
+              xhr_c2C.open("GET", url_user_organizations = urlValue, true);
+              xhr_c2C.setRequestHeader("Accept", "application/json");
+              xhr_c2C.setRequestHeader("Content-Type", "application/json");
+              xhr_c2C.setRequestHeader("Authorization", apiKeyValue);
+              xhr_c2C.onreadystatechange = function () {
+                  if (xhr_c2C.readyState === 4 && xhr_c2C.status === 200) {
+                      var json_error = JSON.parse(xhr_c2C.responseText);
+                      console.log(json_error);
+                    }
+                    else{
+                      var json_response = JSON.parse(xhr_c2C.responseText);
+                      console.log(json_response);
+
+                    }
+                  };
+                  xhr_c2C.send();*/
+            document.getElementById("ckan-modal-connection").style.display = "none";
+            document.getElementById("ckan-modal").style.display = "block";
+
           }
 
           function transmitCKANdata(){
@@ -1085,21 +1147,15 @@
                 console.log(data);
                 xhr.send(data);
 
-              /*  var xhr2 = new XMLHttpRequest();
-                xhr2.open("POST", url_update, true);
-                xhr2.setRequestHeader("Accept", "application/json");
-                xhr2.setRequestHeader("Content-Type", "application/json");
-                xhr2.setRequestHeader("Authorization", keyValue);
-                xhr2.onreadystatechange = function () {
-                    if (xhr2.readyState === 4 && xhr2.status === 200) {
-                        var json2 = JSON.parse(xhr2.responseText);
-                        console.log(json2);
-                      }
-                    };
-                    var updateData = JSON.stringify({"id":nameValue,"spatial":'{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}'});
-                    console.log(updateData);
-                    xhr2.send(updateData);*/
 
+
+
+            //Close main importer modal and open transmission window
+            document.getElementById("ckan-modal").style.display = "none";
+            document.getElementById("ckan-modal-message").style.display = "block";
+          }
+          function closeCKANimporter(){
+            document.getElementById("ckan-modal-message").style.display = "none";
           }
 
         </script>

@@ -750,21 +750,7 @@
                   <span class="ckan-tooltiptext">Licence definitions and additional information can be found at opendefinition.org</span>
                 </div><br><br>
                 <select id="ckan-form-licence" name="ckan-dropdown1" class="ckan-input-field">
-                  <option value="cc-by" selected>Creative Commons Attribution</option>
-                  <option value="cc-by-sa">Creative Commons Attribution Share-Alike</option>
-                  <option value="cc-zero">Creative Commons CCZero</option>
-                  <option value="cc-nc">Creative Commons Non-Commercial (Any)</option>
-                  <option value="gfdl">GNU Free Documentation License</option>
-                  <option value="notspecified">License not specified</option>
-                  <option value="odc-by">Open Data Commons Attribution License</option>
-                  <option value="odc-odbl">Open Data Commons Open Database License (ODbL)</option>
-                  <option value="odc-pddl">Open Data Commons Public Domain Dedication and License (PDDL)</option>
-                  <option value="other-at">Other (Attribution)</option>
-                  <option value="other-nc">Other (Non-Commercial)</option>
-                  <option value="other-closed">Other (Not Open)</option>
-                  <option value="other-open">Other (Open)</option>
-                  <option value="other-pd">Other (Public Domain)</option>
-                  <option value="uk-ogl">UK Open Government Licence (OGL)</option>
+                  <option value="default" selected>Select the licence</option>
                 </select>
                 <br><br>
 
@@ -775,16 +761,7 @@
                     <span class="ckan-tooltiptext">Defines which organization the catalog entry is assigned to</span>
                   </div><br><br>
                 <select id="ckan-form-organization" name="ckan-dropdown2" class="ckan-input-field" required>
-                  <option value="bayerische-vermessungsverwaltung" selected>Bayerische Vermessungsverwaltung</option>
-                  <option value="bayern-innovativ">Bayern Innovativ</option>
-                  <option value="firmen">Firmen</option>
-                  <option value="hardwareentwickler">Hardwareentwickler</option>
-                  <option value="lehrstuhl-fur-geoinformatik">Lehrstuhl fÃ¼r Geoinformatik</option>
-                  <option value="softwareanbieter">Softwareanbieter</option>
-                  <option value="technische-universitat-munchen">Technische UniversitÃ¤t MÃ¼nchen (TUM)</option>
-                  <option value="technologieanbieter">Technologieanbieter</option>
-                  <option value="themenplattform-digitales-planen-und-bauen">Themenplattform Digitales Planen und Bauen</option>
-                  <option value="themenplattform-smarte-stadte-und-regionen">Themenplattform Smarte StÃ¤dte und Regionen</option>
+                  <option value="default" selected>Select your organization</option>
                 </select>
                 <br><br>
 
@@ -872,7 +849,7 @@
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">This marks the validity period of the catalog entry. This period can be used to search for entries later.</span>
                 </div><br>
-                <input type="
+
                 <input type="date" id="ckan-form-individualbeginncollectiondate" name="ckan-IndividualBeginnCollDate" class="ckan-input-field"><br><br>
 
                 <label class="ckan-form-label" for="ckan-form-endcollectiondate">End collectian date:</label>
@@ -1026,6 +1003,14 @@
               modal_connection.style.display = "none";
             }
           }
+          function removeOptions(selectElement) {
+              var i, L = selectElement.options.length - 1;
+              for(i = L; i >= 0; i--) {
+                selectElement.remove(i);
+              }
+            }
+
+
 
           function connect2CKAN(){
             //Function start
@@ -1034,28 +1019,75 @@
             var urlValue = document.getElementById("ckan-form-connection-url").value;
 
             var url_user_organizations = urlValue + "/api/3/action/organization_list_for_user";
+            var url_licence = urlValue + "/api/3/action/license_list";
+
 
             console.log('CKAN URL: '+urlValue);
             console.log('CKAN API Key: '+apiKeyValue);
 
 
-            /*var xhr_c2C = new XMLHttpRequest();
-              xhr_c2C.open("GET", url_user_organizations = urlValue, true);
+            var xhr_c2C = new XMLHttpRequest();
+              xhr_c2C.open("GET", url_user_organizations, true);
               xhr_c2C.setRequestHeader("Accept", "application/json");
               xhr_c2C.setRequestHeader("Content-Type", "application/json");
               xhr_c2C.setRequestHeader("Authorization", apiKeyValue);
               xhr_c2C.onreadystatechange = function () {
                   if (xhr_c2C.readyState === 4 && xhr_c2C.status === 200) {
-                      var json_error = JSON.parse(xhr_c2C.responseText);
-                      console.log(json_error);
-                    }
-                    else{
                       var json_response = JSON.parse(xhr_c2C.responseText);
                       console.log(json_response);
+                      var json_result = json_response.result;
+                      console.log(json_result);
+                      var orgList = document.getElementById("ckan-form-organization");
+                      removeOptions(orgList);
+                      for (var org in json_result) {
+                          console.log(json_result[org].title);
+
+                          var option = document.createElement("option");
+                          option.text = json_result[org].title;
+                          option.value = json_result[org].title;
+                          orgList.add(option);
+                      }
 
                     }
+                    else{
+                      console.log('No response');
+                    }
                   };
-                  xhr_c2C.send();*/
+                  xhr_c2C.send();
+
+
+
+                  var xhr_licence = new XMLHttpRequest();
+                    xhr_licence.open("GET", url_licence, true);
+                    xhr_licence.setRequestHeader("Accept", "application/json");
+                    xhr_licence.setRequestHeader("Content-Type", "application/json");
+                    //xhr_licence.setRequestHeader("Authorization", apiKeyValue);
+                    xhr_licence.onreadystatechange = function () {
+                        if (xhr_licence.readyState === 4 && xhr_licence.status === 200) {
+                            var licence_response = JSON.parse(xhr_licence.responseText);
+                            console.log(licence_response);
+                            var licence_result = licence_response.result;
+                            console.log(licence_result);
+                            var licenceList = document.getElementById("ckan-form-licence");
+                            removeOptions(licenceList);
+                            for (var licence in licence_result) {
+                                console.log(licence_result[licence].title);
+
+                                var option = document.createElement("option");
+                                option.text = licence_result[licence].title;
+                                option.value = licence_result[licence].id;
+                                licenceList.add(option);
+                            }
+
+                          }
+                          else{
+                            console.log('No response');
+                          }
+                        };
+                        xhr_licence.send();
+
+
+
             document.getElementById("ckan-modal-connection").style.display = "none";
             document.getElementById("ckan-modal").style.display = "block";
 

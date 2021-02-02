@@ -713,12 +713,6 @@
                 </div><br>
                 <input type="text" id="ckan-form-name" name="ckan-name" class="ckan-input-field" value="deby_lod2_4906975124" readonly><br><br>
 
-                <label class="ckan-form-label" for="ckan-form-groups">Groups:</label>
-                <div class="ckan-tooltip">&#9432
-                  <span class="ckan-tooltiptext">Each catalog entry is assigned to exactly one "main category". The assignment to the groups "Topics" and "Model regions" is optional; more than one group can also be selected here.</span>
-                </div><br>
-                <input type="text" id="ckan-form-groups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly><br><br>
-
                 <label class="ckan-form-label" for="ckan-form-label">Spatial extend:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">Coordinates of the selected spatial object are displayed in this field. The geometry shape is a multipolygon.   </span>
@@ -743,6 +737,17 @@
                   <span class="ckan-tooltiptext">The user can enter helpful comments on the created object here.  </span>
                 </div><br>
                 <input type="text" id="ckan-form-descriptionnotes" name="ckan-Description_Notes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" ><br><br>
+
+                <!-- Groups Drop Down Box-->
+                <label class="ckan-form-label" for="ckan-form-groups">Groups:</label>
+                <div class="ckan-tooltip">&#9432
+                  <span class="ckan-tooltiptext">Each catalog entry is assigned to exactly one "main category". The assignment to the groups "Topics" and "Model regions" is optional; more than one group can also be selected here.</span>
+                </div><br>
+                <!--<input type="text" id="ckan-form-groups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly><br><br>-->
+                <select id="ckan-form-groups" name="ckan-dropdown-groups" class="ckan-input-field">
+                  <option value="default" selected>Select the Group</option>
+                </select>
+                <br><br>
 
                 <!-- Drop Down Box-->
                 <label class="ckan-form-label" for="ckan-form-licence">Licence:</label>
@@ -876,7 +881,8 @@
     <div class="ckan-form-title">
       <h3>Web form for CKAN upload</h3>
     </div>
-        <h4>Transmission was succesful!</h4>
+        <h4 id="ckan_message_header">Transmission was succesful!</h4>
+          <p id="ckan_message_paragraph">Your data was successfully transmittet to CKAN!</p>
       <button class="ckan-btn" type="submit">Close</button><br><br>
 
   </form>
@@ -1003,6 +1009,7 @@
               modal_connection.style.display = "none";
             }
           }
+
           function removeOptions(selectElement) {
               var i, L = selectElement.options.length - 1;
               for(i = L; i >= 0; i--) {
@@ -1020,12 +1027,51 @@
 
             var url_user_organizations = urlValue + "/api/3/action/organization_list_for_user";
             var url_licence = urlValue + "/api/3/action/license_list";
+            var url_user_groups = urlValue + "/api/3/action/group_list_authz";
+            var url_groups = urlValue + "/api/3/action/group_list";
+
 
 
             console.log('CKAN URL: '+urlValue);
             console.log('CKAN API Key: '+apiKeyValue);
 
+            //Fetching Group List
+            var xhr_group = new XMLHttpRequest();
+              xhr_group.open("GET", url_user_groups, true);
+              xhr_group.setRequestHeader("Accept", "application/json");
+              xhr_group.setRequestHeader("Content-Type", "application/json");
+              xhr_group.setRequestHeader("Authorization", apiKeyValue);
+              xhr_group.onreadystatechange = function () {
+                  if (xhr_group.readyState === 4 && xhr_group.status === 200) {
+                      var group_response = JSON.parse(xhr_group.responseText);
+                      console.log(group_response);
+                      var group_result = group_response.result;
+                      console.log(group_result);
+                      var groupList = document.getElementById("ckan-form-groups");
+                      removeOptions(groupList);
+                      for (var group in group_result) {
+                          console.log(group_result[group].title);
 
+                          var option = document.createElement("option");
+                          option.text = group_result[group].title;
+                          option.value = group_result[group].name;
+                          groupList.add(option);
+                      }
+                      //adding default option, necessary for creating new datasets
+                      var option = document.createElement("option");
+                      option.text = 'geoobject';
+                      option.value = 'geoobject';
+                      option.selected = true;
+                      groupList.add(option);
+
+                    }
+                    else{
+                      console.log('No response');
+                    }
+                  };
+                  xhr_group.send();
+
+            //Fetching Organization List
             var xhr_c2C = new XMLHttpRequest();
               xhr_c2C.open("GET", url_user_organizations, true);
               xhr_c2C.setRequestHeader("Accept", "application/json");
@@ -1043,10 +1089,11 @@
                           console.log(json_result[org].title);
 
                           var option = document.createElement("option");
-                          option.text = json_result[org].title;
-                          option.value = json_result[org].title;
+                          option.text = json_result[org].display_name;
+                          option.value = json_result[org].name;
                           orgList.add(option);
                       }
+
 
                     }
                     else{
@@ -1056,7 +1103,7 @@
                   xhr_c2C.send();
 
 
-
+                  //Fetching Licence Lsit
                   var xhr_licence = new XMLHttpRequest();
                     xhr_licence.open("GET", url_licence, true);
                     xhr_licence.setRequestHeader("Accept", "application/json");
@@ -1087,9 +1134,36 @@
                         xhr_licence.send();
 
 
+            //Load existing data of dataset
+            loadDataset(urlValue);
 
             document.getElementById("ckan-modal-connection").style.display = "none";
             document.getElementById("ckan-modal").style.display = "block";
+
+          }
+
+          //Load information of existing dataset into the webform in order to update the information
+          function loadDataset(url){
+
+            var id = document.getElementById("ckan-form-name").value;
+            var url_update = url + "/api/3/action/package_show?id=" + id;
+
+            var xhr_update = new XMLHttpRequest();
+              xhr_update.open("GET", url_update, true);
+              xhr_update.setRequestHeader("Accept", "application/json");
+              xhr_update.setRequestHeader("Content-Type", "application/json");
+              //xhr_update.setRequestHeader("Authorization", apiKeyValue);
+              xhr_update.onreadystatechange = function () {
+                  if (xhr_update.readyState === 4 && xhr_update.status === 200) {
+                      var update_response = JSON.parse(xhr_update.responseText);
+                      console.log(update_response);
+                      alert("An CKAN object with this ID already exists. Your changes will update the existing object.");
+                    }
+                    else{
+                      console.log('No response');
+                    }
+                  };
+                  xhr_update.send();
 
           }
 
@@ -1199,7 +1273,27 @@
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var json = JSON.parse(xhr.responseText);
                     console.log(json);
+                    document.getElementById("ckan_message_header").innerHTML = 'Transmission was successful';
+                    document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
                   }
+                  if (xhr.readyState === 4 && xhr.status === 409) {
+                      var json = JSON.parse(xhr.responseText);
+                      console.log(json);
+
+                      //Print response on message modal
+                      document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Error 409';
+                      document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
+
+                    }
+                    if (xhr.readyState === 4 && xhr.status === 404) {
+                        var json = JSON.parse(xhr.responseText);
+                        console.log(json);
+
+                        //Print response on message modal
+                        document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Error 404';
+                        document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
+
+                      }
                 };
                 //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
                 //data += extraValues;

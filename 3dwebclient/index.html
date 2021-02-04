@@ -651,16 +651,12 @@
         <!---<input type="checkbox" id="css-toggle-switch" checked="checked" class="css-toggle-switch">
         <label for="css-toggle-switch" class="btn">CKAN Log in for data transfer</label>--->
         <div id="ckan-modal" class="css-toggle-content ckan-modal">
-          <span class="ckan-close-importer">&times;</span>
-
             <form class="ckan-modal-content ckan-animate" action="javascript:transmitCKANdata();" method="POST">
-            <div class="ckan-modal-header">
-              <button class="ckan-form-close-button" type="close" id="ckan-form-modal-close" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-
-            </div>
-
+              <div class="ckan-modal-header">
+                <button class="ckan-form-close-button" type="button" id="ckan-form-modal-close" aria-label="Close" onclick="document.getElementById('ckan-modal').style.display = 'none';">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
             <div class="ckan-form-title">
               <h3>Web form for CKAN upload</h3>
             </div>
@@ -902,6 +898,11 @@
 <!--Transmission message modal -->
 <div id="ckan-modal-message" class="css-toggle-content ckan-modal-message">
     <form class="ckan-modal-message-content ckan-animate" action="javascript:closeCKANimporter()" method="">
+      <div class="ckan-modal-header">
+        <button class="ckan-form-close-button" type="button" id="ckan-form-modal-message-close" aria-label="Close" onclick="document.getElementById('ckan-modal-message').style.display = 'none';">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
     <div class="ckan-form-title">
       <h3>Web form for CKAN upload</h3>
     </div>
@@ -916,6 +917,11 @@
 <!--Start connection modal -->
   <div id="ckan-modal-connection" class="css-toggle-content ckan-modal-connection">
       <form class="ckan-modal-connection-content ckan-animate" action="javascript:connect2CKAN()" method="">
+        <div class="ckan-modal-header">
+          <button class="ckan-form-close-button" type="button" onclick="document.getElementById('ckan-modal-connection').style.display = 'none';" id="ckan-form-modal-connection-close" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
       <div class="ckan-form-title">
         <h3>Web form for CKAN upload</h3>
       </div>
@@ -979,11 +985,6 @@
 
           var modal = document.getElementById("ckan-modal");
           var modal_connection = document.getElementById("ckan-modal-connection");
-          var span = document.getElementsByClassName("ckan-close-importer")[0];
-          span.onclick = function() {
-            modal.style.display = "none";
-            document.getElementById('ckan-attribute-table-body').innerHTML = '';
-          }
           window.onclick = function(event) {
             if (event.target == modal) {
               modal.style.display = "none";

@@ -80,8 +80,9 @@
         <script src="utils/mashup-data-source-service/application/DataSourceController.js"></script>
         <!-- URL controller -->
         <script src="utils/UrlController.js"></script>
-        <!-- Libs for the CKAN Importer-->
+        <!-- Scripts for the CKAN Importer-->
         <script src="utils/proj4.js"></script>
+        <script src="utils/select2.min.js"></script>
 
         <style>
             @import url(../ThirdParty/Cesium/Widgets/widgets.css);
@@ -89,6 +90,7 @@
             @import url(css/MobileFullscreenStyles.css);
             @import url(css/SplashWindow.css);
             @import url(css/ckan-importer.css);
+            @import url(css/select2.min.css);
 
             html, body, #cesiumContainer {
                 top: 0px;
@@ -809,33 +811,9 @@
                   <span class="ckan-tooltiptext">Tags can be used to find catalog entries more easily. A tag is a word that stands in connection with the entry.</span>
                 </div><br>
                 <input type="text" id="ckan-form-tags" name="ckan-Tags" class="ckan-input-field"  placeholder="e.g. economy">
-                <!--Multi tags with autocomplete: https://www.cssscript.com/tags-multi-input/-->
-                <div>
-                  <multi-input>
-                    <input list="ckan-tag-options">
-                    <datalist id="ckan-tag-options">
-                      <option value="Default"></option>
-                    </datalist>
-                  </multi-input>
-                </div>
-                <div>
-                  <multi-input>
-                    <input list="speakers">
-                    <datalist id="speakers">
-                      <option value="Banquo"></option>
-                      <option value="Bishop Stokesly of London"></option>
-                      <option value="Caesar’s Second Watchman"></option>
-                      <option value="Celia"></option>
-                      <option value="Cleopatra"></option>
-                      <option value="Dogberry"></option>
-                      <option value="Falstaff"></option>
-                      <option value="First Servant"></option>
-                      <option value="Hamlet"></option>
-                      <option value="Juliet"></option>
-                      <option value="Macbeth"></option>
-                    </datalist>
-                  </multi-input>
-                </div>
+                <select id="ckan-tag-options" class="form-control" multiple="multiple">
+                  <option selected="selected">default</option>
+                </select>
 
 
                 <br>
@@ -1004,6 +982,12 @@
               }
             }
 
+          function removeAllChildNodes(parent) {
+            while (parent.firstChild) {
+              parent.removeChild(parent.firstChild);
+            }
+          }
+
 
 
           function connect2CKAN(){
@@ -1166,12 +1150,13 @@
                                   var tag_result = tag_response.result;
                                   console.log(tag_result);
                                   var tagList = document.getElementById("ckan-tag-options");
-                                  //removeOptions(tagList);
+                                  removeAllChildNodes(tagList);
                                   for (var tag in tag_result) {
                                       console.log(tag_result[tag]);
 
                                       var option = document.createElement("option");
                                       option.value = tag_result[tag];
+                                      option.text = tag_result[tag];
                                       tagList.appendChild(option);
                                   }
                                 }

@@ -80,6 +80,8 @@
         <script src="utils/mashup-data-source-service/application/DataSourceController.js"></script>
         <!-- URL controller -->
         <script src="utils/UrlController.js"></script>
+        <!-- Libs for the CKAN Importer-->
+        <script src="utils/proj4.js"></script>
 
         <style>
             @import url(../ThirdParty/Cesium/Widgets/widgets.css);
@@ -804,6 +806,34 @@
                   <span class="ckan-tooltiptext">Tags can be used to find catalog entries more easily. A tag is a word that stands in connection with the entry.</span>
                 </div><br>
                 <input type="text" id="ckan-form-tags" name="ckan-Tags" class="ckan-input-field"  placeholder="e.g. economy">
+                <!--Multi tags with autocomplete: https://www.cssscript.com/tags-multi-input/-->
+                <div>
+                  <multi-input>
+                    <input list="ckan-tag-options">
+                    <datalist id="ckan-tag-options">
+                      <option value="Default"></option>
+                    </datalist>
+                  </multi-input>
+                </div>
+                <div>
+                  <multi-input>
+                    <input list="speakers">
+                    <datalist id="speakers">
+                      <option value="Banquo"></option>
+                      <option value="Bishop Stokesly of London"></option>
+                      <option value="Caesar’s Second Watchman"></option>
+                      <option value="Celia"></option>
+                      <option value="Cleopatra"></option>
+                      <option value="Dogberry"></option>
+                      <option value="Falstaff"></option>
+                      <option value="First Servant"></option>
+                      <option value="Hamlet"></option>
+                      <option value="Juliet"></option>
+                      <option value="Macbeth"></option>
+                    </datalist>
+                  </multi-input>
+                </div>
+
 
                 <br>
                 <label class="ckan-form-label" for="ckan-form-autorname">Autor Name and E-Mail:</label><br>
@@ -901,11 +931,8 @@
       </div>
     </form>
   </div>
-
-
-
-        <script>
-
+  <script src="utils/multi-input.js"></script>
+    <script>
           /*Scrips for CKAN Import Functionality*/
 
         //jQuery functions for the handling of the webform
@@ -941,13 +968,6 @@
           console.log(longitudeStr);
 
           var ckan_spatial_extent= longitudeStr + ', ' + latitudeStr;
-
-          document.getElementById("ckan-form-spatial-extent").value=ckan_spatial_extent;
-
-
-
-
-
           }
 
           var modal = document.getElementById("ckan-modal");
@@ -1020,6 +1040,7 @@
             var url_licence = urlValue + "/api/3/action/license_list";
             var url_user_groups = urlValue + "/api/3/action/group_list_authz";
             var url_groups = urlValue + "/api/3/action/group_list";
+            var url_tags = urlValue + "/api/3/action/tag_list";
 
 
 
@@ -1094,7 +1115,7 @@
                   xhr_c2C.send();
 
 
-                  //Fetching Licence Lsit
+                  //Fetching Licence List
                   var xhr_licence = new XMLHttpRequest();
                     xhr_licence.open("GET", url_licence, true);
                     xhr_licence.setRequestHeader("Accept", "application/json");
@@ -1123,6 +1144,32 @@
                           }
                         };
                         xhr_licence.send();
+
+                        //Fetching Tag List
+                        var xhr_tag = new XMLHttpRequest();
+                          xhr_tag.open("GET", url_tags, true);
+                          xhr_tag.setRequestHeader("Accept", "application/json");
+                          xhr_tag.setRequestHeader("Content-Type", "application/json");
+                          //xhr_tag.setRequestHeader("Authorization", apiKeyValue);
+                          xhr_tag.onreadystatechange = function () {
+                              if (xhr_tag.readyState === 4 && xhr_tag.status === 200) {
+                                  var tag_response = JSON.parse(xhr_tag.responseText);
+                                  console.log(tag_response);
+                                  var tag_result = tag_response.result;
+                                  console.log(tag_result);
+                                  var tagList = document.getElementById("ckan-tag-options");
+                                  //removeOptions(tagList);
+                                  for (var tag in tag_result) {
+                                      console.log(tag_result[tag]);
+
+                                      var option = document.createElement("option");
+                                      option.value = tag_result[tag];
+                                      tagList.appendChild(option);
+                                  }
+                                }
+                              };
+                              xhr_tag.send();
+
 
 
             //Load existing data of dataset
@@ -1185,12 +1232,6 @@
             //var maintainerMailValue = document.getElementById("ckan-form-maintainermail").value;
 
 
-
-
-
-
-
-
             //getting meta data values from the table (only checked values)
             var tableBody = document.getElementById("ckan-attribute-table-body");
             var tableBody_rows = document.getElementById("ckan-attribute-table-body").rows.length;
@@ -1251,13 +1292,38 @@
                 agreementCheck ='licence_agreement_check';
               }
 
+              //transforming spatial data
+
+              var bboxArray = spatialExtentValue.replace(/[{()}]/g, '')  // removes () at start and end
+                          .split(' ')                         // splits into coord sets
+                          .map((set) =>                       // splits every coord set and converts into numbers
+                              set.split(',')
+                              .map(Number)
+                          );
+              var bbox_string = '';
+              proj4.defs("EPSG:31468","+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +towgs84=598.1,73.7,418.2,0.202,0.045,-2.455,6.7 +units=m +no_defs");
+              for (var i in bboxArray) {
+                var bbox_trans = proj4('EPSG:31468', 'EPSG:4326', bboxArray[i]);
+                console.log(bbox_trans);
+                bbox_string += bbox_trans;
+                if(i<bboxArray.length-1){
+                  bbox_string += ', '
+                }
+                }
+
+
+
+
+
+
+
             //Printing out all values for debugging purposes
             console.log('CKAN URL: '+url_path);
             console.log('CKAN Key: '+keyValue);
             console.log('CKAN Schema Type: '+typeValue);
             console.log('CKAN Name: '+nameValue);
             console.log('CKAN Groups: '+groupsValue);
-            console.log('CKAN Spatial Extend: '+spatialExtentValue);
+            console.log('CKAN Spatial Extend: '+bbox_string);
             console.log('CKAN Title: '+titleValue);
             console.log('CKAN Notes: '+noteValue);
             console.log('CKAN Extra: '+extraValues);
@@ -1309,7 +1375,7 @@
                 };
                 //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
                 //data += extraValues;
-                var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'", "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": [{"name": "'+tagValue+'"}],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[[['+spatialExtentValue+'],['+spatialExtentValue+'],['+spatialExtentValue+']]]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
+                var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":[{"name":"'+groupsValue+'"}], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": [{"name": "'+tagValue+'"}],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
                 //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"notes":noteValue, "end_collection_date":endDateValue,"begin_collection_date":beginDateValue,"licence_agreement":[agreementCheck],"license_id":licenceValue,"owner_org":organizationValue,"private":visibilityValue,"language":languageValue,"version":versionValue,"tags": [{"name": tagValue}],"spatial":'{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]}'});
                 //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
                 //"spatial":&quot;{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}&quot;,

@@ -39,6 +39,12 @@
         <!-- Load jquery ui datepicker FLATPICKR -->
         <link rel="stylesheet" type="text/css" href="../ThirdParty/flatpickrv4.5.1.css">
         <script type="text/javascript" src="../ThirdParty/flatpickrv4.5.1.js"></script>
+        <!-- Scripts for the CKAN Importer-->
+        <script src="utils/proj4.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="utils/select2.min.js"></script>
+        <script src="utils/CKANImporter.js"></script>
+
         <!-- CesiumJS -->
         <script src="../ThirdParty/Cesium/Cesium.js"></script>
         <script src="../ThirdParty/Intersection/IntersectionAPI.js"></script>
@@ -80,9 +86,7 @@
         <script src="utils/mashup-data-source-service/application/DataSourceController.js"></script>
         <!-- URL controller -->
         <script src="utils/UrlController.js"></script>
-        <!-- Scripts for the CKAN Importer-->
-        <script src="utils/proj4.js"></script>
-        <script src="utils/select2.min.js"></script>
+
 
         <style>
             @import url(../ThirdParty/Cesium/Widgets/widgets.css);
@@ -795,12 +799,7 @@
                 <label class="ckan-form-label" for="ckan-form-licence_agreement"> I hereby confirm that all data entered by me is covered by the license selected above.</label><br><br>
 
                 <button type="button" class="ckan-form-togglebutton" id="ckan-form-toggleadditionalcategoriesbutton">Show additional input categories</button>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                <script>
-                $("#ckan-form-toggleadditionalcategoriesbutton").click(function(){
-                  $("#ckan-fieldset-toggleID").toggle();
-                });
-                </script>
+
             </fieldset><br>
 
             <fieldset class="ckan-fieldset-toggle" id="ckan-fieldset-toggleID">
@@ -811,7 +810,7 @@
                   <span class="ckan-tooltiptext">Tags can be used to find catalog entries more easily. A tag is a word that stands in connection with the entry.</span>
                 </div><br>
                 <input type="text" id="ckan-form-tags" name="ckan-Tags" class="ckan-input-field"  placeholder="e.g. economy">
-                <select id="ckan-tag-options" class="form-control" multiple="multiple">
+                <select id="ckan-tag-options" class="ckan-tags form-control" multiple="multiple" style="width: 100%">
                   <option selected="selected">default</option>
                 </select>
 
@@ -922,34 +921,8 @@
       </div>
     </form>
   </div>
-  <script src="utils/multi-input.js"></script>
     <script>
           /*Scrips for CKAN Import Functionality*/
-
-        //jQuery functions for the handling of the webform
-        $(document).ready(function(){
-             $('#ckan-form-autor_add').click(function(){
-                  var i = $('#ckan_autor_table tr').length + 1;
-                  $('#ckan_autor_table').append('<tr id="ckan-form-autor_row'+i+'"><td><input id="ckan-form-autorname'+i+'" type="text" placeholder="Enter autor name" class="form-control name_list" /></td><td><input id="ckan-form-autormail'+i+'" type="text" placeholder="Enter autor email" class="form-control name_list" /><td><button type="button" name="remove" id="ckan_btn_autor_remove'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
-             });
-             $(document).on('click', '.ckan-form-btn_remove', function(){
-                  $(this).parent().parent().remove();
-             });
-        });
-
-        $(document).ready(function(){
-             var i=1;
-             $('#ckan-form-maintainer_add').click(function(){
-                  i++;
-                  $('#ckan_maintainer_table').append('<tr id="ckan-form-maintainer_row'+i+'"><td><input type="text" placeholder="Enter maintainer name" class="form-control name_list" /></td><td><input type="text" placeholder="Enter maintainer mail" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
-             });
-             $(document).on('click', '.ckan-form-btn_remove', function(){
-                  var button_id = $(this).attr("id");
-                  $('#ckan-form-maintainer_row'+button_id+'').remove();
-             });
-        });
-
-
           function getSpatialBuildingInfo(){
 
           var latitudeStr = urlController.getUrlParaValue('latitude', window.location.href, CitydbUtil);
@@ -1296,9 +1269,12 @@
               var bbox_string = '';
               proj4.defs("EPSG:31468","+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +towgs84=598.1,73.7,418.2,0.202,0.045,-2.455,6.7 +units=m +no_defs");
               for (var i in bboxArray) {
+                if(bboxArray[i].length > 2){
+                  bboxArray[i].pop();
+                }
                 var bbox_trans = proj4('EPSG:31468', 'EPSG:4326', bboxArray[i]);
                 console.log(bbox_trans);
-                bbox_string += bbox_trans;
+                bbox_string += '['+bbox_trans+']';
                 if(i<bboxArray.length-1){
                   bbox_string += ', '
                 }
@@ -1359,12 +1335,17 @@
                     if (xhr.readyState === 4 && xhr.status === 404) {
                         var json = JSON.parse(xhr.responseText);
                         console.log(json);
-
                         //Print response on message modal
                         document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Error 404';
                         document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
-
                       }
+                      if (xhr.readyState === 4 && xhr.status === 500) {
+                          var json = JSON.parse(xhr.responseText);
+                          console.log(json);
+                          //Print response on message modal
+                          document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Error 500';
+                          document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
+                        }
                 };
                 //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
                 //data += extraValues;

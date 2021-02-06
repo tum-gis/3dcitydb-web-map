@@ -37,13 +37,20 @@
         <link rel="icon" type="image/png" href="../theme/img/favicon.png" sizes="16x16">
         <script src="../ThirdParty/jquery-3.3.1.min.js"></script>
         <!-- Load jquery ui datepicker FLATPICKR -->
-        <link rel="stylesheet" type="text/css" href="../ThirdParty/flatpickrv4.5.1.css">
+
         <script type="text/javascript" src="../ThirdParty/flatpickrv4.5.1.js"></script>
+        <!-- Scripts for the CKAN Importer-->
+        <script src="utils/proj4.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="utils/select2.min.js"></script>
+        <script src="utils/CKANImporter.js"></script>
+
+
         <!-- CesiumJS -->
         <script src="../ThirdParty/Cesium/Cesium.js"></script>
         <script src="../ThirdParty/Intersection/IntersectionAPI.js"></script>
         <script src="../ThirdParty/Cesium-Navigation/Cesium-Navigation.js"></script>
-        <link rel="stylesheet" type="text/css" href="../ThirdParty/Cesium-Navigation/Cesium-Navigation.css" />
+
         <script src="../js/3dcitydb-web-map.js"></script>
         <script src="../js/CitydbUtil.js"></script>
         <script src="../js/CitydbWebworker.js"></script>
@@ -81,12 +88,15 @@
         <!-- URL controller -->
         <script src="utils/UrlController.js"></script>
 
+<link rel="stylesheet" type="text/css" href="../ThirdParty/flatpickrv4.5.1.css">
+<link rel="stylesheet" type="text/css" href="../ThirdParty/Cesium-Navigation/Cesium-Navigation.css" />
         <style>
             @import url(../ThirdParty/Cesium/Widgets/widgets.css);
             @import url(css/GPSButtonStyles.css);
             @import url(css/MobileFullscreenStyles.css);
             @import url(css/SplashWindow.css);
             @import url(css/ckan-importer.css);
+            @import url(css/select2.min.css);
 
             html, body, #cesiumContainer {
                 top: 0px;
@@ -649,16 +659,12 @@
         <!---<input type="checkbox" id="css-toggle-switch" checked="checked" class="css-toggle-switch">
         <label for="css-toggle-switch" class="btn">CKAN Log in for data transfer</label>--->
         <div id="ckan-modal" class="css-toggle-content ckan-modal">
-          <span class="ckan-close-importer">&times;</span>
-
-            <form class="ckan-modal-content ckan-animate" action="javascript:transmitCKANdata();" method="POST">
-            <div class="ckan-modal-header">
-              <button class="ckan-form-close-button" type="close" id="ckan-form-modal-close" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-
-            </div>
-
+            <form class="ckan-modal-content ckan-animate" action="javascript:transmitCKANdata();" method="POST" autocomplete="off">
+              <div class="ckan-modal-header">
+                <button class="ckan-form-close-button" type="button" id="ckan-form-modal-close" aria-label="Close" onclick="document.getElementById('ckan-modal').style.display = 'none';">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
             <div class="ckan-form-title">
               <h3>Web Form for CKAN Upload</h3>
             </div>
@@ -749,9 +755,14 @@
                 <label class="ckan-form-label" for="ckan-form-descriptionnotes">Description:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">The user can enter helpful comments on the created object here.  </span>
+<<<<<<< HEAD
                 </div>
                 <br><br>
                 <input type="text" id="ckan-form-descriptionnotes" name="ckan-Description_Notes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" ><br><br>
+=======
+                </div><br>
+                <input type="text" id="ckan-form-descriptionnotes" name="ckan-Description_Notes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" autocomplete="off"><br><br>
+>>>>>>> cd025d5ffd6175e3abf882b24861d0fdc6c608a1
 
                 <!-- Groups Drop Down Box-->
                 <label class="ckan-form-label" for="ckan-form-groups">Groups:</label>
@@ -793,19 +804,25 @@
                 <label class="ckan-form-label" for="ckan-form-visibility">Visibility:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">The user should be given the possibility to determine who should have access to the transferred data in the CKAN catalogue.  </span>
+<<<<<<< HEAD
                 </div>
                 <br><br>
                 <select id="ckan-form-visibility"name="ckan-dropdown3" class="ckan-input-field">
+=======
+                </div><br>
+                <select id="ckan-form-visibility"name="ckan-dropdown3" class="ckan-input-field" autocomplete="off">
+>>>>>>> cd025d5ffd6175e3abf882b24861d0fdc6c608a1
                   <option value="false" selected>Public</option>
                   <option value="true">Organization Internal</option>
                 </select><br><br>
 
 
 
-                <input type="checkbox" id="ckan-form-licence_agreement" name="ckan-Licence_Agreement" value="Agreed" required>
+                <input type="checkbox" id="ckan-form-licence_agreement" name="ckan-Licence_Agreement" value="Agreed" required autocomplete="off">
                 <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
                 <label class="ckan-form-label" for="ckan-form-licence_agreement"> I hereby confirm that all data entered by me is covered by the license selected above.</label><br><br>
 
+<<<<<<< HEAD
                 <button type="button" class="ckan-form-togglebutton" id="ckan-form-toggleadditionalcategoriesbutton">Show Additional Input Categories</button>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                 <script>
@@ -813,6 +830,10 @@
                   $("#ckan-fieldset-toggleID").toggle();
                 });
                 </script>
+=======
+                <button type="button" class="ckan-form-togglebutton" id="ckan-form-toggleadditionalcategoriesbutton">Show additional input categories</button>
+
+>>>>>>> cd025d5ffd6175e3abf882b24861d0fdc6c608a1
             </fieldset><br>
 
             <fieldset class="ckan-fieldset-toggle" id="ckan-fieldset-toggleID">
@@ -821,9 +842,17 @@
                 <br><label class="ckan-form-label" for="ckan-form-tags">Tags:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">Tags can be used to find catalog entries more easily. A tag is a word that stands in connection with the entry.</span>
+<<<<<<< HEAD
                 </div>
                 <br><br>
                 <input type="text" id="ckan-form-tags" name="ckan-Tags" class="ckan-input-field"  placeholder="e.g. economy">
+=======
+                </div><br>
+                <select id="ckan-tag-options" class="ckan-tags form-control" multiple="multiple" style="width: 100%">
+                  <option selected="selected">default</option>
+                </select>
+
+>>>>>>> cd025d5ffd6175e3abf882b24861d0fdc6c608a1
 
                 <br>
                 <label class="ckan-form-label" for="ckan-form-autorname">Author Name and Email:</label>
@@ -878,7 +907,7 @@
             </fieldset><br>
 
 
-            <button class="ckan-btn" type="submit">Submit Data</button><br><br>
+            <button id="ckan-modal-submit-btn" class="ckan-btn" type="submit">Submit Data</button><br><br>
 
 
         </div>
@@ -889,6 +918,11 @@
 <!--Transmission message modal -->
 <div id="ckan-modal-message" class="css-toggle-content ckan-modal-message">
     <form class="ckan-modal-message-content ckan-animate" action="javascript:closeCKANimporter()" method="">
+      <div class="ckan-modal-header">
+        <button class="ckan-form-close-button" type="button" id="ckan-form-modal-message-close" aria-label="Close" onclick="document.getElementById('ckan-modal-message').style.display = 'none';">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
     <div class="ckan-form-title">
       <h3>Web form for CKAN upload</h3>
     </div>
@@ -903,6 +937,11 @@
 <!--Start connection modal -->
   <div id="ckan-modal-connection" class="css-toggle-content ckan-modal-connection">
       <form class="ckan-modal-connection-content ckan-animate" action="javascript:connect2CKAN()" method="">
+        <div class="ckan-modal-header">
+          <button class="ckan-form-close-button" type="button" onclick="document.getElementById('ckan-modal-connection').style.display = 'none';" id="ckan-form-modal-connection-close" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
       <div class="ckan-form-title">
         <h3>Web form for CKAN upload</h3>
       </div>
@@ -927,6 +966,7 @@
     </form>
   </div>
 
+<<<<<<< HEAD
 
 
         <script>
@@ -1357,5 +1397,7 @@
           }
 
         </script>
+=======
+>>>>>>> cd025d5ffd6175e3abf882b24861d0fdc6c608a1
     </body>
 </html>

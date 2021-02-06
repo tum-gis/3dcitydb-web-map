@@ -24,7 +24,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**-----------------------------------------Separate Line-------------------------------------------------**/
 
 // URL controller
@@ -1040,6 +1039,10 @@ function createInfoTable(res, citydbLayer) {
                 if (isValidUrl(iValue)) {
                     iValue = '<a href="' + iValue + '" target="_blank">' + iValue + '</a>';
                 }
+                if(key == 'CITYOBJECT_ENVELOPE'){
+                  document.getElementById("ckan-form-spatial-extent").value=iValue;
+                }
+                else{
                 html += '<tr><td>' + key + '</td><td>' + iValue + '</td></tr>';
                 var ckan_table = document.getElementById("ckan-attribute-table-body");
                 var ckan_row = ckan_table.insertRow(0);
@@ -1049,11 +1052,13 @@ function createInfoTable(res, citydbLayer) {
                 cell1.innerHTML = key;
                 cell2.innerHTML = iValue;
                 cell3.innerHTML = '<input id="'+key+'_checkbox'+'" type="checkbox" checked>';
+              }
             }
             html += '</tbody></table>';
             cesiumEntity.description = html;
         }
     }, 1000, cesiumEntity);
+
 
     // fetchDataFromGoogleFusionTable(gmlid, thematicDataUrl).then(function (kvp) {
     //     console.log(kvp);

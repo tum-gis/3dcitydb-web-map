@@ -84,8 +84,12 @@ function connect2CKAN(){
   var apiKeyValue = document.getElementById("ckan-form-connection-key").value;
   var urlValue = document.getElementById("ckan-form-connection-url").value;
 
+  console.log('CKAN URL: '+urlValue);
+  console.log('CKAN API Key: '+apiKeyValue);
+
   var url_user = urlValue + "/api/3/action/organization_list_for_user";
 
+//Testing connection and api key
   var xhr_user = new XMLHttpRequest();
     xhr_user.open("GET", url_user, true);
     xhr_user.setRequestHeader("Accept", "application/json");
@@ -97,34 +101,26 @@ function connect2CKAN(){
         if (xhr_user.readyState === 4 && xhr_user.status === 200) {
             var user_response = JSON.parse(xhr_user.responseText);
             console.log(user_response);
-            getCKANdata();
+
+            document.getElementById("ckan-form-url").value = urlValue;
+            document.getElementById("ckan-form-key").value = apiKeyValue;
+
+            getCKANdata(urlValue,apiKeyValue);
           }
           if (xhr_user.readyState === 4 && xhr_user.status === 0) {
             alert("Connection to CKAN could not be established. Please read the error log for more information.");
-
             }
         };
         xhr_user.send();
-
-
-
-
 }
 
-function getCKANdata(){
-  var apiKeyValue = document.getElementById("ckan-form-connection-key").value;
-  var urlValue = document.getElementById("ckan-form-connection-url").value;
+function getCKANdata(urlValue,apiKeyValue){
 
   var url_user_organizations = urlValue + "/api/3/action/organization_list_for_user";
   var url_licence = urlValue + "/api/3/action/license_list";
   var url_user_groups = urlValue + "/api/3/action/group_list_authz";
   var url_groups = urlValue + "/api/3/action/group_list";
   var url_tags = urlValue + "/api/3/action/tag_list";
-
-
-
-  console.log('CKAN URL: '+urlValue);
-  console.log('CKAN API Key: '+apiKeyValue);
 
   //Fetching Group List
   var xhr_group = new XMLHttpRequest();
@@ -151,9 +147,7 @@ function getCKANdata(){
                   option.selected = true;
                 }
                 groupList.add(option);
-
             }
-
             if(group_result.length < 1){
             //adding default option, necessary for creating new datasets
             var option = document.createElement("option");
@@ -163,7 +157,6 @@ function getCKANdata(){
             groupList.add(option);
           }
           }
-
         };
         xhr_group.send();
 
@@ -192,9 +185,6 @@ function getCKANdata(){
 
 
           }
-          else{
-            console.log('No response');
-          }
         };
         xhr_c2C.send();
 
@@ -215,16 +205,11 @@ function getCKANdata(){
                   removeOptions(licenceList);
                   for (var licence in licence_result) {
                       console.log(licence_result[licence].title);
-
                       var option = document.createElement("option");
                       option.text = licence_result[licence].title;
                       option.value = licence_result[licence].id;
                       licenceList.add(option);
                   }
-
-                }
-                else{
-                  console.log('No response');
                 }
               };
               xhr_licence.send();
@@ -259,10 +244,6 @@ function getCKANdata(){
 
   //Load existing data of dataset
   loadDataset(urlValue);
-
-  document.getElementById("ckan-modal-connection").style.display = "none";
-  document.getElementById("ckan-modal").style.display = "block";
-
 }
 
 //Load information of existing dataset into the webform in order to update the information
@@ -277,11 +258,24 @@ function loadDataset(url){
     xhr_update.setRequestHeader("Content-Type", "application/json");
     //xhr_update.setRequestHeader("Authorization", apiKeyValue);
     xhr_update.onreadystatechange = function () {
+      //Status 200: object is already existing -> update dataset
         if (xhr_update.readyState === 4 && xhr_update.status === 200) {
             var update_response = JSON.parse(xhr_update.responseText);
             console.log(update_response);
             alert("An CKAN object with this ID already exists. Your changes will update the existing object.");
+
+              document.getElementById("ckan-modal-submit-btn").innerHTML = "Update Object";
+              document.getElementById("ckan-modal-connection").style.display = "none";
+              document.getElementById("ckan-modal").style.display = "block";
           }
+          //Status 200: object is not already existing -> create dataset
+          if (xhr_update.readyState === 4 && xhr_update.status === 404) {
+              var update_response = JSON.parse(xhr_update.responseText);
+              console.log(update_response);
+                document.getElementById("ckan-modal-submit-btn").innerHTML = "Create New Object";
+                document.getElementById("ckan-modal-connection").style.display = "none";
+                document.getElementById("ckan-modal").style.display = "block";
+            }
         };
         xhr_update.send();
 

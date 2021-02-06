@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+    <asset>
+        <contributor>
+            <authoring_tool>impexp-kml-collada-plugin, version 4.2.0; Chair of Geoinformatics, Technical University of Munich</authoring_tool>
+        </contributor>
+        <created>2021-02-03T17:52:33.367</created>
+        <modified>2021-02-03T17:52:33.367</modified>
+        <unit meter="1.0" name="meters"/>
+        <up_axis>Z_UP</up_axis>
+    </asset>
+    <library_images>
+        <image id="textureAtlas_30347701_0_img">
+            <init_from>textureAtlas_30347701_0.jpeg</init_from>
+        </image>
+    </library_images>
+    <library_materials>
+        <material id="default_ai_0.2_sh_0.2_tr_0.0_dc_r_0.8_g_0.8_b_0.8_sc_r_1.0_g_1.0_b_1.0_ec_r_0.0_g_0.0_b_0_mat">
+            <instance_effect url="#default_ai_0.2_sh_0.2_tr_0.0_dc_r_0.8_g_0.8_b_0.8_sc_r_1.0_g_1.0_b_1.0_ec_r_0.0_g_0.0_b_0_eff"/>
+        </material>
+        <material id="textureAtlas_30347701_0_mat">
+            <instance_effect url="#textureAtlas_30347701_0_eff"/>
+        </material>
+    </library_materials>
+    <library_effects>
+        <effect id="default_ai_0.2_sh_0.2_tr_0.0_dc_r_0.8_g_0.8_b_0.8_sc_r_1.0_g_1.0_b_1.0_ec_r_0.0_g_0.0_b_0_eff">
+            <profile_COMMON>
+                <technique sid="COMMON">
+                    <lambert>
+                        <emission>
+                            <color>0.0 0.0 0.0 1.0</color>
+                        </emission>
+                        <diffuse>
+                            <color>0.8 0.8 0.8 1.0</color>
+                        </diffuse>
+                        <reflective>
+                            <color>1.0 1.0 1.0 1.0</color>
+                        </reflective>
+                        <reflectivity>
+                            <float>0.2</float>
+                        </reflectivity>
+                        <transparent opaque="A_ONE">
+                            <color>1.0 1.0 1.0 1.0</color>
+                        </transparent>
+                        <transparency>
+                            <float>1.0</float>
+                        </transparency>
+                    </lambert>
+                </technique>
+                <extra>
+                    <technique profile="GOOGLEEARTH">
+                        <double_sided>1</double_sided>
+                    </technique>
+                </extra>
+            </profile_COMMON>
+        </effect>
+        <effect id="textureAtlas_30347701_0_eff">
+            <profile_COMMON>
+                <newparam sid="textureAtlas_30347701_0_surface">
+                    <surface type="2D">
+                        <init_from>textureAtlas_30347701_0_img</init_from>
+                    </surface>
+                </newparam>
+                <newparam sid="textureAtlas_30347701_0_sampler">
+                    <sampler2D>
+                        <source>textureAtlas_30347701_0_surface</source>
+                    </sampler2D>
+                </newparam>
+                <technique sid="COMMON">
+                    <lambert>
+                        <emission>
+                            <color>0.0 0.0 0.0 1.0</color>
+                        </emission>
+                        <diffuse>
+                            <texture texture="textureAtlas_30347701_0_sampler" texcoord="TEXCOORD"/>
+                        </diffuse>
+                    </lambert>
+                </technique>
+                <extra>
+                    <technique profile="GOOGLEEARTH">
+                        <double_sided>1</double_sided>
+                    </technique>
+                </extra>
+            </profile_COMMON>
+        </effect>
+    </library_effects>
+    <library_geometries>
+        <geometry id="geometry0">
+            <mesh>
+                <source id="geometry0-position">
+                    <float_array id="geometry0-position-array" count="72">-6.2499263 -19.104505 20.0181103 5.1674777 -3.3113819 20.0181103 4.589E-4 6.798E-4 21.4775084 -11.1653339 -15.4444019 21.4775084 0.6888168 0.9528488 20.5360786 5.8558667 -2.3591667 20.5360786 9.1293122 2.1688319 23.2703376 3.9622623 5.4808474 23.2703376 12.5958065 6.9638527 20.0181103 7.4287566 10.2758683 20.0181103 18.4585685 -3.8195135 23.2703376 21.7854954 1.073375 20.0181103 15.3254438 -8.4273797 20.5360786 14.6647696 -9.399029 20.0181103 0.0 0.0 0.0 5.16705 -3.3120155 0.0 -6.250354 -19.1051386 0.0 -11.1657928 -15.4450817 0.0 7.4283289 10.2752346 0.0 12.5953788 6.9632191 0.0 14.6643419 -9.3996626 0.0 21.7850677 1.0727413 0.0 5.1674765 -3.3113837 19.9610767 9.2897278 2.3907265 23.1198373</float_array>
+                    <technique_common>
+                        <accessor count="24" source="#geometry0-position-array" stride="3">
+                            <param name="X" type="float"/>
+                            <param name="Y" type="float"/>
+                            <param name="Z" type="float"/>
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="geometry0-texCoords">
+                    <float_array id="geometry0-texCoords-array" count="160">0.183986203125 0.19649345703124999 0.44344797656249996 0.2595960234375 0.273495796875 0.28594423046874995 6.6975E-4 0.21738401562499998 0.8488093984374999 0.9369263916015625 0.585958453125 0.9997794384765625 0.0025214765625 0.9288894091796875 0.2830091328125 0.8681834423828125 0.00300625 0.48711804980468754 0.25833671874999997 0.47076026660156245 0.7782984375 0.5456275839843749 0.5061484374999999 0.55956640234375 0.6400555078125 0.740884615234375 0.6118569375 0.7349404423828125 0.6126295078125 0.7347562734374999 0.771144890625 0.7701783896484375 0.6111378828125 0.6794949580078125 0.6151584375 0.678184310546875 0.849755296875 0.6614249560546874 0.19367329687499998 0.28627201660156254 0.53809865625 0.3460955810546875 0.33967190625 0.36904416992187505 0.0016430625 0.30849412109374996 0.6002390625 0.1846600625 0.33680521875 0.19612162499999997 0.002116296875 0.14793612499999997 0.48272563281249997 0.15942750000000006 0.29390659375 0.13923993749999997 0.27420903125 0.13400206250000002 0.34540275 0.5599000859375001 0.68554475 0.6202548203125 0.3305671875 0.6609222734375 0.001865875 0.599280234375 0.6504691328125 0.71249012890625 0.8449737890625 0.732925015625 0.8505276328125 0.7341221123046875 0.6105566328125 0.708174505859375 0.781699625 0.8634922900390625 0.782569671875 0.8634510302734375 0.827136828125 0.8678465966796876 0.3610085 0.36932617968750003 0.647873359375 0.43385716406249997 0.2787503125 0.47049370312500005 0.0031261171874999998 0.40485284374999997 0.0020865 0.723074828125 0.253436015625 0.661438625 0.60926409375 0.707403578125 0.36900946875 0.770475765625 0.029445000000000002 0.7291220625 0.15624253125 0.758835859375 0.1978296875 0.77062802734375 0.780578125 0.841560546875 0.572059375 0.86798544921875 8.7265625E-4 0.79845791015625 0.8196410859375 0.679862916015625 0.659429625 0.7078348037109374 0.611246859375 0.706630255859375 0.8142505859375 0.442558228515625 0.842866015625 0.4485952978515625 0.6513154296875 0.47053011621093754 0.193447078125 0.012922477539062505 0.3258110625 0.04239135742187505 0.134405578125 0.06421120898437505 0.00286321875 0.03464937207031249 0.804171390625 0.34119678906249995 0.716209140625 0.368805234375 0.540363 0.34518622949218747 0.627429828125 0.31745806835937496 0.44643334375 0.24427706445312503 0.5336678125 0.21690406835937504 0.8505046249999999 0.259393962890625 0.75660684375 0.285927994140625 0.133417484375 0.13346047949218753 0.0022846406249999998 0.10424287011718747 0.34834574218750003 0.06477012890625 0.4757461484375 0.09435508007812499 0.4778964921875 0.08981505566406245 0.5253958671875 0.08625121484374998 0.8423726796875 0.13006640234375 0.7941348906250001 0.1335395166015625</float_array>
+                    <technique_common>
+                        <accessor count="80" source="#geometry0-texCoords-array" stride="2">
+                            <param name="S" type="float"/>
+                            <param name="T" type="float"/>
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="geometry0-vertex">
+                    <input semantic="POSITION" source="#geometry0-position"/>
+                </vertices>
+                <triangles count="40" material="textureAtlas_30347701_0_tri">
+                    <input offset="0" semantic="VERTEX" source="#geometry0-vertex"/>
+                    <input offset="1" semantic="TEXCOORD" source="#geometry0-texCoords"/>
+                    <p>16 0 0 1 3 2 16 0 3 2 17 3 15 4 1 5 0 6 15 4 0 6 16 7 17 8 3 9 2 10 17 8 2 10 14 11 5 12 1 13 22 14 5 12 22 14 6 15 23 16 6 17 5 18 18 19 9 20 8 21 18 19 8 21 19 22 9 23 18 24 14 25 7 26 9 23 14 25 4 27 7 26 14 25 4 27 14 25 2 28 19 29 8 30 11 31 19 29 11 31 21 32 5 33 6 34 23 35 5 33 23 35 1 36 22 37 1 38 5 39 20 40 13 41 1 42 20 40 1 42 15 43 13 44 20 45 21 46 13 44 21 46 11 47 12 48 13 44 11 47 12 48 11 47 10 49 0 50 1 51 2 52 0 50 2 52 3 53 1 54 4 55 2 56 1 57 5 58 4 59 5 60 6 61 7 62 5 60 7 62 4 63 6 64 8 65 9 66 6 64 9 66 7 67 8 68 6 69 10 70 8 68 10 70 11 71 6 72 5 73 12 74 6 72 12 74 10 75 5 76 1 77 13 78 5 76 13 78 12 79</p>
+                </triangles>
+                <triangles count="6" material="default_ai_0.2_sh_0.2_tr_0.0_dc_r_0.8_g_0.8_b_0.8_sc_r_1.0_g_1.0_b_1.0_ec_r_0.0_g_0.0_b_0_tri">
+                    <input offset="0" semantic="VERTEX" source="#geometry0-vertex"/>
+                    <p>18 19 15 18 15 14 20 15 19 20 19 21 14 15 16 14 16 17</p>
+                </triangles>
+            </mesh>
+        </geometry>
+    </library_geometries>
+    <library_visual_scenes>
+        <visual_scene id="Building_BLDG_0003000b0061ff08">
+            <node>
+                <instance_geometry url="#geometry0">
+                    <bind_material>
+                        <technique_common>
+                            <instance_material symbol="default_ai_0.2_sh_0.2_tr_0.0_dc_r_0.8_g_0.8_b_0.8_sc_r_1.0_g_1.0_b_1.0_ec_r_0.0_g_0.0_b_0_tri" target="#default_ai_0.2_sh_0.2_tr_0.0_dc_r_0.8_g_0.8_b_0.8_sc_r_1.0_g_1.0_b_1.0_ec_r_0.0_g_0.0_b_0_mat"/>
+                            <instance_material symbol="textureAtlas_30347701_0_tri" target="#textureAtlas_30347701_0_mat"/>
+                        </technique_common>
+                    </bind_material>
+                </instance_geometry>
+            </node>
+        </visual_scene>
+    </library_visual_scenes>
+    <scene>
+        <instance_visual_scene url="#Building_BLDG_0003000b0061ff08"/>
+    </scene>
+</COLLADA>

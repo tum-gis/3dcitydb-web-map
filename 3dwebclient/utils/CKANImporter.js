@@ -243,11 +243,13 @@ function getCKANdata(urlValue,apiKeyValue){
 
 
   //Load existing data of dataset
-  loadDataset(urlValue);
+  loadDataset(urlValue,apiKeyValue);
 }
 
 //Load information of existing dataset into the webform in order to update the information
-function loadDataset(url){
+//CKAN_Object stores the existing data of an object needed for the update
+var CKAN_Object;
+function loadDataset(url,key){
 
   var id = document.getElementById("ckan-form-name").value;
   var url_update = url + "/api/3/action/package_show?id=" + id;
@@ -256,28 +258,77 @@ function loadDataset(url){
     xhr_update.open("GET", url_update, true);
     xhr_update.setRequestHeader("Accept", "application/json");
     xhr_update.setRequestHeader("Content-Type", "application/json");
-    //xhr_update.setRequestHeader("Authorization", apiKeyValue);
+    xhr_update.setRequestHeader("Authorization", key);
     xhr_update.onreadystatechange = function () {
       //Status 200: object is already existing -> update dataset
         if (xhr_update.readyState === 4 && xhr_update.status === 200) {
             var update_response = JSON.parse(xhr_update.responseText);
             console.log(update_response);
             alert("An CKAN object with this ID already exists. Your changes will update the existing object.");
-
-              document.getElementById("ckan-modal-submit-btn").innerHTML = "Update Object";
-              document.getElementById("ckan-modal-connection").style.display = "none";
-              document.getElementById("ckan-modal").style.display = "block";
+            CKAN_Object = update_response.result;
+            loadObjectInfo2form();
           }
           //Status 200: object is not already existing -> create dataset
           if (xhr_update.readyState === 4 && xhr_update.status === 404) {
               var update_response = JSON.parse(xhr_update.responseText);
               console.log(update_response);
+              CKAN_Object = '';
                 document.getElementById("ckan-modal-submit-btn").innerHTML = "Create New Object";
                 document.getElementById("ckan-modal-connection").style.display = "none";
                 document.getElementById("ckan-modal").style.display = "block";
             }
         };
         xhr_update.send();
+
+}
+
+//Loading selected object data into webform
+function loadObjectInfo2form(){
+
+  console.log(CKAN_Object);
+
+  /*
+  var groupsValue = document.getElementById("ckan-form-groups").value;
+  var spatialExtentValue = document.getElementById("ckan-form-spatial-extent").value;
+  var licenceValue = document.getElementById("ckan-form-licence").value;
+  var organizationValue = document.getElementById("ckan-form-organization").value;
+
+  var visibilityValue = document.getElementById("ckan-form-visibility").value;
+  var agreementValue = document.getElementById("ckan-form-licence_agreement").checked;
+  var languageValue = document.querySelector('input[name="ckan-language"]:checked').value;
+
+  var tagValues = $('#ckan-tag-options').find(':selected');
+  */
+  if (typeof CKAN_Object.type !== 'undefined'){
+  document.getElementById("ckan-form-schematype").value = CKAN_Object.type;
+  }
+  if (typeof CKAN_Object.name !== 'undefined'){
+  document.getElementById("ckan-form-name").value = CKAN_Object.name;
+  }
+  if (typeof CKAN_Object.title !== 'undefined'){
+  document.getElementById("ckan-form-title").value = CKAN_Object.title;
+  }
+  if (typeof CKAN_Object.notes !== 'undefined'){
+  document.getElementById("ckan-form-descriptionnotes").value = CKAN_Object.notes;
+  }
+  if (typeof CKAN_Object.version !== 'undefined'){
+  document.getElementById("ckan-form-version").value = CKAN_Object.version;
+  }
+  if (typeof CKAN_Object.begin_collection_date !== 'undefined'){
+  document.getElementById("ckan-form-individualbeginncollectiondate").value = CKAN_Object.begin_collection_date;
+  }
+  if (typeof CKAN_Object.end_collection_date !== 'undefined'){
+  document.getElementById("ckan-form-individualendcollectiondate").value = CKAN_Object.end_collection_date;
+  }
+
+
+
+
+
+  document.getElementById("ckan-modal-submit-btn").innerHTML = "Update Object";
+  document.getElementById("ckan-modal-connection").style.display = "none";
+  document.getElementById("ckan-modal").style.display = "block";
+
 
 }
 

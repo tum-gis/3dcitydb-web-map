@@ -671,28 +671,6 @@
 
             <!-- Create a form container -->
             <div class="ckan-container" id="ckan-form-container">
-              <label class="ckan-form-label-star" for="ckan-form-title" style="display:none;">* </label>
-              <label class="ckan-form-label" for="uname"style="display:none;"><b>CKAN URL</b></label>
-                <div class="ckan-tooltip"style="display:none;">&#9432
-                  <span class="ckan-tooltiptext"style="display:none;">Enter the URL of your CKAN account that is to receive the data. Please observe the corresponding usage guidelines.</span>
-                </div>
-              <br><br>
-              <input class="ckan-input-field" id="ckan-form-url" type="url" placeholder="  Enter CKAN URL"  name="uname" required
-              minlength="10"
-              maxlength="200"
-              style="display:none;"
-              >
-              <!-- API Key -->
-              <label class="ckan-form-label-star" for="ckan-form-title" style="display:none;">* </label>
-              <label class="ckan-form-label" for="psw" style="display:none;"><b>API Key</b></label>
-                <div class="ckan-tooltip" style="display:none;">&#9432
-                  <span class="ckan-tooltiptext" style="display:none;">Please enter a valid API key that enables the transmission.</span>
-                </div>
-              <br><br>
-              <input id="ckan-form-key" class="ckan-input-field" type="password" placeholder="Enter API key" name="psw" required style="display:none;">
-              <!-- Submit Button -->
-
-
 
             <fieldset>
               <legend class="ckan-form-fieldsettitle">Pre-Set Categories for Information:</legend>
@@ -721,22 +699,19 @@
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">There are several schema types available in CKAN. Due to the orientation of the programme, only the creation of a datahub_resource is possible in this form. </span>
                 </div>
-                <br><br>
-                <input type="text" id="ckan-form-schematype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly><br><br>
+                <input type="text" id="ckan-form-schematype" name="ckan-schematype" class="ckan-input-field" value="datahub_resource"  readonly>
 
                 <label class="ckan-form-label" for="ckan-form-name">Name:</label>
                 <div class="ckan-tooltip">&#9432
-                  <span class="ckan-tooltiptext">The name under which the object is created in CKAN is the name under which the object is stored in 3DCityDB. Since the name must fulfill certain conditions, the parameter cannot be changed.  </span>
+                  <span class="ckan-tooltiptext">the Name category serves as the ID for the object in CKAN. An important criterion here is uniqueness, which is why the parameter cannot be changed by the user. </span>
                 </div>
-                <br><br>
-                <input type="text" id="ckan-form-name" name="ckan-name" class="ckan-input-field" value="deby_lod2_4906975124" readonly><br><br>
+                <input type="text" id="ckan-form-name" name="ckan-name" class="ckan-input-field" value="deby_lod2_4906975124" readonly>
 
                 <label class="ckan-form-label" for="ckan-form-label">Spatial Extend:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">Bounding box values of the selected spatial object are displayed in this field. The geometry shape is a multipolygon.   </span>
                 </div>
-                <br><br>
-                <input type="text" id="ckan-form-spatial-extent" name="ckan-label" class="ckan-input-field" value=""  readonly><br><br>
+                <input type="text" id="ckan-form-spatial-extent" name="ckan-label" class="ckan-input-field" value=""  readonly>
 
 
             </fieldset><br>
@@ -749,26 +724,24 @@
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">The title of the created CKAN object can be freely chosen by the user. </span>
                 </div>
-                <br><br>
-                <input type="text" id="ckan-form-title" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data" required autocomplete="off"><br><br>
+                <input type="text" id="ckan-form-title" name="ckan-Title" class="ckan-input-field"  placeholder="MY 3DCityDB Data" required autocomplete="off">
 
                 <label class="ckan-form-label" for="ckan-form-descriptionnotes">Description:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">The user can enter helpful comments on the created object here.  </span>
-                </div><br>
-                <input type="text" id="ckan-form-descriptionnotes" name="ckan-Description_Notes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" autocomplete="off"><br><br>
+                </div>
+                <input type="text" id="ckan-form-descriptionnotes" name="ckan-Description_Notes" class="ckan-input-field" width=300 placeholder="e.g. some usefull notes about the data" autocomplete="off">
 
                 <!-- Groups Drop Down Box-->
                 <label class="ckan-form-label" for="ckan-form-groups">Groups:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">Each catalog entry is assigned to one "main category" or "Topic".</span>
                 </div>
-                <br><br>
                 <!--<input type="text" id="ckan-form-groups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly><br><br>-->
                 <select id="ckan-form-groups" name="ckan-dropdown-groups" class="ckan-input-field">
                   <option value="default" selected>Select the Group</option>
                 </select>
-                <br><br>
+
 
                 <!-- Drop Down Box-->
                 <label class="ckan-form-label" for="ckan-form-licence">License:</label>
@@ -776,11 +749,9 @@
                   <span class="ckan-tooltiptext">License definitions and additional information can be found at </span>
                   <span class="ckan-tooltiptext"><l> opendefinition.org.</l></span>
                 </div>
-                <br><br>
                 <select id="ckan-form-licence" name="ckan-dropdown1" class="ckan-input-field">
                   <option value="default" selected>Select the license</option>
                 </select>
-                <br><br>
 
                 <!-- Drop Down Box-->
                 <label class="ckan-form-label-star" for="ckan-form-title">* </label>
@@ -788,29 +759,30 @@
                 <div class="ckan-tooltip">&#9432
                     <span class="ckan-tooltiptext">Defines which organization the catalog entry is assigned to.</span>
                   </div>
-                <br><br>
                 <select id="ckan-form-organization" name="ckan-dropdown2" class="ckan-input-field" required>
                   <option value="default" selected>Select your organization</option>
                 </select>
-                <br><br>
+
 
                 <!-- Drop Down Box-->
                 <label class="ckan-form-label" for="ckan-form-visibility">Visibility:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">The user should be given the possibility to determine who should have access to the transferred data in the CKAN catalogue.  </span>
-                </div><br>
+                </div>
                 <select id="ckan-form-visibility"name="ckan-dropdown3" class="ckan-input-field" autocomplete="off">
                   <option value="false" selected>Public</option>
                   <option value="true">Organization Internal</option>
-                </select><br><br>
+                </select>
 
 
 
                 <input type="checkbox" id="ckan-form-licence_agreement" name="ckan-Licence_Agreement" value="Agreed" required autocomplete="off">
-                <br><label class="ckan-form-label-star" for="ckan-form-title">* </label>
-                <label class="ckan-form-label" for="ckan-form-licence_agreement"> I hereby confirm that all data entered by me is covered by the license selected above.</label><br><br>
+                <label class="ckan-form-label-star" for="ckan-form-title">* </label>
+                <label class="ckan-form-label" for="ckan-form-licence_agreement"> I hereby confirm that all data entered by me is covered by the license selected above.</label>
+                <br><br>
 
-                <button type="button" class="ckan-form-togglebutton" id="ckan-form-toggleadditionalcategoriesbutton">Show additional input categories</button>
+          
+                <button type="button" onclick="ckan_toggle_button_text()" class="ckan-form-togglebutton" id="ckan-form-toggleadditionalcategoriesbutton">Show additional input categories</button>
 
             </fieldset><br>
 
@@ -820,15 +792,14 @@
                 <br><label class="ckan-form-label" for="ckan-form-tags">Tags:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">Tags can be used to find catalog entries more easily. A tag is a word that stands in connection with the entry.</span>
-                </div><br>
+                </div>
+                <br><br>
                 <select id="ckan-tag-options" class="ckan-tags form-control" multiple="multiple" style="width: 100%">
                   <option selected="selected">default</option>
                 </select>
 
-
-                <br>
-                <label class="ckan-form-label" for="ckan-form-autorname">Author Name and Email:</label>
                 <br><br>
+                <label class="ckan-form-label" for="ckan-form-autorname">Author Name and Email:</label>
                 <table class="table table-bordered" id="ckan_autor_table">
                      <tr>
                           <td><input type="text"  placeholder="Enter author name" id="ckan-form-autorname1" class="ckan-input-field" /></td>
@@ -838,7 +809,6 @@
                 </table>
 
                 <label class="ckan-form-label" for="ckan-form-maintainername">Maintainer Name and Email:</label>
-                <br><br>
                 <table class="table table-bordered" id="ckan_maintainer_table">
                      <tr>
                           <td><input type="text" placeholder="Enter maintainer name" id="ckan-form-maintainername1" class="ckan-input-field" /></td>
@@ -847,32 +817,29 @@
                      </tr>
                 </table>
 
-                <label class="ckan-form-label" for="ckan-form-language1">Language:</label><br>
+                <label class="ckan-form-label" for="ckan-form-language1">Language:</label><br><br>
                 <input type="radio" id="ckan-form-language-en" name="ckan-language" value="en" checked>
                 <label class="ckan-form-label" for="ckan-form-language-en">English</label><br>
                 <input type="radio" id="ckan-form-language-de" name="ckan-language" value="de">
                 <label class="ckan-form-label" for="ckan-form-language-de">German</label>
-                <br><br>
 
+                <br><br>
                 <label class="ckan-form-label" for="ckan-form-version">Version:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">The version number can be used to make changes to the catalog entry visible. The higher the version number, the more often the catalog entry has been edited.</span>
                 </div>
-                <br><br>
-                <input type="text" id="ckan-form-version" name="ckan-Version" class="ckan-input-field" width=300 placeholder="1.0" ><br><br>
+                <input type="text" id="ckan-form-version" name="ckan-Version" class="ckan-input-field"  placeholder="1.0" >
 
                 <label class="ckan-form-label" for="ckan-form-beginncollectiondate">Begin collection date:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">This marks the validity period of the catalog entry. This period can be used to search for entries later.</span>
                 </div>
-                <br><br>
-                <input type="date" id="ckan-form-individualbeginncollectiondate" name="ckan-IndividualBeginnCollDate" class="ckan-input-field"><br><br>
+                <input type="date" id="ckan-form-individualbeginncollectiondate" name="ckan-IndividualBeginnCollDate" class="ckan-input-field">
 
                 <label class="ckan-form-label" for="ckan-form-endcollectiondate">End collection date:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">This marks the validity period of the catalog entry. This period can be used to search for entries later.</span>
                 </div>
-                <br><br>
                 <input type="date" id="ckan-form-individualendcollectiondate" name="ckan-IndividualEndCollDate" class="ckan-input-field">
 
 
@@ -920,15 +887,15 @@
       <!-- Create a form container -->
       <div class="ckan-container" id="ckan-form-container">
         <label class="ckan-form-label-star" for="ckan-form-connection-title">* </label>
-        <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label><br><br>
+        <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label>
         <input class="ckan-input-field" id="ckan-form-connection-url" type="url" placeholder="  Enter CKAN URL"  name="uname" required
         minlength="10"
         maxlength="100"
-        ><br>
+        >
         <!-- API Key -->
-        <br><label class="ckan-form-label-star" for="ckan-form-connection-title">* </label>
+        <label class="ckan-form-label-star" for="ckan-form-connection-title">* </label>
         <label class="ckan-form-label" for="psw"><b>API Key</b></label>
-        <br><br>
+
         <input id="ckan-form-connection-key" class="ckan-input-field" type="password" placeholder="Enter API Key" name="psw" required><br><br>
         <!-- Submit Button -->
         <button class="ckan-btn" type="submit">Connect to CKAN</button><br><br>

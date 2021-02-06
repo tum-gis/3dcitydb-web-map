@@ -3,6 +3,7 @@ $(document).ready(function(){
 
   $("#ckan-form-toggleadditionalcategoriesbutton").click(function(){
     $("#ckan-fieldset-toggleID").toggle();
+
   });
 
      $('#ckan-form-autor_add').click(function(){
@@ -33,7 +34,14 @@ $(document).ready(function(){
 
 
 });
-
+function ckan_toggle_button_text() {
+  var x = document.getElementById("ckan-form-toggleadditionalcategoriesbutton");
+  if (x.innerHTML === "Show additional input categories") {
+    x.innerHTML = "Hide additional input categories";
+  } else {
+    x.innerHTML = "Show additional input categories";
+  }
+}
 
 
 /*Functions for CKAN Import Functionality*/
@@ -84,12 +92,8 @@ function connect2CKAN(){
   var apiKeyValue = document.getElementById("ckan-form-connection-key").value;
   var urlValue = document.getElementById("ckan-form-connection-url").value;
 
-  console.log('CKAN URL: '+urlValue);
-  console.log('CKAN API Key: '+apiKeyValue);
-
   var url_user = urlValue + "/api/3/action/organization_list_for_user";
 
-//Testing connection and api key
   var xhr_user = new XMLHttpRequest();
     xhr_user.open("GET", url_user, true);
     xhr_user.setRequestHeader("Accept", "application/json");
@@ -101,26 +105,34 @@ function connect2CKAN(){
         if (xhr_user.readyState === 4 && xhr_user.status === 200) {
             var user_response = JSON.parse(xhr_user.responseText);
             console.log(user_response);
-
-            document.getElementById("ckan-form-url").value = urlValue;
-            document.getElementById("ckan-form-key").value = apiKeyValue;
-
-            getCKANdata(urlValue,apiKeyValue);
+            getCKANdata();
           }
           if (xhr_user.readyState === 4 && xhr_user.status === 0) {
             alert("Connection to CKAN could not be established. Please read the error log for more information.");
+
             }
         };
         xhr_user.send();
+
+
+
+
 }
 
-function getCKANdata(urlValue,apiKeyValue){
+function getCKANdata(){
+  var apiKeyValue = document.getElementById("ckan-form-connection-key").value;
+  var urlValue = document.getElementById("ckan-form-connection-url").value;
 
   var url_user_organizations = urlValue + "/api/3/action/organization_list_for_user";
   var url_licence = urlValue + "/api/3/action/license_list";
   var url_user_groups = urlValue + "/api/3/action/group_list_authz";
   var url_groups = urlValue + "/api/3/action/group_list";
   var url_tags = urlValue + "/api/3/action/tag_list";
+
+
+
+  console.log('CKAN URL: '+urlValue);
+  console.log('CKAN API Key: '+apiKeyValue);
 
   //Fetching Group List
   var xhr_group = new XMLHttpRequest();
@@ -147,7 +159,9 @@ function getCKANdata(urlValue,apiKeyValue){
                   option.selected = true;
                 }
                 groupList.add(option);
+
             }
+
             if(group_result.length < 1){
             //adding default option, necessary for creating new datasets
             var option = document.createElement("option");
@@ -157,6 +171,7 @@ function getCKANdata(urlValue,apiKeyValue){
             groupList.add(option);
           }
           }
+
         };
         xhr_group.send();
 
@@ -185,6 +200,9 @@ function getCKANdata(urlValue,apiKeyValue){
 
 
           }
+          else{
+            console.log('No response');
+          }
         };
         xhr_c2C.send();
 
@@ -205,11 +223,16 @@ function getCKANdata(urlValue,apiKeyValue){
                   removeOptions(licenceList);
                   for (var licence in licence_result) {
                       console.log(licence_result[licence].title);
+
                       var option = document.createElement("option");
                       option.text = licence_result[licence].title;
                       option.value = licence_result[licence].id;
                       licenceList.add(option);
                   }
+
+                }
+                else{
+                  console.log('No response');
                 }
               };
               xhr_licence.send();
@@ -243,13 +266,15 @@ function getCKANdata(urlValue,apiKeyValue){
 
 
   //Load existing data of dataset
-  loadDataset(urlValue,apiKeyValue);
+  loadDataset(urlValue);
+
+  document.getElementById("ckan-modal-connection").style.display = "none";
+  document.getElementById("ckan-modal").style.display = "block";
+
 }
 
 //Load information of existing dataset into the webform in order to update the information
-//CKAN_Object stores the existing data of an object needed for the update
-var CKAN_Object;
-function loadDataset(url,key){
+function loadDataset(url){
 
   var id = document.getElementById("ckan-form-name").value;
   var url_update = url + "/api/3/action/package_show?id=" + id;
@@ -258,77 +283,15 @@ function loadDataset(url,key){
     xhr_update.open("GET", url_update, true);
     xhr_update.setRequestHeader("Accept", "application/json");
     xhr_update.setRequestHeader("Content-Type", "application/json");
-    xhr_update.setRequestHeader("Authorization", key);
+    //xhr_update.setRequestHeader("Authorization", apiKeyValue);
     xhr_update.onreadystatechange = function () {
-      //Status 200: object is already existing -> update dataset
         if (xhr_update.readyState === 4 && xhr_update.status === 200) {
             var update_response = JSON.parse(xhr_update.responseText);
             console.log(update_response);
             alert("An CKAN object with this ID already exists. Your changes will update the existing object.");
-            CKAN_Object = update_response.result;
-            loadObjectInfo2form();
           }
-          //Status 200: object is not already existing -> create dataset
-          if (xhr_update.readyState === 4 && xhr_update.status === 404) {
-              var update_response = JSON.parse(xhr_update.responseText);
-              console.log(update_response);
-              CKAN_Object = '';
-                document.getElementById("ckan-modal-submit-btn").innerHTML = "Create New Object";
-                document.getElementById("ckan-modal-connection").style.display = "none";
-                document.getElementById("ckan-modal").style.display = "block";
-            }
         };
         xhr_update.send();
-
-}
-
-//Loading selected object data into webform
-function loadObjectInfo2form(){
-
-  console.log(CKAN_Object);
-
-  /*
-  var groupsValue = document.getElementById("ckan-form-groups").value;
-  var spatialExtentValue = document.getElementById("ckan-form-spatial-extent").value;
-  var licenceValue = document.getElementById("ckan-form-licence").value;
-  var organizationValue = document.getElementById("ckan-form-organization").value;
-
-  var visibilityValue = document.getElementById("ckan-form-visibility").value;
-  var agreementValue = document.getElementById("ckan-form-licence_agreement").checked;
-  var languageValue = document.querySelector('input[name="ckan-language"]:checked').value;
-
-  var tagValues = $('#ckan-tag-options').find(':selected');
-  */
-  if (typeof CKAN_Object.type !== 'undefined'){
-  document.getElementById("ckan-form-schematype").value = CKAN_Object.type;
-  }
-  if (typeof CKAN_Object.name !== 'undefined'){
-  document.getElementById("ckan-form-name").value = CKAN_Object.name;
-  }
-  if (typeof CKAN_Object.title !== 'undefined'){
-  document.getElementById("ckan-form-title").value = CKAN_Object.title;
-  }
-  if (typeof CKAN_Object.notes !== 'undefined'){
-  document.getElementById("ckan-form-descriptionnotes").value = CKAN_Object.notes;
-  }
-  if (typeof CKAN_Object.version !== 'undefined'){
-  document.getElementById("ckan-form-version").value = CKAN_Object.version;
-  }
-  if (typeof CKAN_Object.begin_collection_date !== 'undefined'){
-  document.getElementById("ckan-form-individualbeginncollectiondate").value = CKAN_Object.begin_collection_date;
-  }
-  if (typeof CKAN_Object.end_collection_date !== 'undefined'){
-  document.getElementById("ckan-form-individualendcollectiondate").value = CKAN_Object.end_collection_date;
-  }
-
-
-
-
-
-  document.getElementById("ckan-modal-submit-btn").innerHTML = "Update Object";
-  document.getElementById("ckan-modal-connection").style.display = "none";
-  document.getElementById("ckan-modal").style.display = "block";
-
 
 }
 

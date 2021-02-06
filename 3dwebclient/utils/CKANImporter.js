@@ -302,7 +302,7 @@ function transmitCKANdata(){
   //getting the values of the input form fields
   var url_host = document.getElementById("ckan-form-url").value;
   var url_path = url_host + "/api/3/action/package_create";
-  var url_update = url_host + "/api/3/action/resource_update";
+  var url_update = url_host + "/api/3/action/package_update";
   var keyValue = document.getElementById("ckan-form-key").value;
   var typeValue = document.getElementById("ckan-form-schematype").value;
   var nameValue = document.getElementById("ckan-form-name").value;
@@ -442,10 +442,45 @@ function transmitCKANdata(){
   //console.log('CKAN Maintainer Name: '+maintainerNameValue);
   //console.log('CKAN Maintainer Mail: '+maintainerMailValue);
 
+  var data;
+  var url;
+
+  if(CKAN_Object.length<1){
+    console.log("Create New");
+    url = url_path;
+
+  //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
+  //data += extraValues;
+  data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":[{"name":"'+groupsValue+'"}], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
+  //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"notes":noteValue, "end_collection_date":endDateValue,"begin_collection_date":beginDateValue,"licence_agreement":[agreementCheck],"license_id":licenceValue,"owner_org":organizationValue,"private":visibilityValue,"language":languageValue,"version":versionValue,"tags": [{"name": tagValue}],"spatial":'{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]}'});
+  //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
+  //"spatial":&quot;{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}&quot;,
+  //,"author": [{"author_email": "'+autorMailValue+'", "author": "'+autorNameValue+'"}],"maintainer": [{"maintainer_email": "'+maintainerMailValue+'", "maintainer": "'+maintainerNameValue+'"}]
+  //"extras":[extraValues],
+  //,"spatial":\'{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}\'
+  //,"maintainer": "[{\\"maintainer_email\\": \\"'+maintainerMailValue+'\\", \\"maintainer\\": \\"'+maintainerNameValue+'\\"}]"
+}else{
+  console.log("Update");
+  url = url_update;
+
+  //Replacing the old values
+  CKAN_Object.type = typeValue;
+  CKAN_Object.name = nameValue;
+  CKAN_Object.title = titleValue;
+  CKAN_Object.notes = noteValue;
+  CKAN_Object.version = versionValue;
+  CKAN_Object.begin_collection_date = beginDateValue;
+  CKAN_Object.end_collection_date = endDateValue;
+  CKAN_Object.spatial = '{\"type\":\"MultiPolygon\",\"coordinates\":[[['+bbox_string+']]]}';
+
+  data = JSON.stringify(CKAN_Object);
+
+}
+
 
 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", url_path, true);
+  xhr.open("POST", url, true);
   xhr.setRequestHeader("Accept", "application/json");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", keyValue);
@@ -480,17 +515,7 @@ function transmitCKANdata(){
                 document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
               }
       };
-      //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
-      //data += extraValues;
-      var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":[{"name":"'+groupsValue+'"}], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
-      //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"notes":noteValue, "end_collection_date":endDateValue,"begin_collection_date":beginDateValue,"licence_agreement":[agreementCheck],"license_id":licenceValue,"owner_org":organizationValue,"private":visibilityValue,"language":languageValue,"version":versionValue,"tags": [{"name": tagValue}],"spatial":'{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]}'});
-      //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
-      //"spatial":&quot;{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}&quot;,
-      //,"author": [{"author_email": "'+autorMailValue+'", "author": "'+autorNameValue+'"}],"maintainer": [{"maintainer_email": "'+maintainerMailValue+'", "maintainer": "'+maintainerNameValue+'"}]
-      //"extras":[extraValues],
-      //,"spatial":\'{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}\'
-      //,"maintainer": "[{\\"maintainer_email\\": \\"'+maintainerMailValue+'\\", \\"maintainer\\": \\"'+maintainerNameValue+'\\"}]"
-      console.log(data);
+        console.log(data);
       xhr.send(data);
 
 

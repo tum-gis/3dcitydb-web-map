@@ -671,7 +671,11 @@
 
             <!-- Create a form container -->
             <div class="ckan-container" id="ckan-form-container">
-
+              <input class="ckan-input-field" id="ckan-form-url" type="url" placeholder="  Enter CKAN URL"  name="uname" required
+              minlength="10"
+              maxlength="200"
+              style="display:none;">
+              <input id="ckan-form-key" class="ckan-input-field" type="password" placeholder="Enter API key" name="psw" required style="display:none;">
             <fieldset>
               <legend class="ckan-form-fieldsettitle">Pre-Set Categories for Information:</legend>
               <br>

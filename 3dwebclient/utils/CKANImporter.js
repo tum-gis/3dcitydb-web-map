@@ -306,11 +306,14 @@ function loadDataset(url,key){
               document.getElementById("ckan-modal-submit-btn").innerHTML = "Update Object";
               document.getElementById("ckan-modal-connection").style.display = "none";
               document.getElementById("ckan-modal").style.display = "block";
+              CKAN_Object = update_response.result;
+              loadObjectInfo2form();
           }
           //Status 200: object is not already existing -> create dataset
           if (xhr_update.readyState === 4 && xhr_update.status === 404) {
               var update_response = JSON.parse(xhr_update.responseText);
               console.log(update_response);
+              CKAN_Object = '';
                 document.getElementById("ckan-modal-submit-btn").innerHTML = "Create New Object";
                 document.getElementById("ckan-modal-connection").style.display = "none";
                 document.getElementById("ckan-modal").style.display = "block";
@@ -320,7 +323,6 @@ function loadDataset(url,key){
 
 }
 
-<<<<<<< HEAD
 //Loading selected object data into webform
 function loadObjectInfo2form(){
 
@@ -371,10 +373,6 @@ function loadObjectInfo2form(){
 
 }
 
-
-
-=======
->>>>>>> be4805a69ea2d86ab0fa4f830e079fc24ab46276
 function transmitCKANdata(){
   //Function start
   console.log('Starting transmitting data to CKAN');

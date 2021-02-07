@@ -3,7 +3,17 @@ $(document).ready(function(){
 
   $("#ckan-form-toggleadditionalcategoriesbutton").click(function(){
     $("#ckan-fieldset-toggleID").toggle();
+
   });
+
+  function ckan_toggle_button_text() {
+    var x = document.getElementById("ckan-form-toggleadditionalcategoriesbutton");
+    if (x.innerHTML === "Show additional input categories") {
+      x.innerHTML = "Hide additional input categories";
+    } else {
+      x.innerHTML = "Show additional input categories";
+    }
+  }
 
      $('#ckan-form-autor_add').click(function(){
           var i = $('#ckan_autor_table tr').length + 1;
@@ -33,7 +43,14 @@ $(document).ready(function(){
 
 
 });
-
+function ckan_toggle_button_text() {
+  var x = document.getElementById("ckan-form-toggleadditionalcategoriesbutton");
+  if (x.innerHTML === "Show additional input categories") {
+    x.innerHTML = "Hide additional input categories";
+  } else {
+    x.innerHTML = "Show additional input categories";
+  }
+}
 
 
 /*Functions for CKAN Import Functionality*/
@@ -87,6 +104,7 @@ function connect2CKAN(){
   console.log('CKAN URL: '+urlValue);
   console.log('CKAN API Key: '+apiKeyValue);
 
+
   var url_user = urlValue + "/api/3/action/organization_list_for_user";
 
 //Testing connection and api key
@@ -106,21 +124,32 @@ function connect2CKAN(){
             document.getElementById("ckan-form-key").value = apiKeyValue;
 
             getCKANdata(urlValue,apiKeyValue);
+
           }
           if (xhr_user.readyState === 4 && xhr_user.status === 0) {
             alert("Connection to CKAN could not be established. Please read the error log for more information.");
+
             }
+            if (xhr_user.readyState === 4 && xhr_user.status === 401) {
+              alert("Connection to CKAN could not be established. Error 401 Unauthorized. Please read the error log for more information.");
+
+              }
         };
         xhr_user.send();
+
+
+
+
 }
 
 function getCKANdata(urlValue,apiKeyValue){
-
   var url_user_organizations = urlValue + "/api/3/action/organization_list_for_user";
   var url_licence = urlValue + "/api/3/action/license_list";
   var url_user_groups = urlValue + "/api/3/action/group_list_authz";
   var url_groups = urlValue + "/api/3/action/group_list";
   var url_tags = urlValue + "/api/3/action/tag_list";
+
+
 
   //Fetching Group List
   var xhr_group = new XMLHttpRequest();
@@ -147,7 +176,9 @@ function getCKANdata(urlValue,apiKeyValue){
                   option.selected = true;
                 }
                 groupList.add(option);
+
             }
+
             if(group_result.length < 1){
             //adding default option, necessary for creating new datasets
             var option = document.createElement("option");
@@ -157,6 +188,7 @@ function getCKANdata(urlValue,apiKeyValue){
             groupList.add(option);
           }
           }
+
         };
         xhr_group.send();
 
@@ -205,11 +237,13 @@ function getCKANdata(urlValue,apiKeyValue){
                   removeOptions(licenceList);
                   for (var licence in licence_result) {
                       console.log(licence_result[licence].title);
+
                       var option = document.createElement("option");
                       option.text = licence_result[licence].title;
                       option.value = licence_result[licence].id;
                       licenceList.add(option);
                   }
+
                 }
               };
               xhr_licence.send();
@@ -243,7 +277,8 @@ function getCKANdata(urlValue,apiKeyValue){
 
 
   //Load existing data of dataset
-  loadDataset(urlValue,apiKeyValue);
+    loadDataset(urlValue,apiKeyValue);
+
 }
 
 //Load information of existing dataset into the webform in order to update the information
@@ -332,6 +367,8 @@ function loadObjectInfo2form(){
 
 }
 
+
+
 function transmitCKANdata(){
   //Function start
   console.log('Starting transmitting data to CKAN');
@@ -339,7 +376,7 @@ function transmitCKANdata(){
   //getting the values of the input form fields
   var url_host = document.getElementById("ckan-form-url").value;
   var url_path = url_host + "/api/3/action/package_create";
-  var url_update = url_host + "/api/3/action/resource_update";
+  var url_update = url_host + "/api/3/action/package_update";
   var keyValue = document.getElementById("ckan-form-key").value;
   var typeValue = document.getElementById("ckan-form-schematype").value;
   var nameValue = document.getElementById("ckan-form-name").value;
@@ -479,10 +516,45 @@ function transmitCKANdata(){
   //console.log('CKAN Maintainer Name: '+maintainerNameValue);
   //console.log('CKAN Maintainer Mail: '+maintainerMailValue);
 
+  var data;
+  var url;
+
+  if(CKAN_Object.length<1){
+    console.log("Create New");
+    url = url_path;
+
+  //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
+  //data += extraValues;
+  data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":[{"name":"'+groupsValue+'"}], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
+  //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"notes":noteValue, "end_collection_date":endDateValue,"begin_collection_date":beginDateValue,"licence_agreement":[agreementCheck],"license_id":licenceValue,"owner_org":organizationValue,"private":visibilityValue,"language":languageValue,"version":versionValue,"tags": [{"name": tagValue}],"spatial":'{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]}'});
+  //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
+  //"spatial":&quot;{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}&quot;,
+  //,"author": [{"author_email": "'+autorMailValue+'", "author": "'+autorNameValue+'"}],"maintainer": [{"maintainer_email": "'+maintainerMailValue+'", "maintainer": "'+maintainerNameValue+'"}]
+  //"extras":[extraValues],
+  //,"spatial":\'{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}\'
+  //,"maintainer": "[{\\"maintainer_email\\": \\"'+maintainerMailValue+'\\", \\"maintainer\\": \\"'+maintainerNameValue+'\\"}]"
+}else{
+  console.log("Update");
+  url = url_update;
+
+  //Replacing the old values
+  CKAN_Object.type = typeValue;
+  CKAN_Object.name = nameValue;
+  CKAN_Object.title = titleValue;
+  CKAN_Object.notes = noteValue;
+  CKAN_Object.version = versionValue;
+  CKAN_Object.begin_collection_date = beginDateValue;
+  CKAN_Object.end_collection_date = endDateValue;
+  CKAN_Object.spatial = '{\"type\":\"MultiPolygon\",\"coordinates\":[[['+bbox_string+']]]}';
+
+  data = JSON.stringify(CKAN_Object);
+
+}
+
 
 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", url_path, true);
+  xhr.open("POST", url, true);
   xhr.setRequestHeader("Accept", "application/json");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", keyValue);
@@ -491,14 +563,14 @@ function transmitCKANdata(){
           var json = JSON.parse(xhr.responseText);
           console.log(json);
           document.getElementById("ckan_message_header").innerHTML = 'Transmission was successful';
-          document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
+          //document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
         }
         if (xhr.readyState === 4 && xhr.status === 409) {
             var json = JSON.parse(xhr.responseText);
             console.log(json);
 
             //Print response on message modal
-            document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Error 409';
+            document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Conflict Error 409';
             document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
 
           }
@@ -506,28 +578,25 @@ function transmitCKANdata(){
               var json = JSON.parse(xhr.responseText);
               console.log(json);
               //Print response on message modal
-              document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Error 404';
+              document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Not Found Error 404';
               document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
             }
+            if (xhr.readyState === 4 && xhr.status === 400) {
+                var json = JSON.parse(xhr.responseText);
+                console.log(json);
+                //Print response on message modal
+                document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Bad Request Error 400';
+                document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
+              }
             if (xhr.readyState === 4 && xhr.status === 500) {
                 var json = JSON.parse(xhr.responseText);
                 console.log(json);
                 //Print response on message modal
-                document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Error 500';
+                document.getElementById("ckan_message_header").innerHTML = 'Transmission failed, Internal Server Error Error 500';
                 document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
               }
       };
-      //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
-      //data += extraValues;
-      var data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":[{"name":"'+groupsValue+'"}], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
-      //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"notes":noteValue, "end_collection_date":endDateValue,"begin_collection_date":beginDateValue,"licence_agreement":[agreementCheck],"license_id":licenceValue,"owner_org":organizationValue,"private":visibilityValue,"language":languageValue,"version":versionValue,"tags": [{"name": tagValue}],"spatial":'{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]}'});
-      //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
-      //"spatial":&quot;{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}&quot;,
-      //,"author": [{"author_email": "'+autorMailValue+'", "author": "'+autorNameValue+'"}],"maintainer": [{"maintainer_email": "'+maintainerMailValue+'", "maintainer": "'+maintainerNameValue+'"}]
-      //"extras":[extraValues],
-      //,"spatial":\'{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}\'
-      //,"maintainer": "[{\\"maintainer_email\\": \\"'+maintainerMailValue+'\\", \\"maintainer\\": \\"'+maintainerNameValue+'\\"}]"
-      console.log(data);
+        console.log(data);
       xhr.send(data);
 
 

@@ -847,9 +847,9 @@
                 <input type="date" id="ckan-form-individualendcollectiondate" name="ckan-IndividualEndCollDate" class="ckan-input-field">
 
 
-            </fieldset><br>
+            </fieldset>
 
-            <button id="ckan-modal-submit-btn" class="ckan-btn" type="submit">Submit Data</button><br><br>
+            <button id="ckan-modal-submit-btn" class="ckan-btn" type="submit">Submit Data</button>
 
 
         </div>
@@ -868,10 +868,13 @@
     <div class="ckan-form-title">
       <h3>Web form for CKAN upload</h3>
     </div>
-        <h4 id="ckan_message_header">Transmission was succesful!</h4>
+    <div class="ckan-container" id="ckan-form-container">
+      <fieldset>
+          <h4 id="ckan_message_header">Transmission was succesful!</h4>
           <p id="ckan_message_paragraph">Your data was successfully transmittet to CKAN!</p>
-      <button class="ckan-btn" type="submit">Close</button><br><br>
-
+        </fieldset>
+      <button class="ckan-btn" type="submit">Close</button>
+    </div>
   </form>
 </div>
 
@@ -900,9 +903,9 @@
         <label class="ckan-form-label-star" for="ckan-form-connection-title">* </label>
         <label class="ckan-form-label" for="psw"><b>API Key</b></label>
 
-        <input id="ckan-form-connection-key" class="ckan-input-field" type="password" placeholder="Enter API Key" name="psw" required><br><br>
+        <input id="ckan-form-connection-key" class="ckan-input-field" type="password" placeholder="Enter API key of your CKAN account" name="psw" required>
         <!-- Submit Button -->
-        <button class="ckan-btn" type="submit">Connect to CKAN</button><br><br>
+        <button class="ckan-btn" type="submit">Connect to CKAN</button>
 
       </div>
     </form>

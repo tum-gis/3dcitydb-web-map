@@ -243,6 +243,7 @@ function getCKANdata(urlValue,apiKeyValue){
                       var option = document.createElement("option");
                       option.text = licence_result[licence].title;
                       option.value = licence_result[licence].id;
+                      option.id = 'ckan-license-' + licence_result[licence].id;
                       licenceList.add(option);
                   }
 
@@ -330,7 +331,6 @@ function loadObjectInfo2form(){
 
   /*
   var groupsValue = document.getElementById("ckan-form-groups").value;
-  var spatialExtentValue = document.getElementById("ckan-form-spatial-extent").value;
   var licenceValue = document.getElementById("ckan-form-licence").value;
   var organizationValue = document.getElementById("ckan-form-organization").value;
 
@@ -361,6 +361,26 @@ function loadObjectInfo2form(){
   if (typeof CKAN_Object.end_collection_date !== 'undefined'){
   document.getElementById("ckan-form-individualendcollectiondate").value = CKAN_Object.end_collection_date;
   }
+  if (typeof CKAN_Object.extras !== 'undefined'){
+    var extra_data = CKAN_Object.extras;
+    var ckan_table = document.getElementById("ckan-attribute-table-body");
+
+    for(var meta in extra_data){
+    var ckan_row = ckan_table.insertRow(0);
+    var cell1 = ckan_row.insertCell(0);
+    var cell2 = ckan_row.insertCell(1);
+    var cell3 = ckan_row.insertCell(2);
+    var cell4 = ckan_row.insertCell(3);
+    cell1.innerHTML = extra_data[meta].key;
+    cell2.innerHTML = extra_data[meta].value;
+    cell3.innerHTML = '<input type="checkbox" >';
+    cell4.innerHTML = 'Old Value';
+  }
+  }
+  if (typeof CKAN_Object.license_id !== 'undefined'){
+    document.getElementById("ckan-license-" + CKAN_Object.license_id).selected = true;
+  }
+
 
 
 
@@ -414,7 +434,7 @@ function transmitCKANdata(){
           var col2 = row.cells[1].innerHTML;
 
           //check if checked
-          var check = document.getElementById(col1+"_checkbox");
+          var check = row.cells[2].getElementsByTagName('input')[0];
           if(check.checked){
             var row_string = '{"key":"'+col1+'","value": "'+col2+'"}';
             extraValues += row_string;
@@ -426,6 +446,7 @@ function transmitCKANdata(){
 
       }
       extraValues +=']';
+      console.debug(extraValues);
 
       //Getting Autor and Maintainer data from the dynamic table
       var autor_table_length = document.getElementById("ckan_autor_table").rows.length;
@@ -550,6 +571,8 @@ function transmitCKANdata(){
   CKAN_Object.begin_collection_date = beginDateValue;
   CKAN_Object.end_collection_date = endDateValue;
   CKAN_Object.spatial = '{\"type\":\"MultiPolygon\",\"coordinates\":[[['+bbox_string+']]]}';
+  CKAN_Object.extras = JSON.parse(extraValues);
+  CKAN_Object.license_id = licenceValue;
 
   data = JSON.stringify(CKAN_Object);
 

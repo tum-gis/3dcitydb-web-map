@@ -93,9 +93,6 @@ function removeAllChildNodes(parent) {
 }
 
 
-//CKAN_User_Org stores the existing data of all user dependent organizations
-var CKAN_User_Org;
-
 function connect2CKAN(){
   //Function start
   console.debug('Starting connection to CKAN');
@@ -142,6 +139,9 @@ function connect2CKAN(){
 
 
 }
+
+//CKAN_User_Org stores the existing data of all user dependent organizations
+var CKAN_User_Org;
 
 function getCKANdata(urlValue,apiKeyValue){
   var url_user_organizations = urlValue + "/api/3/action/organization_list_for_user";
@@ -274,6 +274,7 @@ function getCKANdata(urlValue,apiKeyValue){
                             var option = document.createElement("option");
                             option.value = tag_result[tag];
                             option.text = tag_result[tag];
+                            option.id = 'ckan-tag-' + tag_result[tag];
                             tagList.appendChild(option);
                         }
                       }
@@ -399,6 +400,17 @@ function loadObjectInfo2form(){
     if(CKAN_Object.private == false){
       document.getElementById("ckan-form-visibility-false").selected = true;
     }
+
+  }
+
+  if (typeof CKAN_Object.tags !== 'undefined'){
+    var tag_list = CKAN_Object.tags;
+    for(tag in tag_list){
+    //document.getElementById("ckan-tag-" + tag_list[tag].name).selected = true;
+    $('#ckan-tag-options').val([tag_list[tag].name]);
+    console.debug('Tag Name: ' + tag_list[tag].name);
+    }
+    $('#ckan-tag-options').trigger('change'); // Notify any JS components that the value changed
 
   }
 
@@ -596,6 +608,7 @@ function transmitCKANdata(){
   CKAN_Object.language = languageValue;
   CKAN_Object.private = visibilityValue;
   CKAN_Object.organization = CKAN_User_Org.find( function(org) { return org.name == organizationValue } );
+  CKAN_Object.owner_org = CKAN_User_Org.find( function(org) { return org.name == organizationValue } ).id;
 
   data = JSON.stringify(CKAN_Object);
 

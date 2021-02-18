@@ -142,6 +142,10 @@ function connect2CKAN(){
 
 }
 
+//Due to a bug, we have to difine all values of the main category and the topic in two list. Later, when the data is fetched from CKAN, together with the list is decided, which kind of category a group is in
+var group_main_categories = ["geoobject","dataset","online-service","project","software","online-application","method","device"];
+var group_topics = ["administration","urban-planning","environment","health","energy","information-technology","living","education","work","trade","construction","culture","mobility","agriculture","craft"];
+
 //CKAN_User_Org stores the existing data of all user dependent organizations
 var CKAN_User_Org;
 
@@ -167,18 +171,28 @@ function getCKANdata(urlValue,apiKeyValue){
             var group_result = group_response.result;
             console.debug(group_result);
             var groupList = document.getElementById("ckan-form-groups");
+            var maincategoryList = document.getElementById("ckan-form-maincategory");
+            var topicList = document.getElementById("ckan-form-topic");
             removeOptions(groupList);
+            removeOptions(maincategoryList);
+            removeOptions(topicList);
             for (var group in group_result) {
                 console.debug(group_result[group].title);
-
                 var option = document.createElement("option");
                 option.text = group_result[group].title;
                 option.value = group_result[group].name;
+                option.id = 'ckan-group-' + group_result[group].name;
 
                 if(option.value == 'geoobject'){ //Setting geoobject as default, as this makes the most sense for the group in the importer
                   option.selected = true;
                 }
                 groupList.add(option);
+                if(group_topics.includes(group_result[group].name)){
+                  topicList.add(option);
+                }
+                if(group_main_categories.includes(group_result[group].name)){
+                  maincategoryList.add(option);
+                }
 
             }
 
@@ -440,6 +454,15 @@ function loadObjectInfo2form(){
       }
     }
   }
+
+  if (typeof CKAN_Object.groups !== 'undefined'){
+    var groupList = CKAN_Object.groups;
+    for(group in groupList){
+      if(group_main_categories.includes(groupList[group].name)){
+        document.getElementById("ckan-group-"+groupList[group].name).selected = true;
+      }
+  }
+}
 
 
 

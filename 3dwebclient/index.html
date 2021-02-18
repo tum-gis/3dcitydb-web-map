@@ -832,7 +832,7 @@
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">The version number can be used to make changes to the catalog entry visible. The higher the version number, the more often the catalog entry has been edited.</span>
                 </div>
-                <input type="text" id="ckan-form-version" name="ckan-Version" class="ckan-input-field"  placeholder="1.0" >
+                <input type="text" id="ckan-form-version" name="ckan-Version" class="ckan-input-field"  pattern="(?=\d{1})(?=.*\d{1}$)(?!.*[.]{2})[0-9.]*  placeholder="1.0" >
 
                 <label class="ckan-form-label" for="ckan-form-beginncollectiondate">Begin collection date:</label>
                 <div class="ckan-tooltip">&#9432

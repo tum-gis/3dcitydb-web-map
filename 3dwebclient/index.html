@@ -807,7 +807,7 @@
                 <table class="table table-bordered" id="ckan_autor_table">
                      <tr>
                           <td><input type="text"  placeholder="Enter author name" id="ckan-form-autorname1" class="ckan-input-field" /></td>
-                          <td><input type="email"  placeholder="Enter author email" id="ckan-form-autormail1" class="ckan-input-field" /></td>
+                          <td><input type="email"  placeholder="Enter author email" id="ckan-form-autormail1" class="ckan-input-field" title="Please enter an email address"/></td>
                           <td><button type="button" id="ckan-form-autor_add" class="ckan_addbtn">Add More</button></td>
                      </tr>
                 </table>
@@ -816,7 +816,7 @@
                 <table class="table table-bordered" id="ckan_maintainer_table">
                      <tr>
                           <td><input type="text" placeholder="Enter maintainer name" id="ckan-form-maintainername1" class="ckan-input-field" /></td>
-                          <td><input type="email" placeholder="Enter maintainer email" id="ckan-form-maintainermail1" class="ckan-input-field" /></td>
+                          <td><input type="email" placeholder="Enter maintainer email" id="ckan-form-maintainermail1" class="ckan-input-field" title="Please enter an email address" /></td>
                           <td><button type="button" id="ckan-form-maintainer_add" class="ckan_addbtn">Add More</button></td>
                      </tr>
                 </table>
@@ -830,9 +830,9 @@
                 <br><br>
                 <label class="ckan-form-label" for="ckan-form-version">Version:</label>
                 <div class="ckan-tooltip">&#9432
-                  <span class="ckan-tooltiptext">The version number can be used to make changes to the catalog entry visible. The higher the version number, the more often the catalog entry has been edited.</span>
+                  <span class="ckan-tooltiptext">The version number can be used to make changes to the catalog entry visible. The higher the version number, the more often the catalog entry has been edited</span>
                 </div>
-                <input type="text" id="ckan-form-version" name="ckan-Version" class="ckan-input-field"  pattern="(?=\d{1})(?=.*\d{1}$)(?!.*[.]{2})[0-9.]*  placeholder="1.0" >
+                <input type="text" id="ckan-form-version" name="ckan-Version" class="ckan-input-field"  pattern="(?=\d{1})(?=.*\d{1}$)(?!.*[.]{2})[0-9.]*" title="Only version number with digits (and dots) is valid. First and last element must be a number, not more than one point in succession. " placeholder="1.0" >
 
                 <label class="ckan-form-label" for="ckan-form-beginncollectiondate">Begin collection date:</label>
                 <div class="ckan-tooltip">&#9432
@@ -895,7 +895,7 @@
       <div class="ckan-container" id="ckan-form-container">
         <label class="ckan-form-label-star" for="ckan-form-connection-title">* </label>
         <label class="ckan-form-label" for="uname"><b>CKAN URL</b></label>
-        <input class="ckan-input-field" id="ckan-form-connection-url" type="url" placeholder="  Enter CKAN URL"  name="uname" required
+        <input class="ckan-input-field" id="ckan-form-connection-url" type="url" placeholder="  Enter CKAN URL"  name="uname" title="Please enter a URL" required
         minlength="10"
         maxlength="100"
         >

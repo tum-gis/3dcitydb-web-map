@@ -17,20 +17,20 @@ $(document).ready(function(){
 
      $('#ckan-form-autor_add').click(function(){
           var i = $('#ckan_autor_table tr').length + 1;
-          $('#ckan_autor_table').append('<tr id="ckan-form-autor_row'+i+'"><td><input id="ckan-form-autorname'+i+'" type="text" placeholder="Enter autor name" class="form-control name_list" /></td><td><input id="ckan-form-autormail'+i+'" type="text" placeholder="Enter autor email" class="form-control name_list" /><td><button type="button" name="remove" id="ckan_btn_autor_remove'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+          $('#ckan_autor_table').append('<tr id="ckan-form-autor_row'+i+'"><td><input id="ckan-form-autorname'+i+'" type="text" placeholder="Enter autor name" class="form-control name_list ckan-input-field" /></td><td><input id="ckan-form-autormail'+i+'" type="text" placeholder="Enter autor email" class="form-control name_list ckan-input-field" /><td><button type="button" name="remove" id="ckan_btn_autor_remove'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
      });
      $(document).on('click', '.ckan-form-btn_remove', function(){
           $(this).parent().parent().remove();
      });
 
-     var i=1;
+
      $('#ckan-form-maintainer_add').click(function(){
-          i++;
-          $('#ckan_maintainer_table').append('<tr id="ckan-form-maintainer_row'+i+'"><td><input type="text" placeholder="Enter maintainer name" class="form-control name_list" /></td><td><input type="text" placeholder="Enter maintainer mail" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+          var j = $('#ckan_maintainer_table tr').length + 1;
+          $('#ckan_maintainer_table').append('<tr id="ckan-form-maintainer_row'+j+'"><td><input type="text" placeholder="Enter maintainer name" class="form-control name_list ckan-input-field" /></td><td><input type="text" placeholder="Enter maintainer email" class="form-control name_list ckan-input-field" /></td><td><button type="button" name="remove" id="ckan_btn_maintainer_remove'+j+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
      });
      $(document).on('click', '.ckan-form-btn_remove', function(){
           var button_id = $(this).attr("id");
-          $('#ckan-form-maintainer_row'+button_id+'').remove();
+          $(this).parent().parent().remove();
      });
 
      $(".ckan-tags").select2({
@@ -47,6 +47,11 @@ function ckan_toggle_button_text() {
   } else {
     x.innerHTML = "Show additional input categories";
   }
+}
+
+function ckan_clear_entries(){
+    $('#ckan_autor_table').find("tr:gt(0)").remove();
+    $('#ckan_maintainer_table').find("tr:gt(0)").remove();
 }
 
 
@@ -125,10 +130,10 @@ function connect2CKAN(){
             alert("Connection to CKAN could not be established. Please read the error debug for more information.");
 
             }
-            if (xhr_user.readyState === 4 && xhr_user.status === 401) {
-              alert("Connection to CKAN could not be established. Error 401 Unauthorized. Please read the error debug for more information.");
+          if (xhr_user.readyState === 4 && xhr_user.status === 401) {
+            alert("Connection to CKAN could not be established. Error 401 Unauthorized. Please read the error debug for more information.");
 
-              }
+            }
         };
         xhr_user.send();
 
@@ -280,7 +285,8 @@ function getCKANdata(urlValue,apiKeyValue){
                     xhr_tag.send();
 
 
-
+  //Clear values in Author and Maintainer fields
+  ckan_clear_entries();
   //Load existing data of dataset
     loadDataset(urlValue,apiKeyValue);
 
@@ -333,8 +339,6 @@ function loadObjectInfo2form(){
 
   /*
   var groupsValue = document.getElementById("ckan-form-groups").value;
-  var organizationValue = document.getElementById("ckan-form-organization").value;
-  var tagValues = $('#ckan-tag-options').find(':selected');
   */
   if (typeof CKAN_Object.type !== 'undefined'){
   document.getElementById("ckan-form-schematype").value = CKAN_Object.type;
@@ -415,6 +419,26 @@ function loadObjectInfo2form(){
     console.debug('Tag Name: ' + tag_list[tag].name);
     }
 
+  }
+
+  if (typeof CKAN_Object.author !== 'undefined'){
+    var author_list = JSON.parse(CKAN_Object.author);
+    for(author in author_list){
+      if(author_list[author].author !== ""){
+        var i = $('#ckan_autor_table tr').length + 1;
+        $('#ckan_autor_table').append('<tr id="ckan-form-autor_row'+i+'"><td><input id="ckan-form-autorname'+i+'" type="text" placeholder="Enter autor name" class="form-control name_list ckan-input-field" value="'+author_list[author].author+'" /></td><td><input id="ckan-form-autormail'+i+'" type="text" placeholder="Enter autor email" class="form-control name_list ckan-input-field" value="'+author_list[author].author_email+'" /><td><button type="button" name="remove" id="ckan_btn_autor_remove'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+        }
+      }
+  }
+
+  if (typeof CKAN_Object.maintainer !== 'undefined'){
+    var maintainer_list = JSON.parse(CKAN_Object.maintainer);
+    for(maintainer in maintainer_list){
+      if(maintainer_list[maintainer].maintainer !== ""){
+        var j = $('#ckan_maintainer_table tr').length + 1;
+        $('#ckan_maintainer_table').append('<tr id="ckan-form-maintainer_row'+j+'"><td><input type="text" placeholder="Enter maintainer name" class="form-control name_list ckan-input-field" value="'+maintainer_list[maintainer].maintainer+'" /></td><td><input type="text" placeholder="Enter maintainer email" class="form-control name_list ckan-input-field" value="'+maintainer_list[maintainer].maintainer_email+'" /></td><td><button type="button" name="remove" id="ckan_btn_maintainer_remove'+j+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+      }
+    }
   }
 
 
@@ -613,6 +637,9 @@ function transmitCKANdata(){
   CKAN_Object.organization = CKAN_User_Org.find( function(org) { return org.name == organizationValue } );
   CKAN_Object.owner_org = CKAN_User_Org.find( function(org) { return org.name == organizationValue } ).id;
   CKAN_Object.tags = JSON.parse('['+tagString+']');
+  CKAN_Object.author = '['+autorValues.replace(/\\/g, '')+']';
+  CKAN_Object.maintainer = '['+maintainerValues.replace(/\\/g, '')+']';
+
   data = JSON.stringify(CKAN_Object);
 
 }

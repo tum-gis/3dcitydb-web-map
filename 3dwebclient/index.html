@@ -739,12 +739,12 @@
                 <!-- Groups Drop Down Box-->
                 <label class="ckan-form-label" for="ckan-form-groups">Groups:</label>
                 <div class="ckan-tooltip">&#9432
-                  <span class="ckan-tooltiptext">Each catalog entry is assigned to one "main category" or "Topic".</span>
+                  <span class="ckan-tooltiptext">Each catalog entry is assigned to one "Main Category" or "Topic".</span>
                 </div>
-                <!--<input type="text" id="ckan-form-groups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly><br><br>-->
+                <!--<input type="text" id="ckan-form-groups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly><br><br>
                 <select id="ckan-form-groups" name="ckan-dropdown-groups" class="ckan-input-field">
                   <option value="default" selected>Select the Group</option>
-                </select>
+                </select>-->
 
                 <label class="ckan-form-label" for="ckan-form-maincategory">Main Category:</label>
                 <select id="ckan-form-maincategory" name="ckan-dropdown-maincategory" class="ckan-input-field">
@@ -752,11 +752,13 @@
                 </select>
 
                 <label class="ckan-form-label" for="ckan-form-topic">Topics:</label>
-                <select id="ckan-form-topic" name="ckan-dropdown-topic" class="ckan-input-field">
-                  <option value="default" selected>Topics</option>
+                <select id="ckan-form-topic" name="topics[]" class="ckan-basic-multiple ckan-input-field" multiple="multiple" style="width: 100%">
+                  <option value="default">Topics</option>
                 </select>
 
+
                 <!-- Drop Down Box-->
+                </br>
                 <label class="ckan-form-label" for="ckan-form-licence">License:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">License definitions and additional information can be found at </span>

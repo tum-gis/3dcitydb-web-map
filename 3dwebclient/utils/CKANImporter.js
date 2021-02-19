@@ -38,6 +38,8 @@ $(document).ready(function(){
         tokenSeparators: [',', ' ']
       });
 
+    $('.ckan-basic-multiple').select2();
+
 
 });
 function ckan_toggle_button_text() {
@@ -173,9 +175,9 @@ function getCKANdata(urlValue,apiKeyValue){
             var groupList = document.getElementById("ckan-form-groups");
             var maincategoryList = document.getElementById("ckan-form-maincategory");
             var topicList = document.getElementById("ckan-form-topic");
-            removeOptions(groupList);
-            removeOptions(maincategoryList);
-            removeOptions(topicList);
+            removeAllChildNodes(groupList);
+            removeAllChildNodes(maincategoryList);
+            removeAllChildNodes(topicList);
             for (var group in group_result) {
                 console.debug(group_result[group].title);
                 var option = document.createElement("option");
@@ -183,27 +185,27 @@ function getCKANdata(urlValue,apiKeyValue){
                 option.value = group_result[group].name;
                 option.id = 'ckan-group-' + group_result[group].name;
 
-                if(option.value == 'geoobject'){ //Setting geoobject as default, as this makes the most sense for the group in the importer
+                /*if(option.value == 'geoobject'){ //Setting geoobject as default, as this makes the most sense for the group in the importer
                   option.selected = true;
-                }
-                groupList.add(option);
+                }*/
+                //groupList.add(option);
                 if(group_topics.includes(group_result[group].name)){
-                  topicList.add(option);
+                  topicList.appendChild(option);
                 }
                 if(group_main_categories.includes(group_result[group].name)){
-                  maincategoryList.add(option);
+                  maincategoryList.appendChild(option);
                 }
 
             }
 
-            if(group_result.length < 1){
+            /*if(group_result.length < 1){
             //adding default option, necessary for creating new datasets
             var option = document.createElement("option");
             option.text = 'geoobject';
             option.value = 'geoobject';
             option.selected = true;
             groupList.add(option);
-          }
+          }*/
           }
 
         };
@@ -461,6 +463,18 @@ function loadObjectInfo2form(){
       if(group_main_categories.includes(groupList[group].name)){
         document.getElementById("ckan-group-"+groupList[group].name).selected = true;
       }
+      if(group_topics.includes(groupList[group].name)){
+      document.getElementById("ckan-group-" + groupList[group].name).remove();
+      var topicList = document.getElementById("ckan-form-topic");
+      var option = document.createElement("option");
+      option.text = groupList[group].title;
+      option.value = groupList[group].name;
+      option.id = 'ckan-group-' + groupList[group].name;
+      option.selected = true;
+      topicList.appendChild(option);
+      console.debug('Topic Name: ' + groupList[group].name);
+    }
+
   }
 }
 
@@ -486,7 +500,7 @@ function transmitCKANdata(){
   var keyValue = document.getElementById("ckan-form-key").value;
   var typeValue = document.getElementById("ckan-form-schematype").value;
   var nameValue = document.getElementById("ckan-form-name").value;
-  var groupsValue = document.getElementById("ckan-form-groups").value;
+  var groupsValue = document.getElementById("ckan-form-maincategory").value;
   var spatialExtentValue = document.getElementById("ckan-form-spatial-extent").value;
   var titleValue = document.getElementById("ckan-form-title").value;
   var noteValue = document.getElementById("ckan-form-descriptionnotes").value;

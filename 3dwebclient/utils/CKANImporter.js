@@ -172,10 +172,10 @@ function getCKANdata(urlValue,apiKeyValue){
             console.debug(group_response);
             var group_result = group_response.result;
             console.debug(group_result);
-            var groupList = document.getElementById("ckan-form-groups");
+            //var groupList = document.getElementById("ckan-form-groups");
             var maincategoryList = document.getElementById("ckan-form-maincategory");
             var topicList = document.getElementById("ckan-form-topic");
-            removeAllChildNodes(groupList);
+            //removeAllChildNodes(groupList);
             removeAllChildNodes(maincategoryList);
             removeAllChildNodes(topicList);
             for (var group in group_result) {

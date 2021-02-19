@@ -354,7 +354,7 @@ function loadObjectInfo2form(){
   console.debug(CKAN_Object);
 
   /*
-  var groupsValue = document.getElementById("ckan-form-groups").value;
+  var maincategoryValue = document.getElementById("ckan-form-groups").value;
   */
   if (typeof CKAN_Object.type !== 'undefined'){
   document.getElementById("ckan-form-schematype").value = CKAN_Object.type;
@@ -500,7 +500,7 @@ function transmitCKANdata(){
   var keyValue = document.getElementById("ckan-form-key").value;
   var typeValue = document.getElementById("ckan-form-schematype").value;
   var nameValue = document.getElementById("ckan-form-name").value;
-  var groupsValue = document.getElementById("ckan-form-maincategory").value;
+  var maincategoryValue = document.getElementById("ckan-form-maincategory").value;
   var spatialExtentValue = document.getElementById("ckan-form-spatial-extent").value;
   var titleValue = document.getElementById("ckan-form-title").value;
   var noteValue = document.getElementById("ckan-form-descriptionnotes").value;
@@ -513,6 +513,7 @@ function transmitCKANdata(){
   var beginDateValue = document.getElementById("ckan-form-individualbeginncollectiondate").value;
   var endDateValue = document.getElementById("ckan-form-individualendcollectiondate").value;
   var tagValues = $('#ckan-tag-options').find(':selected');
+  var topicValues = $('#ckan-form-topic').find(':selected');
   //var autorNameValue = document.getElementById("ckan-form-autorname").value;
   //var autorMailValue = document.getElementById("ckan-form-autormail").value;
   //var maintainerNameValue = document.getElementById("ckan-form-maintainername").value;
@@ -614,12 +615,28 @@ function transmitCKANdata(){
           }
         }
 
+        //Formatting group topic Values
+        var topicString = '';
+        var topicNum = topicValues.length;
+        for (var k = 0; k < topicNum; k++) {
+            topicString += '{"name": "'+topicValues[k].value+'"}';
+            if(k<topicNum-1){
+              topicString += ', ';
+            }
+          }
+
+        //Putting together group main category and topics
+        groupsString = '{"name": "'+maincategoryValue+'"}';
+        if(topicString.length > 0){
+          groupsString += ', ' + topicString
+        }
+
   //Printing out all values for debugging purposes
   console.debug('CKAN URL: '+url_path);
   console.debug('CKAN Key: '+keyValue);
   console.debug('CKAN Schema Type: '+typeValue);
   console.debug('CKAN Name: '+nameValue);
-  console.debug('CKAN Groups: '+groupsValue);
+  console.debug('CKAN Groups: '+groupsString);
   console.debug('CKAN Spatial Extend: '+bbox_string);
   console.debug('CKAN Title: '+titleValue);
   console.debug('CKAN Notes: '+noteValue);
@@ -646,7 +663,7 @@ function transmitCKANdata(){
 
   //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
   //data += extraValues;
-  data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":[{"name":"'+groupsValue+'"}], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
+  data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":['+groupsString+'], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
   //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"notes":noteValue, "end_collection_date":endDateValue,"begin_collection_date":beginDateValue,"licence_agreement":[agreementCheck],"license_id":licenceValue,"owner_org":organizationValue,"private":visibilityValue,"language":languageValue,"version":versionValue,"tags": [{"name": tagValue}],"spatial":'{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]}'});
   //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
   //"spatial":&quot;{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}&quot;,
@@ -676,6 +693,7 @@ function transmitCKANdata(){
   CKAN_Object.tags = JSON.parse('['+tagString+']');
   CKAN_Object.author = '['+autorValues.replace(/\\/g, '')+']';
   CKAN_Object.maintainer = '['+maintainerValues.replace(/\\/g, '')+']';
+  CKAN_Object.groups = JSON.parse('['+groupsString+']');
 
   data = JSON.stringify(CKAN_Object);
 

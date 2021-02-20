@@ -104,6 +104,9 @@ function connect2CKAN(){
   var apiKeyValue = document.getElementById("ckan-form-connection-key").value;
   var urlValue = document.getElementById("ckan-form-connection-url").value;
 
+  //Remove trailing slash in URL
+  urlValue = urlValue.replace(/\/$/, "");
+
   console.debug('CKAN URL: '+urlValue);
   console.debug('CKAN API Key: '+apiKeyValue);
 
@@ -116,24 +119,28 @@ function connect2CKAN(){
     xhr_user.setRequestHeader("Content-Type", "application/json");
     xhr_user.setRequestHeader("Authorization", apiKeyValue);
     xhr_user.onreadystatechange = function () {
-      console.debug('Ready State: ' + xhr_user.readyState);
-      console.debug('Status: ' + xhr_user.status);
         if (xhr_user.readyState === 4 && xhr_user.status === 200) {
             var user_response = JSON.parse(xhr_user.responseText);
             console.debug(user_response);
+            var user_org_list = user_response.result;
 
+            if(user_org_list.length > 0){
             document.getElementById("ckan-form-url").value = urlValue;
             document.getElementById("ckan-form-key").value = apiKeyValue;
 
             getCKANdata(urlValue,apiKeyValue);
+          }else{
+            alert("Connection to CKAN could not be established. Please check CKAN URL and API Key. Read the error log for more information.");
+
+          }
 
           }
           if (xhr_user.readyState === 4 && xhr_user.status === 0) {
-            alert("Connection to CKAN could not be established. Please read the error debug for more information.");
+            alert("Connection to CKAN could not be established. Please check CKAN URL and API Key. Read the error log for more information.");
 
             }
           if (xhr_user.readyState === 4 && xhr_user.status === 401) {
-            alert("Connection to CKAN could not be established. Error 401 Unauthorized. Please read the error debug for more information.");
+            alert("Connection to CKAN could not be established. Error 401 Unauthorized. Please read the error log for more information.");
 
             }
         };
@@ -193,6 +200,9 @@ function getCKANdata(urlValue,apiKeyValue){
                   topicList.appendChild(option);
                 }
                 if(group_main_categories.includes(group_result[group].name)){
+                  if(group_result[group].name == 'geoobject'){
+                    option.selected = true;
+                  }
                   maincategoryList.appendChild(option);
                 }
 
@@ -236,9 +246,6 @@ function getCKANdata(urlValue,apiKeyValue){
             }
 
 
-          }
-          else{
-            console.debug('No response');
           }
         };
         xhr_c2C.send();

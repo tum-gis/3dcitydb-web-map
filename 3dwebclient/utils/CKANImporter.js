@@ -763,4 +763,5 @@ function transmitCKANdata(){
 }
 function closeCKANimporter(){
   document.getElementById("ckan-modal-message").style.display = "none";
+  location.reload(); 
 }

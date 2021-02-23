@@ -1032,6 +1032,9 @@ function createInfoTable(res, citydbLayer) {
         } else {
             console.log(kvp);
             var html = '<table class="cesium-infoBox-defaultTable" style="font-size:10.5pt"><tbody>';
+
+            //Additional code for the CKAN Importer Tool
+            //The metadata is simultaneously added to the table in the importer modal
             document.getElementById('ckan-attribute-table-body').innerHTML = '';
             for (var key in kvp) {
                 var iValue = kvp[key];
@@ -1039,6 +1042,8 @@ function createInfoTable(res, citydbLayer) {
                 if (isValidUrl(iValue)) {
                     iValue = '<a href="' + iValue + '" target="_blank">' + iValue + '</a>';
                 }
+                //If the metadata has the key CITYOBJECT_ENVELOPE, than the values are not added to the infoBox. Instead the containing spatial informaton is added to the
+                //spatial extend input field of the importer modal.
                 if(key == 'CITYOBJECT_ENVELOPE'){
                   document.getElementById("ckan-form-spatial-extent").value=iValue;
                 }
@@ -1051,7 +1056,7 @@ function createInfoTable(res, citydbLayer) {
                 var cell3 = ckan_row.insertCell(2);
                 cell1.innerHTML = key;
                 cell2.innerHTML = iValue;
-                cell3.innerHTML = '<input type="checkbox" checked>';
+                cell3.innerHTML = '<input type="checkbox" checked>'; //All new values are checked by default. 
               }
             }
             html += '</tbody></table>';

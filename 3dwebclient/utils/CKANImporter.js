@@ -194,7 +194,6 @@ function getCKANdata(urlValue,apiKeyValue){
     xhr_group.onreadystatechange = function () {
         if (xhr_group.readyState === 4 && xhr_group.status === 200) {
             var group_response = JSON.parse(xhr_group.responseText);
-            console.debug(group_response);
             var group_result = group_response.result;
             console.debug(group_result);
 
@@ -240,11 +239,16 @@ function getCKANdata(urlValue,apiKeyValue){
     xhr_c2C.onreadystatechange = function () {
         if (xhr_c2C.readyState === 4 && xhr_c2C.status === 200) {
             var json_response = JSON.parse(xhr_c2C.responseText);
-            console.debug(json_response);
-            CKAN_User_Org = json_response.result;
+            CKAN_User_Org = json_response.result; //storing values in global variable
             console.debug(CKAN_User_Org);
+
+            //Addressing the select input field
             var orgList = document.getElementById("ckan-form-organization");
+
+            //Remove existing values to prevent duplicate entries
             removeOptions(orgList);
+
+            //Creating new entries with fetched list
             for (var org in CKAN_User_Org) {
                 console.debug(CKAN_User_Org[org].title);
 
@@ -254,8 +258,6 @@ function getCKANdata(urlValue,apiKeyValue){
                 option.id = 'ckan-organization-' + CKAN_User_Org[org].name;
                 orgList.add(option);
             }
-
-
           }
         };
         xhr_c2C.send();
@@ -266,15 +268,19 @@ function getCKANdata(urlValue,apiKeyValue){
           xhr_licence.open("GET", url_licence, true);
           xhr_licence.setRequestHeader("Accept", "application/json");
           xhr_licence.setRequestHeader("Content-Type", "application/json");
-          //xhr_licence.setRequestHeader("Authorization", apiKeyValue);
           xhr_licence.onreadystatechange = function () {
               if (xhr_licence.readyState === 4 && xhr_licence.status === 200) {
                   var licence_response = JSON.parse(xhr_licence.responseText);
-                  console.debug(licence_response);
                   var licence_result = licence_response.result;
                   console.debug(licence_result);
+
+                  //Addressing the select input field
                   var licenceList = document.getElementById("ckan-form-licence");
+
+                  //Remove existing values to prevent duplicate entries
                   removeOptions(licenceList);
+
+                  //Creating new entries with fetched list
                   for (var licence in licence_result) {
                       console.debug(licence_result[licence].title);
 
@@ -284,7 +290,6 @@ function getCKANdata(urlValue,apiKeyValue){
                       option.id = 'ckan-license-' + licence_result[licence].id;
                       licenceList.add(option);
                   }
-
                 }
               };
               xhr_licence.send();
@@ -294,15 +299,19 @@ function getCKANdata(urlValue,apiKeyValue){
                 xhr_tag.open("GET", url_tags, true);
                 xhr_tag.setRequestHeader("Accept", "application/json");
                 xhr_tag.setRequestHeader("Content-Type", "application/json");
-                //xhr_tag.setRequestHeader("Authorization", apiKeyValue);
                 xhr_tag.onreadystatechange = function () {
                     if (xhr_tag.readyState === 4 && xhr_tag.status === 200) {
                         var tag_response = JSON.parse(xhr_tag.responseText);
-                        console.debug(tag_response);
                         var tag_result = tag_response.result;
                         console.debug(tag_result);
+
+                        //Addressing the select input field
                         var tagList = document.getElementById("ckan-tag-options");
+
+                        //Remove existing values to prevent duplicate entries
                         removeAllChildNodes(tagList);
+
+                        //Creating new entries with fetched list
                         for (var tag in tag_result) {
                             console.debug(tag_result[tag]);
 
@@ -310,7 +319,6 @@ function getCKANdata(urlValue,apiKeyValue){
                             option.value = tag_result[tag];
                             option.text = tag_result[tag];
                             option.id = 'ckan-tag-' + tag_result[tag];
-                            //option.selected = true;
                             tagList.appendChild(option);
                         }
                       }
@@ -331,7 +339,7 @@ var CKAN_Object;
 function loadDataset(url,key){
 
   var id = document.getElementById("ckan-form-name").value;
-  var url_update = url + "/api/3/action/package_show?id=" + id;
+  var url_update = url + "/api/3/action/package_show?id=" + id; //url and id for retrieving existing object
 
   var xhr_update = new XMLHttpRequest();
     xhr_update.open("GET", url_update, true);
@@ -342,20 +350,23 @@ function loadDataset(url,key){
       //Status 200: object is already existing -> update dataset
         if (xhr_update.readyState === 4 && xhr_update.status === 200) {
             var update_response = JSON.parse(xhr_update.responseText);
-            console.debug(update_response);
             alert("An CKAN object with this ID already exists. Your changes will update the existing object.");
 
+              //Closing first modal and opening next
               document.getElementById("ckan-modal-submit-btn").innerHTML = "Update Object";
               document.getElementById("ckan-modal-connection").style.display = "none";
               document.getElementById("ckan-modal").style.display = "block";
               CKAN_Object = update_response.result;
+
+              //Loading data from fetched object into webform
               loadObjectInfo2form();
           }
           //Status 404: object is not already existing -> create new dataset
           if (xhr_update.readyState === 4 && xhr_update.status === 404) {
               var update_response = JSON.parse(xhr_update.responseText);
-              console.debug(update_response);
               CKAN_Object = '';
+
+                //Closing first modal and opening next
                 document.getElementById("ckan-modal-submit-btn").innerHTML = "Create New Object";
                 document.getElementById("ckan-modal-connection").style.display = "none";
                 document.getElementById("ckan-modal").style.display = "block";
@@ -370,9 +381,9 @@ function loadObjectInfo2form(){
 
   console.debug(CKAN_Object);
 
-  /*
-  var maincategoryValue = document.getElementById("ckan-form-groups").value;
-  */
+  //checking, if each value exists and is not empty(undefined)
+  //writing the existing values into the webform
+
   if (typeof CKAN_Object.type !== 'undefined'){
   document.getElementById("ckan-form-schematype").value = CKAN_Object.type;
   }
@@ -398,6 +409,7 @@ function loadObjectInfo2form(){
     var extra_data = CKAN_Object.extras;
     var ckan_table = document.getElementById("ckan-attribute-table-body");
 
+    //Writing existing values into metadata table
     for(var meta in extra_data){
     var ckan_row = ckan_table.insertRow(0);
     var cell1 = ckan_row.insertCell(0);
@@ -406,10 +418,11 @@ function loadObjectInfo2form(){
     var cell4 = ckan_row.insertCell(3);
     cell1.innerHTML = extra_data[meta].key;
     cell2.innerHTML = extra_data[meta].value;
-    cell3.innerHTML = '<input type="checkbox" >';
-    cell4.innerHTML = 'Old Value';
+    cell3.innerHTML = '<input type="checkbox" >'; //All existing values are not checked by default (in contrast to the new values from the spreadsheet).
+    cell4.innerHTML = 'Old Value'; //Existing values are getting this addidional field to seperate them from new values
   }
   }
+
   if (typeof CKAN_Object.license_id !== 'undefined'){
     document.getElementById("ckan-license-" + CKAN_Object.license_id).selected = true;
   }
@@ -426,8 +439,8 @@ function loadObjectInfo2form(){
     if(CKAN_Object.language == 'en'){
       document.getElementById("ckan-form-language-en").checked = true;
     }
-
   }
+
   if (typeof CKAN_Object.private !== 'undefined'){
     if(CKAN_Object.private == true){
       document.getElementById("ckan-form-visibility-true").selected = true;
@@ -435,13 +448,13 @@ function loadObjectInfo2form(){
     if(CKAN_Object.private == false){
       document.getElementById("ckan-form-visibility-false").selected = true;
     }
-
   }
 
   if (typeof CKAN_Object.tags !== 'undefined'){
     var tag_list = CKAN_Object.tags;
     var tagList = document.getElementById("ckan-tag-options");
     for(tag in tag_list){
+    //Existing tags have to be removed and then added again to be pre selected. This is necessary, as for the select2 field it is not sufficient to just select existing fields.
     document.getElementById("ckan-tag-" + tag_list[tag].name).remove();
     var option = document.createElement("option");
     option.value = tag_list[tag].name;
@@ -456,6 +469,7 @@ function loadObjectInfo2form(){
 
   if (typeof CKAN_Object.author !== 'undefined'){
     var author_list = JSON.parse(CKAN_Object.author);
+    //For each existing author a new row is inserted in the author table
     for(author in author_list){
       if(author_list[author].author !== ""){
         var i = $('#ckan_author_table tr').length + 1;
@@ -466,6 +480,7 @@ function loadObjectInfo2form(){
 
   if (typeof CKAN_Object.maintainer !== 'undefined'){
     var maintainer_list = JSON.parse(CKAN_Object.maintainer);
+    //For each existing maintainer a new row is inserted in the maintainer table
     for(maintainer in maintainer_list){
       if(maintainer_list[maintainer].maintainer !== ""){
         var j = $('#ckan_maintainer_table tr').length + 1;
@@ -477,9 +492,11 @@ function loadObjectInfo2form(){
   if (typeof CKAN_Object.groups !== 'undefined'){
     var groupList = CKAN_Object.groups;
     for(group in groupList){
+      //Selecting one main topic (if multiple exist only the last one is used)
       if(group_main_categories.includes(groupList[group].name)){
         document.getElementById("ckan-group-"+groupList[group].name).selected = true;
       }
+      //Adding existing topics to the multiselect field (same approach as tags)
       if(group_topics.includes(groupList[group].name)){
       document.getElementById("ckan-group-" + groupList[group].name).remove();
       var topicList = document.getElementById("ckan-form-topic");
@@ -491,14 +508,10 @@ function loadObjectInfo2form(){
       topicList.appendChild(option);
       console.debug('Topic Name: ' + groupList[group].name);
     }
-
   }
 }
 
-
-
-
-
+  //Closing first modal and opening next
   document.getElementById("ckan-modal-submit-btn").innerHTML = "Update Object";
   document.getElementById("ckan-modal-connection").style.display = "none";
   document.getElementById("ckan-modal").style.display = "block";
@@ -506,11 +519,12 @@ function loadObjectInfo2form(){
 
 }
 
+//Function is called after data modal submission. Data from the modal is fetched and then send to CKAN.
 function transmitCKANdata(){
   //Function start
   console.debug('Starting transmitting data to CKAN');
 
-  //getting the values of the input form fields
+  //Getting the values of the input form fields
   var url_host = document.getElementById("ckan-form-url").value;
   var url_path = url_host + "/api/3/action/package_create";
   var url_update = url_host + "/api/3/action/package_update";
@@ -531,19 +545,14 @@ function transmitCKANdata(){
   var endDateValue = document.getElementById("ckan-form-individualendcollectiondate").value;
   var tagValues = $('#ckan-tag-options').find(':selected');
   var topicValues = $('#ckan-form-topic').find(':selected');
-  //var authorNameValue = document.getElementById("ckan-form-authorname").value;
-  //var authorMailValue = document.getElementById("ckan-form-authormail").value;
-  //var maintainerNameValue = document.getElementById("ckan-form-maintainername").value;
-  //var maintainerMailValue = document.getElementById("ckan-form-maintainermail").value;
 
 
-
-  //getting meta data values from the table (only checked values)
+  //Getting meta data values from the table (only checked values)
   var tableBody = document.getElementById("ckan-attribute-table-body");
   var tableBody_rows = document.getElementById("ckan-attribute-table-body").rows.length;
   var extraValues = '[';
     for (var i = 0, row; row = tableBody.rows[i]; i++) {
-        //iterate through rows of the tbody with the Values
+        //Iterate through rows of the tbody with the Values
           var col1 = row.cells[0].innerHTML;
           var col2 = row.cells[1].innerHTML;
 
@@ -557,12 +566,10 @@ function transmitCKANdata(){
               extraValues +=', ';
             }
           }
-
       }
       extraValues +=']';
-      console.debug(extraValues);
 
-      //Getting author and Maintainer data from the dynamic table
+      //Getting author and maintainer data from the dynamic table
       var author_table_length = document.getElementById("ckan_author_table").rows.length;
       var authorTable = document.getElementById("ckan_author_table")
       var authorValues = '';
@@ -571,7 +578,7 @@ function transmitCKANdata(){
               var col1 = row.cells[0].getElementsByTagName('input')[0].value;
               var col2 = row.cells[1].getElementsByTagName('input')[0].value;
 
-                authorValues += '{\\"author\\":\\"'+col1+'\\",\\"author_email\\": \\"'+col2+'\\"}';
+                authorValues += '{\\"author\\":\\"'+col1+'\\",\\"author_email\\": \\"'+col2+'\\"}'; //Specific format for CKAN
 
                 if(i<author_table_length-1){
                   authorValues +=', ';
@@ -582,25 +589,25 @@ function transmitCKANdata(){
           var maintainerTable = document.getElementById("ckan_maintainer_table")
           var maintainerValues = '';
             for (var i = 0, row; row = maintainerTable.rows[i]; i++) {
-                //iterate through rows of the tbody with the Values
+                //Iterate through rows of the tbody with the Values
                   var col1 = row.cells[0].getElementsByTagName('input')[0].value;
                   var col2 = row.cells[1].getElementsByTagName('input')[0].value;
 
-                    maintainerValues += '{\\"maintainer\\":\\"'+col1+'\\",\\"maintainer_email\\": \\"'+col2+'\\"}';
+                    maintainerValues += '{\\"maintainer\\":\\"'+col1+'\\",\\"maintainer_email\\": \\"'+col2+'\\"}'; //Specific format for CKAN
 
                     if(i<maintainer_table_length-1){
                       maintainerValues +=', ';
                     }
               }
 
-    //check licence agreementValue
+    //Check licence agreementValue
     var agreementCheck = '';
     if(agreementValue){
       agreementCheck ='licence_agreement_check';
     }
 
-    //transforming spatial data, see reference: https://github.com/tum-gis/3DCityDB4BIM
-
+    //Transforming spatial data, see reference: https://github.com/tum-gis/3DCityDB4BIM
+    //Coordinate processing on the basis of AttributeProcessor.js, line 23, 76-81
     var bboxArray = spatialExtentValue.replace(/[{()}]/g, '')  // removes () at start and end
                 .split(' ')                         // splits into coord sets
                 .map((set) =>                       // splits every coord set and converts into numbers
@@ -610,7 +617,7 @@ function transmitCKANdata(){
     var bbox_string = '';
     proj4.defs("EPSG:31468","+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +towgs84=598.1,73.7,418.2,0.202,0.045,-2.455,6.7 +units=m +no_defs");
     for (var i in bboxArray) {
-      if(bboxArray[i].length > 2){
+      if(bboxArray[i].length > 2){ //Removing height, CKAN cannot process this information
         bboxArray[i].pop();
       }
       var bbox_trans = proj4('EPSG:31468', 'EPSG:4326', bboxArray[i]);
@@ -620,7 +627,6 @@ function transmitCKANdata(){
         bbox_string += ', ';
       }
       }
-
 
       //Formatting tag Values
       var tagString = '';
@@ -643,9 +649,11 @@ function transmitCKANdata(){
           }
 
         //Putting together group main category and topics
+        //The group string should conatain one main category (obligatory) and zero to many topics (optional)
+        //If the group string is empty, the transmission fails
         groupsString = '{"name": "'+maincategoryValue+'"}';
         if(topicString.length > 0){
-          groupsString += ', ' + topicString
+          groupsString += ', ' + topicString;
         }
 
   //Printing out all values for debugging purposes
@@ -668,31 +676,25 @@ function transmitCKANdata(){
   console.debug('CKAN End Date: '+endDateValue);
   console.debug('CKAN Tags: '+tagString);
   console.debug('CKAN author(s): '+authorValues);
-  //console.debug('CKAN Maintainer Name: '+maintainerNameValue);
-  //console.debug('CKAN Maintainer Mail: '+maintainerMailValue);
+  console.debug('CKAN maintainer(s): '+maintainerValues);
 
   var data;
   var url;
 
-  if(CKAN_Object.length<1){
+  //The length of the CKAN_Object is used to determine, whether an create or update request is needed.
+  //If the object is empty a create new is done, if it contains values an update is performed.
+  if(CKAN_Object.length<1){ //Create new object in CKAN database
     console.debug("Create New");
-    url = url_path;
+    url = url_path; //Path for new object creation
 
-  //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
-  //data += extraValues;
-  data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":['+groupsString+'], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+authorValues+']","maintainer": "['+maintainerValues+']"}';
-  //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"notes":noteValue, "end_collection_date":endDateValue,"begin_collection_date":beginDateValue,"licence_agreement":[agreementCheck],"license_id":licenceValue,"owner_org":organizationValue,"private":visibilityValue,"language":languageValue,"version":versionValue,"tags": [{"name": tagValue}],"spatial":'{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]}'});
-  //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
-  //"spatial":&quot;{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}&quot;,
-  //,"author": [{"author_email": "'+authorMailValue+'", "author": "'+authorNameValue+'"}],"maintainer": [{"maintainer_email": "'+maintainerMailValue+'", "maintainer": "'+maintainerNameValue+'"}]
-  //"extras":[extraValues],
-  //,"spatial":\'{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}\'
-  //,"maintainer": "[{\\"maintainer_email\\": \\"'+maintainerMailValue+'\\", \\"maintainer\\": \\"'+maintainerNameValue+'\\"}]"
-}else{
+    //Definition of the string containing the values for the CKAN object. Syntax is CKAN specific.
+    data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":['+groupsString+'], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+authorValues+']","maintainer": "['+maintainerValues+']"}';
+
+  }else{
   console.debug("Update");
   url = url_update;
 
-  //Replacing the old values
+  //Replacing the old values with the new ones from the form. Some values have to added as CKAN specific strings.
   CKAN_Object.type = typeValue;
   CKAN_Object.name = nameValue;
   CKAN_Object.title = titleValue;
@@ -716,19 +718,18 @@ function transmitCKANdata(){
 
 }
 
-
-
+  //POST Request for the create/update process
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Accept", "application/json");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", keyValue);
   xhr.onreadystatechange = function () {
+    //The status of the request is checked. If it is not 200 (success), the error is displayed. Only selected errors are shown.
       if (xhr.readyState === 4 && xhr.status === 200) {
           var json = JSON.parse(xhr.responseText);
           console.debug(json);
           document.getElementById("ckan_message_header").innerHTML = 'Transmission was successful';
-          //document.getElementById("ckan_message_paragraph").innerHTML = xhr.responseText;
         }
         if (xhr.readyState === 4 && xhr.status === 409) {
             var json = JSON.parse(xhr.responseText);
@@ -771,6 +772,9 @@ function transmitCKANdata(){
   document.getElementById("ckan-modal").style.display = "none";
   document.getElementById("ckan-modal-message").style.display = "block";
 }
+
+//Funcion for closing the last modal. Afterwards a reload is performed. This is necessary to clear the values from the form, as some browsers are ignoring the autocompletion="off" attribute.
+//If no reload is done, there could occur errors in the select fields end lead to the transmission of wrong values.
 function closeCKANimporter(){
   document.getElementById("ckan-modal-message").style.display = "none";
   location.reload();

@@ -87,7 +87,7 @@ CKAN Importer Tool
 -----------------------------------
 
 Developed by
-  *Ann-Katrin Frank, Georg Eckert and Lucas Angermann.
+  * Ann-Katrin Frank, Georg Eckert and Lucas Angermann.
 
 Supervised by
   * Mandana Moshrefzadeh and Son H. Nguyen.

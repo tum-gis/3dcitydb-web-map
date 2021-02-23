@@ -14,13 +14,13 @@ Introduction
 -------
 The **3DCityDB-Web-Map-Client** is a web-based front-end of the 3DCityDB for high-performance 3D visualization and interactive exploration of **arbitrarily large semantic 3D city models in CityGML**. It utilizes the [Cesium Virtual Globe](http://cesiumjs.org/index.html) as its 3D geo-visualization engine based on HTML5 and Web Graphics Library (WebGL) to provide hardware acceleration and cross-platform functionalities like displaying 3D graphic contents on web browsers without the needs of additional plugins.
 
-The key features and functionalities of the 3DCityDB-Web-Map-Client is summarized as follows: 
+The key features and functionalities of the 3DCityDB-Web-Map-Client is summarized as follows:
 
 * Support for efficient displaying, caching, prefetching, dynamic loading and unloading of large pre-styled 3D visualization models in the form of tiled KML/glTF datasets exported from the 3DCityDB using the Importer/Exporter
 * Intuitive user interface for adding and removing arbitrary number of data layers like 3D visualization model (KML/glTF), WMS imagery layer, and Cesium digital terrain model
 * Support for linking the 3D visualization models (KML/glTF) with the cloud-based Google Fusion Table allowing for querying the thematic data of every 3D object
 * Support for rich interaction with 3D visualization models (KML/glTF), for example, highlighting of 3D objects on mouseover and mouseclick as well as hiding and showing of the selected 3D objects
-* Support for exploring a 3D object of interest from different view perspectives using third-party mapping services like Microsoft Bing Maps with oblique view, Google Streetview, and a combined version (DualMaps) 
+* Support for exploring a 3D object of interest from different view perspectives using third-party mapping services like Microsoft Bing Maps with oblique view, Google Streetview, and a combined version (DualMaps)
 * Support for on-the-fly activating and deactivating shadow visualization of 3D objects (only for glTF, KML is currently not supported yet) and Cesium digital terrain models
 * Support for collaborative creation and sharing of the workspace of the 3DCityDB-Web-Map-Client by means of generating a scene link including information about the current camera perspective, activation status of the shadow visualization, parameters of the current loaded data layers etc.  
 
@@ -40,22 +40,22 @@ Latest release
 --------------
 All releases are available from the [releases section](https://github.com/3dcitydb/3dcitydb-web-map/releases).
 
-For convenient use, there is an official [web link](https://www.3dcitydb.org/3dcitydb-web-map/latest/3dwebclient/index.html) available that can be called to directly run the 3DCityDb-Web-Map-Client on your web browser. 
+For convenient use, there is an official [web link](https://www.3dcitydb.org/3dcitydb-web-map/latest/3dwebclient/index.html) available that can be called to directly run the 3DCityDb-Web-Map-Client on your web browser.
 
 
 System requirements
-------------------- 
-The hardware on which the 3DCityDB-Web-Map-Client will be run must have a graphics card installed that supports WebGL. In addition, the web browser in use must also provide appropriate WebGL support. 
+-------------------
+The hardware on which the 3DCityDB-Web-Map-Client will be run must have a graphics card installed that supports WebGL. In addition, the web browser in use must also provide appropriate WebGL support.
 
 You can visit the following website to check whether your web browser supports WebGL or not:
 
 [http://get.webgl.org/](http://get.webgl.org/)
 
-The 3DCityDB-Web-Map-Client has been successfully tested on (but is not limited to) the following web browsers under different desktop operating systems like Microsoft Windows, Linux, Apple Mac OS X, and even on mobile operating systems like Android and iOS. 
-* Apple Safari 
+The 3DCityDB-Web-Map-Client has been successfully tested on (but is not limited to) the following web browsers under different desktop operating systems like Microsoft Windows, Linux, Apple Mac OS X, and even on mobile operating systems like Android and iOS.
+* Apple Safari
 * Mozilla Firefox
 * Google Chrome
-* Opera 
+* Opera
 
 For best performance, it is recommended to use Google Chrome.
 
@@ -72,15 +72,27 @@ Contributing
 Developers
 -----------------------------------
 
-The 3DCityDB-Web-Map-Client has been developed by: 
+The 3DCityDB-Web-Map-Client has been developed by:
 
 * Zhihang Yao, Son H. Nguyen, Kanishk Chaturvedi, and Thomas H. Kolbe
 <br>[Chair of Geoinformatics, Technical University of Munich](https://www.gis.bgu.tum.de/)
 
 and with the support from the following cooperation partners:
 
-* Jannes Bolling, Lucas van Walstijn, and Claus Nagel 
+* Jannes Bolling, Lucas van Walstijn, and Claus Nagel
 <br>[virtualcitySYSTEMS GmbH, Berlin](https://www.virtualcitysystems.de/)
+
+
+CKAN Importer Tool
+-----------------------------------
+
+Developed by
+  *Ann-Katrin Frank, Georg Eckert and Lucas Angermann.
+
+Supervised by
+  * Mandana Moshrefzadeh and Son H. Nguyen.
+
+Chair of Geoinformatics, Technical University of Munich, winter term 2020/21
 
 
 Demos
@@ -122,13 +134,13 @@ Demos
 ## New features
 
 
-The current 3DCityDB-Web-Map-Client is equipped with an extension that provides better support for mobile devices. 
-The extension comes with a built-in mobile detector, which can automatically detect and adjust the client's behaviors accordingly to whether the 3DCityDB-Web-Map-Client is operating on a mobile device. 
+The current 3DCityDB-Web-Map-Client is equipped with an extension that provides better support for mobile devices.
+The extension comes with a built-in mobile detector, which can automatically detect and adjust the client's behaviors accordingly to whether the 3DCityDB-Web-Map-Client is operating on a mobile device.
 Some of the most important mobile features enabled by this extension are listed as follows:
- 
-* **A more lightweight graphical user interface:** 
-In order to make the best use of the limited screen real-estate available on mobile devices, some elements are removed or hidden from the web client, 
-such as credit texts and logos, as well as some of Cesium's built-in navigation controls that can easily be manipulated using touch gestures. 
+
+* **A more lightweight graphical user interface:**
+In order to make the best use of the limited screen real-estate available on mobile devices, some elements are removed or hidden from the web client,
+such as credit texts and logos, as well as some of Cesium's built-in navigation controls that can easily be manipulated using touch gestures.
 <p align="center">
 <img src="theme/img/mobile_homepage.PNG" width="50%" />
 </p>
@@ -149,23 +161,23 @@ such as credit texts and logos, as well as some of Cesium's built-in navigation 
     <img src="theme/img/mobile_loading.PNG" width="50%" />
     </p>
 
-* Most importantly: **The introduction of a GPS button** (located on the top right corner in the view toolbar) providing new functionalities involving user's current location and orientation. Namely: 
+* Most importantly: **The introduction of a GPS button** (located on the top right corner in the view toolbar) providing new functionalities involving user's current location and orientation. Namely:
     * GPS "snapshot" (single-click): shows the user's current position and orientation,
     <p align="center">
     <img src="theme/img/GPS_off.png" width="15%" />
-    </p> 
+    </p>
 
     * Real-time Compass Tracking  (double-click): periodically shows the user's current orientation with fixed location,
     <p align="center">
     <img src="theme/img/GPS_on_ori.png" width="15%" />
-    </p> 
+    </p>
 
     * Real-time Compass Tracking + Position (triple-click) or the "First-person View" mode: periodically shows the user's current orientation and position.
     <p align="center">
     <img src="theme/img/GPS_on_pos_ori.png" width="15%" />
-    </p> 
+    </p>
 
-    * To disable real-time tracking, simply either click on the button again to return to "snapshot" mode 
+    * To disable real-time tracking, simply either click on the button again to return to "snapshot" mode
 or hold the button for 1 second, the camera will then ascend to a higher altitude of the current location.
 
 ## Demos
@@ -179,8 +191,8 @@ To test the mobile extension, simply click on one of the following two URLs:
 ## Notes
 
 
-The mobile extension makes use of the Geolocation API and the DeviceOrientation API in HTML5. 
-The Geolocation API only functions via HTTPS since Google Chrome 50. Therefore, make sure the client is called from an HTTPS page or your own localhost. 
+The mobile extension makes use of the Geolocation API and the DeviceOrientation API in HTML5.
+The Geolocation API only functions via HTTPS since Google Chrome 50. Therefore, make sure the client is called from an HTTPS page or your own localhost.
 
 Since the 3DCityDB-Web-Map-Client may cause a large amount of data traffic, it is recommended to connect your mobile device to an available WLAN before starting the client.
 

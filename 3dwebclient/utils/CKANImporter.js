@@ -4,7 +4,7 @@
   * Technical University of Munich, winter term 2020/21
 */
 
-//functions for the handling of the webform
+//Functions for the handling of the webform
 
 //jQuery functions
 $(document).ready(function(){

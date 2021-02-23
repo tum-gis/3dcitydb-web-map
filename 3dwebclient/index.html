@@ -39,11 +39,11 @@
         <!-- Load jquery ui datepicker FLATPICKR -->
 
         <script type="text/javascript" src="../ThirdParty/flatpickrv4.5.1.js"></script>
-        <!-- Scripts for the CKAN Importer-->
-        <script src="utils/proj4.js"></script>
+        <!-- Additional scripts for the CKAN Importer-->
+        <script src="utils/proj4.js"></script> <!-- https://github.com/proj4js/proj4js -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="utils/select2.min.js"></script>
-        <script src="utils/CKANImporter.js"></script>
+        <script src="utils/select2.min.js"></script> <!-- https://select2.org/ -->
+
 
 
         <!-- CesiumJS -->
@@ -654,6 +654,7 @@
             }
         </script>
         <script src="script.js"></script>
+        <script src="utils/CKANImporter.js"></script> <!-- script with the CKAN Importer functionality -->
 
 
         <!---<input type="checkbox" id="css-toggle-switch" checked="checked" class="css-toggle-switch">
@@ -815,12 +816,12 @@
                 </select>
 
                 <br><br>
-                <label class="ckan-form-label" for="ckan-form-autorname">Author Name and Email:</label>
-                <table class="table table-bordered" id="ckan_autor_table">
+                <label class="ckan-form-label" for="ckan-form-authorname">Author Name and Email:</label>
+                <table class="table table-bordered" id="ckan_author_table">
                      <tr>
-                          <td><input type="text"  placeholder="Enter author name" id="ckan-form-autorname1" class="ckan-input-field" /></td>
-                          <td><input type="email"  placeholder="Enter author email" id="ckan-form-autormail1" class="ckan-input-field" title="Please enter an email address"/></td>
-                          <td><button type="button" id="ckan-form-autor_add" class="ckan_addbtn">Add More</button></td>
+                          <td><input type="text"  placeholder="Enter author name" id="ckan-form-authorname1" class="ckan-input-field" /></td>
+                          <td><input type="email"  placeholder="Enter author email" id="ckan-form-authormail1" class="ckan-input-field" title="Please enter an email address"/></td>
+                          <td><button type="button" id="ckan-form-author_add" class="ckan_addbtn">Add More</button></td>
                      </tr>
                 </table>
 

@@ -1,29 +1,29 @@
+/*
+  * CKAN Importer Tool
+  * Developed by Ann-Katrin Frank, Georg Eckert and Lucas Angermann
+  * Technical University of Munich, winter term 2020/21
+*/
+
 //functions for the handling of the webform
+
+//jQuery functions
 $(document).ready(function(){
 
+  //toggle button for additional input fields
   $("#ckan-form-toggleadditionalcategoriesbutton").click(function(){
     $("#ckan-fieldset-toggleID").toggle();
-
   });
 
-  function ckan_toggle_button_text() {
-    var x = document.getElementById("ckan-form-toggleadditionalcategoriesbutton");
-    if (x.innerHTML === "Show additional input categories") {
-      x.innerHTML = "Hide additional input categories";
-    } else {
-      x.innerHTML = "Show additional input categories";
-    }
-  }
-
-     $('#ckan-form-autor_add').click(function(){
-          var i = $('#ckan_autor_table tr').length + 1;
-          $('#ckan_autor_table').append('<tr id="ckan-form-autor_row'+i+'"><td><input id="ckan-form-autorname'+i+'" type="text" placeholder="Enter autor name" class="form-control name_list ckan-input-field" /></td><td><input id="ckan-form-autormail'+i+'" type="text" placeholder="Enter autor email" class="form-control name_list ckan-input-field" /><td><button type="button" name="remove" id="ckan_btn_autor_remove'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+    //Functionality for the adding or removal of author information
+    $('#ckan-form-author_add').click(function(){
+          var i = $('#ckan_author_table tr').length + 1;
+          $('#ckan_author_table').append('<tr id="ckan-form-author_row'+i+'"><td><input id="ckan-form-authorname'+i+'" type="text" placeholder="Enter author name" class="form-control name_list ckan-input-field" /></td><td><input id="ckan-form-authormail'+i+'" type="text" placeholder="Enter author email" class="form-control name_list ckan-input-field" /><td><button type="button" name="remove" id="ckan_btn_author_remove'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
      });
      $(document).on('click', '.ckan-form-btn_remove', function(){
           $(this).parent().parent().remove();
      });
 
-
+     //Functionality for the adding or removal of maintainer information
      $('#ckan-form-maintainer_add').click(function(){
           var j = $('#ckan_maintainer_table tr').length + 1;
           $('#ckan_maintainer_table').append('<tr id="ckan-form-maintainer_row'+j+'"><td><input type="text" placeholder="Enter maintainer name" class="form-control name_list ckan-input-field" /></td><td><input type="text" placeholder="Enter maintainer email" class="form-control name_list ckan-input-field" /></td><td><button type="button" name="remove" id="ckan_btn_maintainer_remove'+j+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
@@ -33,6 +33,7 @@ $(document).ready(function(){
           $(this).parent().parent().remove();
      });
 
+     //Initialization of the multiselct input fields for topics and tags. In the tag input new suggestions can be added. See https://select2.org/ for detailed documentation.
      $(".ckan-tags").select2({
         tags: true,
         tokenSeparators: [',', ' ']
@@ -42,6 +43,8 @@ $(document).ready(function(){
 
 
 });
+
+//change toggle button text when clicked
 function ckan_toggle_button_text() {
   var x = document.getElementById("ckan-form-toggleadditionalcategoriesbutton");
   if (x.innerHTML === "Show additional input categories") {
@@ -51,24 +54,25 @@ function ckan_toggle_button_text() {
   }
 }
 
+//Remove entries of author and maintainer fields on new form load
 function ckan_clear_entries(){
-    $('#ckan_autor_table').find("tr:gt(0)").remove();
+    $('#ckan_author_table').find("tr:gt(0)").remove();
     $('#ckan_maintainer_table').find("tr:gt(0)").remove();
 }
 
 
-/*Functions for CKAN Import Functionality*/
+//Function for getting window location coordinates. Not used in later version of the tool.
 function getSpatialBuildingInfo(){
 
 var latitudeStr = urlController.getUrlParaValue('latitude', window.location.href, CitydbUtil);
 var longitudeStr = urlController.getUrlParaValue('longitude', window.location.href, CitydbUtil);
-console.debug("Coordinates:");
+/*console.debug("Coordinates:");
 console.debug(latitudeStr);
-console.debug(longitudeStr);
-
+console.debug(longitudeStr);*/
 var ckan_spatial_extent= longitudeStr + ', ' + latitudeStr;
 }
 
+//Closing the modals, when an outside area is clicked. Not used in later versions.
 var modal = document.getElementById("ckan-modal");
 var modal_connection = document.getElementById("ckan-modal-connection");
 window.onclick = function(event) {
@@ -83,6 +87,7 @@ window.onclick = function(event) {
   }
 }
 
+//Functions for removing existing values in drop down lists
 function removeOptions(selectElement) {
     var i, L = selectElement.options.length - 1;
     for(i = L; i >= 0; i--) {
@@ -96,11 +101,11 @@ function removeAllChildNodes(parent) {
   }
 }
 
-
+//Function is called with submission of first modal. Connection to CKAN is tested and established.
 function connect2CKAN(){
   //Function start
   console.debug('Starting connection to CKAN');
-
+  //Getting connection parameters from form
   var apiKeyValue = document.getElementById("ckan-form-connection-key").value;
   var urlValue = document.getElementById("ckan-form-connection-url").value;
 
@@ -110,9 +115,11 @@ function connect2CKAN(){
   console.debug('CKAN URL: '+urlValue);
   console.debug('CKAN API Key: '+apiKeyValue);
 
-
+  //Adding path to url in order to access user dependent organization list.
+  //If CKAN provides an authentification API in the future, here were the place to implement it.
   var url_user = urlValue + "/api/3/action/organization_list_for_user";
 
+  //XMLHttpRequest to request user dependent organization list. This is done to 1. check if the url and 2. if the API Key is correct.
   var xhr_user = new XMLHttpRequest();
     xhr_user.open("GET", url_user, true);
     xhr_user.setRequestHeader("Accept", "application/json");
@@ -124,21 +131,28 @@ function connect2CKAN(){
             console.debug(user_response);
             var user_org_list = user_response.result;
 
+            //Connection was successful and list is not empty.
             if(user_org_list.length > 0){
-            document.getElementById("ckan-form-url").value = urlValue;
-            document.getElementById("ckan-form-key").value = apiKeyValue;
+              //Connection parameters are forewarded to the next modal
+              document.getElementById("ckan-form-url").value = urlValue;
+              document.getElementById("ckan-form-key").value = apiKeyValue;
 
-            getCKANdata(urlValue,apiKeyValue);
+              //Function for retrieving list values is called
+              getCKANdata(urlValue,apiKeyValue);
+
+            //If the list is empty, then the API Key is wrong or has no permission to request data
           }else{
             alert("Connection to CKAN could not be established. Please check CKAN URL and API Key. Read the error log for more information.");
 
           }
 
           }
+          //Provided URL is not correct, or CKAN instance is not ready
           if (xhr_user.readyState === 4 && xhr_user.status === 0) {
             alert("Connection to CKAN could not be established. Please check CKAN URL and API Key. Read the error log for more information.");
 
             }
+            //Access is not permittet. This case is not happening, as CKAN does not return an 401 error but an empty list instead.
           if (xhr_user.readyState === 4 && xhr_user.status === 401) {
             alert("Connection to CKAN could not be established. Error 401 Unauthorized. Please read the error log for more information.");
 
@@ -151,18 +165,22 @@ function connect2CKAN(){
 
 }
 
-//Due to a bug, we have to difine all values of the main category and the topic in two list. Later, when the data is fetched from CKAN, together with the list is decided, which kind of category a group is in
+//Due to a bug, we have to define all values of the main category and the topic in two list. Later, when the data is fetched from CKAN, together with the list is decided, which kind of category a group is in
+//Ideally this would be improved by CKAN in the future in a way, that a group can be recognized as main category or topic.
 var group_main_categories = ["geoobject","dataset","online-service","project","software","online-application","method","device"];
 var group_topics = ["administration","urban-planning","environment","health","energy","information-technology","living","education","work","trade","construction","culture","mobility","agriculture","craft"];
 
 //CKAN_User_Org stores the existing data of all user dependent organizations
 var CKAN_User_Org;
 
+//Function for retrieving data from CKAN to fill the lists in the form.
 function getCKANdata(urlValue,apiKeyValue){
+
+  //Paths to the different lists
   var url_user_organizations = urlValue + "/api/3/action/organization_list_for_user";
   var url_licence = urlValue + "/api/3/action/license_list";
   var url_user_groups = urlValue + "/api/3/action/group_list_authz";
-  var url_groups = urlValue + "/api/3/action/group_list";
+  var url_groups = urlValue + "/api/3/action/group_list"; //Not used later, as a group, which the current user has no access to, cannot be submittet.
   var url_tags = urlValue + "/api/3/action/tag_list";
 
 
@@ -179,12 +197,16 @@ function getCKANdata(urlValue,apiKeyValue){
             console.debug(group_response);
             var group_result = group_response.result;
             console.debug(group_result);
-            //var groupList = document.getElementById("ckan-form-groups");
+
+            //Addressing the select input fields of the main category and topics.
             var maincategoryList = document.getElementById("ckan-form-maincategory");
             var topicList = document.getElementById("ckan-form-topic");
-            //removeAllChildNodes(groupList);
+
+            //Remove existing values to prevent duplicate entries
             removeAllChildNodes(maincategoryList);
             removeAllChildNodes(topicList);
+
+            //Creating new entries with fetched list
             for (var group in group_result) {
                 console.debug(group_result[group].title);
                 var option = document.createElement("option");
@@ -192,30 +214,18 @@ function getCKANdata(urlValue,apiKeyValue){
                 option.value = group_result[group].name;
                 option.id = 'ckan-group-' + group_result[group].name;
 
-                /*if(option.value == 'geoobject'){ //Setting geoobject as default, as this makes the most sense for the group in the importer
-                  option.selected = true;
-                }*/
-                //groupList.add(option);
+                //Divide groups into main categories and topics with preknown list values. It is not possible at the moment to read from the fetched data which type of group an entrie is.
                 if(group_topics.includes(group_result[group].name)){
                   topicList.appendChild(option);
                 }
                 if(group_main_categories.includes(group_result[group].name)){
-                  if(group_result[group].name == 'geoobject'){
+                  if(group_result[group].name == 'geoobject'){ //Setting geoobject as default, as this makes the most sense for the group in the importer
                     option.selected = true;
                   }
                   maincategoryList.appendChild(option);
                 }
 
             }
-
-            /*if(group_result.length < 1){
-            //adding default option, necessary for creating new datasets
-            var option = document.createElement("option");
-            option.text = 'geoobject';
-            option.value = 'geoobject';
-            option.selected = true;
-            groupList.add(option);
-          }*/
           }
 
         };
@@ -448,8 +458,8 @@ function loadObjectInfo2form(){
     var author_list = JSON.parse(CKAN_Object.author);
     for(author in author_list){
       if(author_list[author].author !== ""){
-        var i = $('#ckan_autor_table tr').length + 1;
-        $('#ckan_autor_table').append('<tr id="ckan-form-autor_row'+i+'"><td><input id="ckan-form-autorname'+i+'" type="text" placeholder="Enter autor name" class="form-control name_list ckan-input-field" value="'+author_list[author].author+'" /></td><td><input id="ckan-form-autormail'+i+'" type="text" placeholder="Enter autor email" class="form-control name_list ckan-input-field" value="'+author_list[author].author_email+'" /><td><button type="button" name="remove" id="ckan_btn_autor_remove'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
+        var i = $('#ckan_author_table tr').length + 1;
+        $('#ckan_author_table').append('<tr id="ckan-form-author_row'+i+'"><td><input id="ckan-form-authorname'+i+'" type="text" placeholder="Enter author name" class="form-control name_list ckan-input-field" value="'+author_list[author].author+'" /></td><td><input id="ckan-form-authormail'+i+'" type="text" placeholder="Enter author email" class="form-control name_list ckan-input-field" value="'+author_list[author].author_email+'" /><td><button type="button" name="remove" id="ckan_btn_author_remove'+i+'" class="btn btn-danger ckan-form-btn_remove">X</button></td></tr>');
         }
       }
   }
@@ -521,8 +531,8 @@ function transmitCKANdata(){
   var endDateValue = document.getElementById("ckan-form-individualendcollectiondate").value;
   var tagValues = $('#ckan-tag-options').find(':selected');
   var topicValues = $('#ckan-form-topic').find(':selected');
-  //var autorNameValue = document.getElementById("ckan-form-autorname").value;
-  //var autorMailValue = document.getElementById("ckan-form-autormail").value;
+  //var authorNameValue = document.getElementById("ckan-form-authorname").value;
+  //var authorMailValue = document.getElementById("ckan-form-authormail").value;
   //var maintainerNameValue = document.getElementById("ckan-form-maintainername").value;
   //var maintainerMailValue = document.getElementById("ckan-form-maintainermail").value;
 
@@ -552,19 +562,19 @@ function transmitCKANdata(){
       extraValues +=']';
       console.debug(extraValues);
 
-      //Getting Autor and Maintainer data from the dynamic table
-      var autor_table_length = document.getElementById("ckan_autor_table").rows.length;
-      var autorTable = document.getElementById("ckan_autor_table")
-      var autorValues = '';
-        for (var i = 0, row; row = autorTable.rows[i]; i++) {
+      //Getting author and Maintainer data from the dynamic table
+      var author_table_length = document.getElementById("ckan_author_table").rows.length;
+      var authorTable = document.getElementById("ckan_author_table")
+      var authorValues = '';
+        for (var i = 0, row; row = authorTable.rows[i]; i++) {
             //iterate through rows of the tbody with the Values
               var col1 = row.cells[0].getElementsByTagName('input')[0].value;
               var col2 = row.cells[1].getElementsByTagName('input')[0].value;
 
-                autorValues += '{\\"author\\":\\"'+col1+'\\",\\"author_email\\": \\"'+col2+'\\"}';
+                authorValues += '{\\"author\\":\\"'+col1+'\\",\\"author_email\\": \\"'+col2+'\\"}';
 
-                if(i<autor_table_length-1){
-                  autorValues +=', ';
+                if(i<author_table_length-1){
+                  authorValues +=', ';
                 }
           }
 
@@ -657,7 +667,7 @@ function transmitCKANdata(){
   console.debug('CKAN Begin Date: '+beginDateValue);
   console.debug('CKAN End Date: '+endDateValue);
   console.debug('CKAN Tags: '+tagString);
-  console.debug('CKAN Autor(s): '+autorValues);
+  console.debug('CKAN author(s): '+authorValues);
   //console.debug('CKAN Maintainer Name: '+maintainerNameValue);
   //console.debug('CKAN Maintainer Mail: '+maintainerMailValue);
 
@@ -670,11 +680,11 @@ function transmitCKANdata(){
 
   //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"spatial":{"type":"Point","coordinates":[spatialExtentValue]}, "extras": [extraValues], "notes":noteValue, "end_collection_date":endDateValue,"licence_agreement":["licence_agreement_check"]});
   //data += extraValues;
-  data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":['+groupsString+'], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+autorValues+']","maintainer": "['+maintainerValues+']"}';
+  data = '{"type":"'+typeValue+'", "name":"'+nameValue+'","title":"'+titleValue+'","groups":['+groupsString+'], "extras": '+extraValues+', "notes":"'+noteValue+'", "end_collection_date":"'+endDateValue+'","begin_collection_date":"'+beginDateValue+'","licence_agreement":["'+agreementCheck+'"],"license_id":"'+licenceValue+'","owner_org":"'+organizationValue+'","private":"'+visibilityValue+'","language":"'+languageValue+'","version":"'+versionValue+'","tags": ['+tagString+'],"spatial":"{\\"type\\":\\"MultiPolygon\\",\\"coordinates\\":[[['+bbox_string+']]]}","author": "['+authorValues+']","maintainer": "['+maintainerValues+']"}';
   //var data = JSON.stringify({"type":typeValue, "name":nameValue,"title":titleValue,"notes":noteValue, "end_collection_date":endDateValue,"begin_collection_date":beginDateValue,"licence_agreement":[agreementCheck],"license_id":licenceValue,"owner_org":organizationValue,"private":visibilityValue,"language":languageValue,"version":versionValue,"tags": [{"name": tagValue}],"spatial":'{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]}'});
   //"spatial":{"type":"MultiPolygon","coordinates":[['+spatialExtentValue+']]},
   //"spatial":&quot;{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}&quot;,
-  //,"author": [{"author_email": "'+autorMailValue+'", "author": "'+autorNameValue+'"}],"maintainer": [{"maintainer_email": "'+maintainerMailValue+'", "maintainer": "'+maintainerNameValue+'"}]
+  //,"author": [{"author_email": "'+authorMailValue+'", "author": "'+authorNameValue+'"}],"maintainer": [{"maintainer_email": "'+maintainerMailValue+'", "maintainer": "'+maintainerNameValue+'"}]
   //"extras":[extraValues],
   //,"spatial":\'{"type":"MultiPolygon","coordinates":[[[[11.566726,48.150439],[11.56956,48.149637],[11.568143,48.147733],[11.56561,48.14832],[11.566726,48.150439]]]]}\'
   //,"maintainer": "[{\\"maintainer_email\\": \\"'+maintainerMailValue+'\\", \\"maintainer\\": \\"'+maintainerNameValue+'\\"}]"
@@ -698,7 +708,7 @@ function transmitCKANdata(){
   CKAN_Object.organization = CKAN_User_Org.find( function(org) { return org.name == organizationValue } );
   CKAN_Object.owner_org = CKAN_User_Org.find( function(org) { return org.name == organizationValue } ).id;
   CKAN_Object.tags = JSON.parse('['+tagString+']');
-  CKAN_Object.author = '['+autorValues.replace(/\\/g, '')+']';
+  CKAN_Object.author = '['+authorValues.replace(/\\/g, '')+']';
   CKAN_Object.maintainer = '['+maintainerValues.replace(/\\/g, '')+']';
   CKAN_Object.groups = JSON.parse('['+groupsString+']');
 
@@ -763,5 +773,5 @@ function transmitCKANdata(){
 }
 function closeCKANimporter(){
   document.getElementById("ckan-modal-message").style.display = "none";
-  location.reload(); 
+  location.reload();
 }

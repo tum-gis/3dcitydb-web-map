@@ -743,24 +743,27 @@
                   <span class="ckan-tooltiptext">Users can first select a main category, then this can still be specified via topics.</span>
                 </div>
                 </br>
+                </br>
                 <!--<input type="text" id="ckan-form-groups" name="ckan-groups" class="ckan-input-field" value="geoobject" readonly><br><br>
                 <select id="ckan-form-groups" name="ckan-dropdown-groups" class="ckan-input-field">
                   <option value="default" selected>Select the Group</option>
                 </select>-->
+                <fieldset class="ckan-group-fieldset">
+                  <label class="ckan-form-label" for="ckan-form-maincategory">Main Category:</label>
+                  <select id="ckan-form-maincategory" name="ckan-dropdown-maincategory" class="ckan-input-field" autocomplete="off">
+                    <option value="default" selected>Main Category</option>
+                  </select>
 
-                <label class="ckan-form-label" for="ckan-form-maincategory">Main Category:</label>
-                <select id="ckan-form-maincategory" name="ckan-dropdown-maincategory" class="ckan-input-field" autocomplete="off">
-                  <option value="default" selected>Main Category</option>
-                </select>
+                  <label class="ckan-form-label" for="ckan-form-topic" >Topics:</label></br></br>
+                  <select id="ckan-form-topic" name="topics[]" class="ckan-basic-multiple ckan-input-field" multiple="multiple" style="width: 100%" autocomplete="off">
+                    <option value="default">Topics</option>
+                  </select>
+                </fieldset>
 
-                <label class="ckan-form-label" for="ckan-form-topic">Topics:</label>
-                <select id="ckan-form-topic" name="topics[]" class="ckan-basic-multiple ckan-input-field" multiple="multiple" style="width: 100%" autocomplete="off">
-                  <option value="default">Topics</option>
-                </select>
 
 
                 <!-- Drop Down Box-->
-                </br>
+                </br></br>
                 <label class="ckan-form-label" for="ckan-form-licence">License:</label>
                 <div class="ckan-tooltip">&#9432
                   <span class="ckan-tooltiptext">License definitions and additional information can be found at </span>

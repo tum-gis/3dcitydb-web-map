@@ -148,7 +148,7 @@ function connect2CKAN(){
 
           }
           //Provided URL is not correct, or CKAN instance is not ready
-          if (xhr_user.readyState === 4 && xhr_user.status === 0) {
+          if (xhr_user.readyState === 4 && xhr_user.status === 0) { //There is no official Http request status 0. But it indicates, that there was no response, which indicates a wrong url. 
             alert("Connection to CKAN could not be established. Please check CKAN URL and API Key. Read the error log for more information.");
 
             }
@@ -166,7 +166,7 @@ function connect2CKAN(){
 }
 
 //Due to a bug, we have to define all values of the main category and the topic in two list. Later, when the data is fetched from CKAN, together with the list is decided, which kind of category a group is in
-//Ideally this would be improved by CKAN in the future in a way, that a group can be recognized as main category or topic.
+//Ideally this would be improved in the future in a way, that a group can be recognized as main category or topic.
 var group_main_categories = ["geoobject","dataset","online-service","project","software","online-application","method","device"];
 var group_topics = ["administration","urban-planning","environment","health","energy","information-technology","living","education","work","trade","construction","culture","mobility","agriculture","craft"];
 
@@ -649,7 +649,7 @@ function transmitCKANdata(){
           }
 
         //Putting together group main category and topics
-        //The group string should conatain one main category (obligatory) and zero to many topics (optional)
+        //The group string should contain one main category (obligatory) and zero to many topics (optional)
         //If the group string is empty, the transmission fails
         groupsString = '{"name": "'+maincategoryValue+'"}';
         if(topicString.length > 0){
@@ -774,7 +774,7 @@ function transmitCKANdata(){
 }
 
 //Funcion for closing the last modal. Afterwards a reload is performed. This is necessary to clear the values from the form, as some browsers are ignoring the autocompletion="off" attribute.
-//If no reload is done, there could occur errors in the select fields end lead to the transmission of wrong values.
+//If no reload is done, there could occur errors in the select fields and lead to the transmission of wrong values.
 function closeCKANimporter(){
   document.getElementById("ckan-modal-message").style.display = "none";
   location.reload();
